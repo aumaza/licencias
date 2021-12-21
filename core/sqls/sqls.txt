@@ -1,0 +1,47 @@
+#tabla usuarios
+create table usuarios (
+id int(11) auto_increment primary key, 
+nombre varchar(60) binary not null, 
+user varchar(15) binary not null, 
+password varchar(15) binary not null, 
+email varchar(90) not null, 
+role int(1) default 1 not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#tabla agentes
+create table agentes (
+id int(11) auto_increment primary key, 
+nombre varchar(60) binary not null,
+dni varchar(8) not null,
+email varchar(90) not null,
+antiguedad int(11) not null,
+situacion_revista enum('Planta Permanente','Ley Marco','Contrato 1109') not null,
+avatar varchar(120)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#tabla licencias
+create table licencias (
+id int(11) auto_increment primary key, 
+agente varchar(60) binary not null,
+dni varchar(8) not null,
+periodo varchar(4) not null,
+f_desde date not null,
+f_hasta date not null,
+tipo_licencia varchar(100) not null,
+dias_tomados int(11),
+dias_restantes int(11),
+fraccion enum('Primera','Segunda','Tercera')
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#tabla tipo_licencias
+create table tipo_licencia (
+id int(11) auto_increment primary key,
+clase_licencia enum('Licencia Ordinaria','Licencias Especiales','Licencias Extraordinarias con goce de haberes','Licencias Extraordinarias sin goce de haberes','Inasistencias','Franquicias') not null,
+descripcion varchar(100) not null,
+art_licencia varchar(50) not null,
+tipo_revista enum('Planta Permanente','No Permanente','Ambas') not null,
+tiempo varchar(30) not null,
+goce_haberes enum('Si','No') not null,
+obligatoria enum('Si','No') not null,
+particularidad varchar(250) not null
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
