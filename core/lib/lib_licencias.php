@@ -417,8 +417,13 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
     
     }
     
-    if(){
+    if(($periodo_agente == $periodo) && ($fraccion_agente == $fraccion)){
     
+        echo 3; // debe seleccionar fraccion diferente
+    }
+    
+    if(($periodo_agente == $periodo) && ($fraccion_agente != $fraccion)){
+        
         if()
         
     
