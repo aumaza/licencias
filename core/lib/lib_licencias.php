@@ -365,17 +365,21 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
     
     mysqli_select_db($conn,'licor'); // seleccionamos base de datos
     
-    $sql = "select total_lor from licencias where agente = '$nombre'";
-    $query = mysqli_query($conn,$sql);
-    while ($row = mysqli_fetch_array($query)){
-        $total_lic = $row['total_lor'];
+    $sql_1 = "select * from licencias where agente = '$nombre'";
+    $query_1 = mysqli_query($conn,$sql_1);
+    while ($row_1 = mysqli_fetch_array($query_1)){
+        $total_lic = $row_1['total_lor'];
+        $periodo_agente = $row_1['periodo'];
+        $fraccon_agente = $row_1['fraccion'];
+        $dias_restantes_agente = $row_1['dias_restantes_lor'];
     }
     
     $cantidad_dias = dias_pasados($f_desde,$f_hasta);
     
-    
+    if(($periodo_agente == '') && ($fraccion_agente == '') || ($periodo_agente == 'NULL') && ($fraccion_agente == 'NULL')){
+            
     // evalua si el total de dias de licencia está vacio o no
-    if(($total_lic == 0) || ($total_lic == '')){
+    if(($total_lic == 0) || ($total_lic == '') || ($total_lic == 'NULL')){
     
         if($antiguedad <= 5){
             $total_lic = 20;        
@@ -390,10 +394,39 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
             $total_lic = 35;
         }
     }
+        
+        if($cantidad_dias <= $total_lic){
+        
+            $dias_restantes = $total_lic - $cantidad_dias;
+            
+            $sql_2 = "INSERT INTO licencias ".
+                    "(agente,dni,periodo,f_desde,f_hasta,tipo_licencia,total_lor,dias_tomados_lor,dias_restantes_lor,fraccion)".
+                    "VALUES ".
+                    "('$nombre','$dni','$periodo','$f_desde','$f_hasta','$descripcion','$dias_restantes','$cantidad_dias','$dias_restantes','$fraccion')";
+                    $query_2 = mysqli_query($conn,$sql_2);
+                 
+                 if($query_2){
+                    echo 1; // registro incertado correctamente
+                 }else{
+                    echo -1; // error al incertar registro
+                 }
+        }
+        if($cantidad_dias > $total_lic){
+            echo 2; // la cantidad de dias a tomar es mayor de los que dispone
+        }
+    
+    }
+    
+    if(){
+    
+        if()
+        
     
     
-
-
+    }
+    
+    
+    
 
 
 }
