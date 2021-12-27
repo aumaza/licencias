@@ -77,7 +77,9 @@ while($row = mysqli_fetch_array($query)){
       .row.content {height: auto;} 
     }
   </style>
-  
+
+<script src="main.js"></script>
+
 <!-- Guardar nuevo usuario -->
 <script type="text/javascript">
 $(document).ready(function(){
@@ -357,7 +359,14 @@ $(document).ready(function(){
       }
       if(isset($_POST['select_agente'])){
         $nombre = mysqli_real_escape_string($conn,$_POST['agente']);
-        formNuevaLicencia($nombre,$conn);
+        $tipo_licencia = mysqli_real_escape_string($conn,$_POST['clase_licencia']);
+        $descripcion = mysqli_real_escape_string($conn,$_POST['descripcion']);
+        
+        if($tipo_licencia == 'Licencia Ordinaria'){
+            formNuevaLicencia($nombre,$descripcion,$conn);
+        }
+        
+        
       }
       
       
@@ -371,6 +380,7 @@ $(document).ready(function(){
         formAltaTipoLicencia();
       }
       
+      
       }else{
             echo "No se pudo completar la conexion con la Base de Datos. Contacte al Administrador" .mysqli_error($conn);
         }
@@ -381,6 +391,8 @@ $(document).ready(function(){
     </div>
   </div>
 </div>
+
+
 
 <script>
   $(document).ready(function(e) {
@@ -400,6 +412,8 @@ $(document).ready(function(){
 });
   </script>
 
+
+  
 <?php modalPermisos(); ?>
 <?php modalChangePassword(); ?>
 

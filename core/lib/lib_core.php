@@ -214,7 +214,8 @@ function rootMain($nombre){
             <div class="panel panel-default">
                 <div class="panel-heading">
                 <h4 class="panel-title" align="center">
-                    <a data-toggle="collapse" href="#collapse1">Menú Principal</a>
+                    <a data-toggle="collapse" href="#collapse1" data-toggle="tooltip" title="Click para Comenzar">
+                        <img src="../icons/categories/preferences-desktop.png"  class="img-reponsive img-rounded"> Menú Principal</a>
                 </h4>
                 </div>
                 <div id="collapse1" class="panel-collapse collapse">
@@ -223,27 +224,27 @@ function rootMain($nombre){
                 <ul class="list-group">
                 
                     <li class="list-group-item">
-                        <button type="submit" class="btn btn-default btn-sm btn-block" name="mis_datos" data-toggle="tooltip" title="Visualizar y Editar Datos Personales">
+                        <button type="submit" class="btn btn-default btn-xs btn-block" name="mis_datos" data-toggle="tooltip" title="Visualizar y Editar Datos Personales">
                             <img src="../icons/actions/address-book-new.png"  class="img-reponsive img-rounded"> Mis Datos</button>
                     </li>
                     
                     <li class="list-group-item">
-                        <button type="submit" class="btn btn-default btn-sm btn-block" name="usuarios" data-toggle="tooltip" title="Listar todos los Usuarios, Altas y Modificaciones">
+                        <button type="submit" class="btn btn-default btn-xs btn-block" name="usuarios" data-toggle="tooltip" title="Listar todos los Usuarios, Altas y Modificaciones">
                             <img src="../icons/actions/meeting-attending.png"  class="img-reponsive img-rounded"> Usuarios</button>
                     </li>
                     
                     <li class="list-group-item">
-                        <button type="submit" class="btn btn-default btn-sm btn-block" name="agentes" data-toggle="tooltip" title="Listar todos los Agentes y Modificar">
+                        <button type="submit" class="btn btn-default btn-xs btn-block" name="agentes" data-toggle="tooltip" title="Listar todos los Agentes y Modificar">
                             <img src="../icons/actions/view-ldap-resource.png"  class="img-reponsive img-rounded"> Agentes</button>
                     </li>
                     
                     <li class="list-group-item">
-                        <button type="submit" class="btn btn-default btn-sm btn-block" name="licencias" data-toggle="tooltip" title="Listar todas las Licencias tomadas por Agentes, Agregar, Editar, Borrar">
+                        <button type="submit" class="btn btn-default btn-xs btn-block" name="licencias" data-toggle="tooltip" title="Listar todas las Licencias tomadas por Agentes, Agregar, Editar, Borrar">
                             <img src="../icons/actions/view-calendar-month.png"  class="img-reponsive img-rounded"> Licencias</button>
                     </li>  
                     
                     <li class="list-group-item">
-                        <button type="submit" class="btn btn-default btn-sm btn-block" name="tipo_licencia" data-toggle="tooltip" title="Listar todos los tipos de licencias existentes">
+                        <button type="submit" class="btn btn-default btn-xs btn-block" name="tipo_licencia" data-toggle="tooltip" title="Listar todos los tipos de licencias existentes">
                             <img src="../icons/actions/view-calendar-upcoming-events.png"  class="img-reponsive img-rounded"> Tipo Licencias</button>
                     </li>
                 
@@ -270,7 +271,8 @@ function userMain($nombre){
             <div class="panel panel-default">
                 <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" href="#collapse1">Menú Principal</a>
+                    <a data-toggle="collapse" href="#collapse1" data-toggle="tooltip" title="Click para Comenzar">
+                        <img src="../icons/categories/preferences-desktop.png"  class="img-reponsive img-rounded"> Menú Principal</a>
                 </h4>
                 </div>
                 <div id="collapse1" class="panel-collapse collapse">
@@ -278,12 +280,12 @@ function userMain($nombre){
                 <ul class="list-group">
                 
                     <li class="list-group-item">
-                        <button type="submit" class="btn btn-default btn-sm btn-block" name="mis_datos" data-toggle="tooltip" title="Visualizar y Editar Datos Personales">
+                        <button type="submit" class="btn btn-default btn-xs btn-block" name="mis_datos" data-toggle="tooltip" title="Visualizar y Editar Datos Personales">
                             <img src="../icons/actions/address-book-new.png"  class="img-reponsive img-rounded"> Mis Datos</button>
                     </li>
                     
                     <li class="list-group-item">
-                        <button type="submit" class="btn btn-default btn-sm btn-block" name="mis_licencias" data-toggle="tooltip" title="Listar todas las Licencias, Agregar, Editar, Borrar">
+                        <button type="submit" class="btn btn-default btn-xs btn-block" name="mis_licencias" data-toggle="tooltip" title="Listar todas las Licencias, Agregar, Editar, Borrar">
                             <img src="../icons/actions/view-calendar-month.png"  class="img-reponsive img-rounded"> Mis Licencias</button>
                     </li>                    
                 
@@ -292,7 +294,7 @@ function userMain($nombre){
                 
                 <div class="panel-footer">
                 <form action="#" method="POST">
-                    <button type="submit" class="btn btn-danger btn-sm btn-block" name="salir" data-toggle="tooltip" title="Salir del Sistema">
+                    <button type="submit" class="btn btn-danger btn-xs btn-block" name="salir" data-toggle="tooltip" title="Salir del Sistema">
                         <img src="../icons/actions/system-shutdown.png"  class="img-reponsive img-rounded"> Salir</button>
                 </form>
                 </div>

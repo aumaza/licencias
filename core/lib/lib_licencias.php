@@ -117,7 +117,7 @@ if($conn)
 /*
 ** funcion que muestra el formulario de nueva licencia
 */
-function formNuevaLicencia($nombre,$conn){
+function formNuevaLicencia($nombre,$descripcion,$conn){
 
     $sql = "select * from agentes where nombre = '$nombre'";
     mysqli_select_db($conn,'licor');
@@ -162,7 +162,7 @@ function formNuevaLicencia($nombre,$conn){
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="antiguedad">Antiguedad:</label>
+                                    <label for="antiguedad">Antiguedad (Años):</label>
                                     <input type="number" class="form-control" id="antiguedad" name="antiguedad" value="'.$antiguedad.'" required readonly>
                                 </div><hr>
                             
@@ -171,9 +171,14 @@ function formNuevaLicencia($nombre,$conn){
                              <div class="col-sm-3">
                                 
                                 <div class="form-group">
-                                    <label for="antiguedad">Situación de revista:</label>
+                                    <label for="revista">Situación de revista:</label>
                                     <input type="text" class="form-control" id="revista" name="revista" value="'.$revista.'" required readonly>
                                 </div>
+                                
+                                <div class="form-group">
+                                    <label for="licencia">Licencia a tomar:</label>
+                                    <input type="text" class="form-control" id="licencia" name="licencia" value="'.$descripcion.'" required readonly>
+                                </div><hr>
                                                               
                                 
                             </div>
@@ -200,7 +205,7 @@ function formNuevaLicencia($nombre,$conn){
                             
                                 <div class="form-group">
                                 <label for="periodo">Período:</label>
-                                <select class="form-control" id="periido" name="periodo" required>';
+                                <select class="form-control" id="periodo" name="periodo" required>';
                                 
                                     for($i = 2020; $i <= 2050; $i++){
                                 
@@ -240,7 +245,7 @@ function formNuevaLicencia($nombre,$conn){
                         <div class="row">
                         
                             <div class="col-sm-3">
-                                <button type="submit" class="btn btn-success" name="guardar_licencia" id="add_nueva_licencia">
+                                <button type="submit" class="btn btn-success" name="guardar_licencia" id="add_nueva_licencia" onclick="guardarLicencia();">
                                 <img class="img-reponsive img-rounded" src="../icons/devices/media-floppy.png" /> Guardar</button>
                             </div>
                             
@@ -298,7 +303,7 @@ function modalSelAgente($conn){
                             
                         <div class="form-group">
                         <label for="tipo_licencia">Tipo de Licencia:</label>
-                        <select class="form-control" name="tipo_licencia" id="tipo_licencia" >
+                        <select class="form-control" name="clase_licencia" id="tipo_licencia" onchange="CargarLicencias(this.value);">
                         <option value="" disabled selected>Seleccionar</option>';
                         
                         
@@ -315,24 +320,13 @@ function modalSelAgente($conn){
                     echo '</select>
                             </div><hr>
                             
+                            
                         <div class="form-group">
                         <label for="descripcion">Descripción:</label>
                         <select class="form-control" name="descripcion" id="descripcion" >
-                        <option value="" disabled selected>Seleccionar</option>';
-                        
-                        
-                        $query = "SELECT descripcion FROM tipo_licencia where tipo_licencia = 'tipo_licencia' group by descripcion ASC";
-                        mysqli_select_db($conn,'licor');
-                        $res = mysqli_query($conn,$query);
-
-                        if($res){
-                            while($valores = mysqli_fetch_array($res)){
-                                echo '<option value="'.$valores[descripcion].'" >'.$valores[descripcion].'</option>';
-                            }
-                            }
-                        
-                    echo '</select>
-                            </div><hr>
+                        <div id="respuesta"></div>
+                        </select>
+                        </div><hr>
                     
                     <button type="submit" class="btn btn-default" name="select_agente">
                         <img src="../icons/actions/dialog-ok.png"  class="img-reponsive img-rounded"> Aceptar</button>
@@ -355,10 +349,10 @@ function modalSelAgente($conn){
 // FUNCIONES ESPECIFICAS
 
 /*
-** funcion que cuenta dias
+** funcion que cuenta dias entre dos fechas
 */
-function dias_pasados($f_desde,$f_hasta)
-{
+function dias_pasados($f_desde,$f_hasta){
+    
     $dias = (strtotime($f_desde) - strtotime($f_hasta)) / 86400;
     $dias = abs($dias); $dias = floor($dias);
     return $dias;
@@ -367,7 +361,42 @@ function dias_pasados($f_desde,$f_hasta)
 
 // ================================================================== //
 // PERSISTENCIA A BASE
-//function insertLicencia($nombre,$dni,)
+function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,$f_desde,$f_hasta,$periodo,$fraccion,$conn){
+    
+    mysqli_select_db($conn,'licor'); // seleccionamos base de datos
+    
+    $sql = "select total_lor from licencias where agente = '$nombre'";
+    $query = mysqli_query($conn,$sql);
+    while ($row = mysqli_fetch_array($query)){
+        $total_lic = $row['total_lor'];
+    }
+    
+    $cantidad_dias = dias_pasados($f_desde,$f_hasta);
+    
+    
+    // evalua si el total de dias de licencia está vacio o no
+    if(($total_lic == 0) || ($total_lic == '')){
+    
+        if($antiguedad <= 5){
+            $total_lic = 20;        
+        }
+        if(($antiguedad > 5) && ($antiguedad <= 10)){
+            $total_lic = 25;
+        }
+        if(($antiguedad > 10) && ($antiguedad <= 15)){
+            $total_lic = 30;
+        }
+        if($antiguedad > 15){
+            $total_lic = 35;
+        }
+    }
+    
+    
+
+
+
+
+}
 
 
 
