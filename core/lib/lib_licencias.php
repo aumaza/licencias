@@ -376,6 +376,8 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
     
     $cantidad_dias = dias_pasados($f_desde,$f_hasta);
     
+    // primero evalua si se cargó alguna licencia, si no se cragado nada aún se carga
+    
     if(($periodo_agente == '') && ($fraccion_agente == '') || ($periodo_agente == 'NULL') && ($fraccion_agente == 'NULL')){
             
     // evalua si el total de dias de licencia está vacio o no
@@ -394,6 +396,8 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
             $total_lic = 35;
         }
     }
+        
+        // ahora evalua si posee dias para usar
         
         if($cantidad_dias <= $total_lic){
         
@@ -417,16 +421,62 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
     
     }
     
+    // se evalua si el periodo y la fraccion ya fueron usados
+    
     if(($periodo_agente == $periodo) && ($fraccion_agente == $fraccion)){
     
-        echo 3; // debe seleccionar fraccion diferente
+        if($fraccion_agente == 'Primera'){
+            echo a; // ya utilizó la primera fraccion
+        }
+        if($fraccion_agente == 'Segunda'){
+            echo b; // debe solitar permiso al superior
+        }
+        if($fraccion_agente == 'Tercera'){
+            echo c; // ya agotó todas las fracciones para dicho periodo
+        }
     }
+    
+    // si el perido es el mismo pero la fraccion distinta, se evalua que fraccion va a usar
     
     if(($periodo_agente == $periodo) && ($fraccion_agente != $fraccion)){
         
-        if()
-        
-    
+        if(($fraccion_agente == 'Primera') && ($fraccion == 'Segunda')){
+            
+            if($cantidad_dias > $total_lic){
+            
+                echo 2; // la cantidad de dias a tomar es mayor de los que dispone
+            
+            }
+            else if($cantidad_dias <= $total_lic){
+            
+                $dias_restantes = $total_lic - $cantidad_dias;
+            
+                $sql_3 = "INSERT INTO licencias ".
+                    "(agente,dni,periodo,f_desde,f_hasta,tipo_licencia,total_lor,dias_tomados_lor,dias_restantes_lor,fraccion)".
+                    "VALUES ".
+                    "('$nombre','$dni','$periodo','$f_desde','$f_hasta','$descripcion','$dias_restantes','$cantidad_dias','$dias_restantes','$fraccion')";
+                $query_3 = mysqli_query($conn,$sql_3);
+                
+                if($query_3){
+                    echo 1; // registro agregado correctamente
+                }else{
+                    echo -1; // hubo un problema al agregar el registro
+                }
+            }
+         }
+         if(($fraccion_agente == 'Primera') && ($fraccion == 'Primera')){
+            echo a; // ya utilizó la primera fraccion
+         }
+         if(($fraccion_agente == 'Segunda') && ($fraccion == 'Segunda')){
+            
+            echo b; // debe solitar permiso al superior
+            
+         }
+          if(($fraccion_agente == 'Tercera') && ($fraccion == 'Tercera')){
+            
+            echo c; // agotó todas las fracciones para dicho período
+            
+         }
     
     }
     
