@@ -241,10 +241,8 @@ $(document).ready(function(){
 });
 </script>
   
-  
-  <!-- Data Table Script -->
 <script>
- $(document).ready(function(){
+$(document).ready(function(){
       $('#myTable').DataTable({
       "order": [[1, "asc"]],
       "responsive": true,
@@ -270,8 +268,10 @@ $(document).ready(function(){
     });
 
   });
-  </script>
-  <!-- END Data Table Script -->
+
+</script>
+  
+ 
   
 </head>
 <body>
@@ -392,7 +392,7 @@ $(document).ready(function(){
   </div>
 </div>
 
-
+<script type="text/javascript" src="../lib/lib_licencias.js"></script>
 
 <script>
   $(document).ready(function(e) {

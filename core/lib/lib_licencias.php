@@ -69,7 +69,8 @@ if($conn)
             <th class='text-nowrap text-center'>Período</th>
             <th class='text-nowrap text-center'>Fecha Desde</th>
             <th class='text-nowrap text-center'>Fecha Hasta</th>
-            <th class='text-nowrap text-center'>Cantidad Días</th>
+            <th class='text-nowrap text-center'>Días a Tomar</th>
+            <th class='text-nowrap text-center'>Días Restantes</th>
             <th class='text-nowrap text-center'>Fracción</th>
             <th>&nbsp;</th>
             </thead>";
@@ -83,7 +84,8 @@ if($conn)
 			 echo "<td align=center>".$fila['periodo']."</td>";
 			 echo "<td align=center>".$fila['f_desde']."</td>";
 			 echo "<td align=center>".$fila['f_hasta']."</td>";
-			 echo "<td align=center>".$fila['cant_dias']."</td>";
+			 echo "<td align=center>".$fila['dias_tomados_lor']."</td>";
+			 echo "<td align=center>".$fila['dias_restantes_lor']."</td>";
 			 echo "<td align=center>".$fila['fraccion']."</td>";
 			 echo "<td class='text-nowrap'>";
              echo '<form <action="#" method="POST">
@@ -137,6 +139,7 @@ function formNuevaLicencia($nombre,$descripcion,$conn){
                 </div>
                 <div class="panel-body">
                      <form id="fr_nueva_licencia_ajax" method="POST">
+                    
                     <div class="container" style="margin-left:100px">
                         
                         <div class="row">
@@ -191,12 +194,12 @@ function formNuevaLicencia($nombre,$descripcion,$conn){
                             
                                 <div class="form-group">
                                     <label for="f_desde">Fecha Desde:</label>
-                                    <input type="date" class="form-control" id="f_desde" name="f_desde" required>
+                                    <input type="date" class="form-control" id="f_desde" name="f_desde">
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="f_hasta">Fecha Hasta:</label>
-                                    <input type="date" class="form-control" id="f_hasta" name="f_hasta" required>
+                                    <input type="date" class="form-control" id="f_hasta" name="f_hasta">
                                 </div><hr>
                             
                             </div>
@@ -205,7 +208,7 @@ function formNuevaLicencia($nombre,$descripcion,$conn){
                             
                                 <div class="form-group">
                                 <label for="periodo">Período:</label>
-                                <select class="form-control" id="periodo" name="periodo" required>';
+                                <select class="form-control" id="periodo" name="periodo" >';
                                 
                                     for($i = 2020; $i <= 2050; $i++){
                                 
@@ -218,9 +221,9 @@ function formNuevaLicencia($nombre,$descripcion,$conn){
                                 <label for="fraccion">Fracción:</label>
                                 <select class="form-control" id="fraccion" name="fraccion">
                                     <option value="" selected disabled>Seleccionar</option>
-                                    <option value="1">Primera</option>
-                                    <option value="2">Segunda</option>
-                                    <option value="3">Tercera</option>
+                                    <option value="Primera">Primera</option>
+                                    <option value="Segunda">Segunda</option>
+                                    <option value="Tercera">Tercera</option>
                                 </select>
                                 </div><hr>
                             
@@ -245,7 +248,7 @@ function formNuevaLicencia($nombre,$descripcion,$conn){
                         <div class="row">
                         
                             <div class="col-sm-3">
-                                <button type="submit" class="btn btn-success" name="guardar_licencia" id="add_nueva_licencia" onclick="guardarLicencia();">
+                                <button type="submit" class="btn btn-success" name="guardar_licencia" id="add_nueva_licencia">
                                 <img class="img-reponsive img-rounded" src="../icons/devices/media-floppy.png" /> Guardar</button>
                             </div>
                             
@@ -355,6 +358,7 @@ function dias_pasados($f_desde,$f_hasta){
     
     $dias = (strtotime($f_desde) - strtotime($f_hasta)) / 86400;
     $dias = abs($dias); $dias = floor($dias);
+    $dias = $dias + 1;
     return $dias;
 }
 
@@ -362,7 +366,7 @@ function dias_pasados($f_desde,$f_hasta){
 // ================================================================== //
 // PERSISTENCIA A BASE
 function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,$f_desde,$f_hasta,$periodo,$fraccion,$conn){
-    
+        
     mysqli_select_db($conn,'licor'); // seleccionamos base de datos
     
     $sql_1 = "select * from licencias where agente = '$nombre'";
@@ -370,7 +374,7 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
     while ($row_1 = mysqli_fetch_array($query_1)){
         $total_lic = $row_1['total_lor'];
         $periodo_agente = $row_1['periodo'];
-        $fraccon_agente = $row_1['fraccion'];
+        $fraccion_agente = $row_1['fraccion'];
         $dias_restantes_agente = $row_1['dias_restantes_lor'];
     }
     
@@ -406,7 +410,7 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
             $sql_2 = "INSERT INTO licencias ".
                     "(agente,dni,periodo,f_desde,f_hasta,tipo_licencia,total_lor,dias_tomados_lor,dias_restantes_lor,fraccion)".
                     "VALUES ".
-                    "('$nombre','$dni','$periodo','$f_desde','$f_hasta','$descripcion','$dias_restantes','$cantidad_dias','$dias_restantes','$fraccion')";
+                    "('$nombre','$dni','$periodo','$f_desde','$f_hasta','$descripcion','$total_lic','$cantidad_dias','$dias_restantes','$fraccion')";
                     $query_2 = mysqli_query($conn,$sql_2);
                  
                  if($query_2){
@@ -416,7 +420,7 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
                  }
         }
         if($cantidad_dias > $total_lic){
-            echo 2; // la cantidad de dias a tomar es mayor de los que dispone
+            echo 4; // la cantidad de dias a tomar es mayor de los que dispone
         }
     
     }
@@ -426,13 +430,13 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
     if(($periodo_agente == $periodo) && ($fraccion_agente == $fraccion)){
     
         if($fraccion_agente == 'Primera'){
-            echo a; // ya utilizó la primera fraccion
+            echo 11; // ya utilizó la primera fraccion
         }
         if($fraccion_agente == 'Segunda'){
-            echo b; // debe solitar permiso al superior
+            echo 13; // debe solitar permiso al superior
         }
         if($fraccion_agente == 'Tercera'){
-            echo c; // ya agotó todas las fracciones para dicho periodo
+            echo 15; // ya agotó todas las fracciones para dicho periodo
         }
     }
     
@@ -442,19 +446,19 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
         
         if(($fraccion_agente == 'Primera') && ($fraccion == 'Segunda')){
             
-            if($cantidad_dias > $total_lic){
+            if($cantidad_dias > $dias_restantes_agente){
             
-                echo 2; // la cantidad de dias a tomar es mayor de los que dispone
+                echo 4; // la cantidad de dias a tomar es mayor de los que dispone
             
             }
-            else if($cantidad_dias <= $total_lic){
+            else if($cantidad_dias <= $dias_restantes_agente){
             
-                $dias_restantes = $total_lic - $cantidad_dias;
+                $dias_restantes = $dias_restantes_agente - $cantidad_dias;
             
                 $sql_3 = "INSERT INTO licencias ".
                     "(agente,dni,periodo,f_desde,f_hasta,tipo_licencia,total_lor,dias_tomados_lor,dias_restantes_lor,fraccion)".
                     "VALUES ".
-                    "('$nombre','$dni','$periodo','$f_desde','$f_hasta','$descripcion','$dias_restantes','$cantidad_dias','$dias_restantes','$fraccion')";
+                    "('$nombre','$dni','$periodo','$f_desde','$f_hasta','$descripcion','$total_lic','$cantidad_dias','$dias_restantes','$fraccion')";
                 $query_3 = mysqli_query($conn,$sql_3);
                 
                 if($query_3){
@@ -463,26 +467,69 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
                     echo -1; // hubo un problema al agregar el registro
                 }
             }
+            else if($dias_restantes_agente == 0){
+                echo 19; // ya no posee mas dias para dicho periodo
+            }
          }
+         
+         if(($fraccion_agente == 'Segunda') && ($fraccion == 'Tercera')){
+            
+            if($cantidad_dias <= $dias_restantes_agente){
+                echo 13; // debe solicitar permiso al superior
+            }else if($dias_restantes_agente == 0){
+                echo 19; // ya no posee más dias para dicho periodo
+            }
+         
+         }
+         
+         if(($fraccion_agente == 'Primera') && ($fraccion == 'Tercera')){
+            echo 17; // debe hacer uso antes de la segunda fraccion
+         }
+         
+         
          if(($fraccion_agente == 'Primera') && ($fraccion == 'Primera')){
-            echo a; // ya utilizó la primera fraccion
+            echo 11; // ya utilizó la primera fraccion
          }
          if(($fraccion_agente == 'Segunda') && ($fraccion == 'Segunda')){
             
-            echo b; // debe solitar permiso al superior
+            echo 13; // debe solitar permiso al superior
             
          }
           if(($fraccion_agente == 'Tercera') && ($fraccion == 'Tercera')){
             
-            echo c; // agotó todas las fracciones para dicho período
+            echo 15; // agotó todas las fracciones para dicho período
             
          }
-    
+       
+         
     }
     
     
+    if(($periodo_agente != $periodo) && (($fraccion_agente == '') || ($fraccion_agente == 'NULL'))){
     
-
+        if($cantidad_dias > $total_lic){
+            echo 4; // la cantidad de dias a tomar es mayor de la que dispone
+        }
+        if($cantidad_dias <= $total_lic){
+        
+            $dias_restantes = $total_lic - $cantidad_dias;
+            
+                $sql_4 = "INSERT INTO licencias ".
+                    "(agente,dni,periodo,f_desde,f_hasta,tipo_licencia,total_lor,dias_tomados_lor,dias_restantes_lor,fraccion)".
+                    "VALUES ".
+                    "('$nombre','$dni','$periodo','$f_desde','$f_hasta','$descripcion','$total_lic','$cantidad_dias','$dias_restantes','$fraccion')";
+                $query_4 = mysqli_query($conn,$sql_4);
+                
+                if($query_4){
+                    echo 1; // registro agregado correctamente
+                }else{
+                    echo -1; // hubo un problema al agregar el registro
+                }
+        
+        }
+    
+    }
+ 
 
 }
 
@@ -627,7 +674,7 @@ function formAltaTipoLicencia(){
                                     </select>
                                 </div>
                                 
-                                <div class="form-group">
+                                <div class="form-group">tomados
                                     <label for="tiempo">Plazos:</label>
                                     <input type="text" class="form-control" id="tiempo" name="tiempo" required>
                                 </div>
