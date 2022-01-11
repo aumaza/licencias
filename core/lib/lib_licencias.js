@@ -47,3 +47,35 @@ $(document).ready(function(){
         return false;
     });
 });
+
+
+/*
+** eliina registro de licencia de base de datos
+*/
+    
+$(document).ready(function(){
+    $('#delete_licencia').click(function(){
+        
+        var datos=$('#fr_delete_licencia_ajax').serialize();
+        
+        $.ajax({
+            type:"POST",
+            url:"../lib/delete_licencia.php",
+            data:datos,
+            success:function(r){
+                if(r == 1){
+                    alert("Licencia Eliminada Exitosamente!!");
+                    document.location.href="main.php";
+                }else if(r == -1){
+                    alert("Hubo un problema al intentar eliminar la licencia");
+                }else if(r == 7){
+                    alert("Error de Conexion a la Base de Datos");
+                }
+                
+                
+            }
+        });
+
+        return false;
+    });
+});

@@ -362,13 +362,15 @@ $(document).ready(function(){
         $tipo_licencia = mysqli_real_escape_string($conn,$_POST['clase_licencia']);
         $descripcion = mysqli_real_escape_string($conn,$_POST['descripcion']);
         
-        if($tipo_licencia == 'Licencia Ordinaria'){
-            formNuevaLicencia($nombre,$descripcion,$conn);
-        }
-        
-        
+            if($tipo_licencia == 'Licencia Ordinaria'){
+                formNuevaLicencia($nombre,$descripcion,$conn);
+            }
       }
       
+      if(isset($_POST['eliminar_licencia'])){
+        $id = mysqli_real_escape_string($conn,$_POST['id']);
+        formEliminarLicencia($id,$conn);
+      }
       
       
       // ====================================== //

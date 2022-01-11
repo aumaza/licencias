@@ -89,10 +89,7 @@ if($conn)
 			 echo "<td align=center>".$fila['fraccion']."</td>";
 			 echo "<td class='text-nowrap'>";
              echo '<form <action="#" method="POST">
-                            <input type="hidden" name="name" value="'.$fila['id'].'">
-                            
-                            <button type="submit" class="btn btn-primary btn-sm" name="editar_licencia">
-                            <img src="../icons/actions/document-edit.png"  class="img-reponsive img-rounded"> Editar Licencia</button>
+                            <input type="hidden" name="id" value="'.$fila['id'].'">
                             
                             <button type="submit" class="btn btn-danger btn-sm" name="eliminar_licencia">
                             <img src="../icons/actions/trash-empty.png"  class="img-reponsive img-rounded"> Eliminar Licencia</button>
@@ -263,6 +260,54 @@ function formNuevaLicencia($nombre,$descripcion,$conn){
 
 }
 
+
+/*
+** FORMULARIO DE ELIMINAR UN REGISTRO DE LICENCIAS
+*/
+function formEliminarLicencia($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $periodo = $fila['periodo'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+            }
+            
+            echo '<div class="container" style="margin-top:70px">
+            <div class="row">
+            <div class="col-sm-8">
+            
+            <div class="panel panel-danger">
+            <div class="panel-heading"><img class="img-reponsive img-rounded" src="../icons/status/security-low.png" /> Licencia - Eliminar Registro</div>
+            <div class="panel-body">
+            <form id="fr_delete_licencia_ajax" method="POST">
+            <input type="hidden" class="form-control" name="id" value="'.$id.'">
+            
+                <div class="alert alert-danger">
+                <img class="img-reponsive img-rounded" src="../icons/status/task-attempt.png" /> <strong>Atención!</strong><hr>
+                <p>Está por eliminar la Licencia: <strong>'.$licencia.'</strong></p>
+                <p>Agente: <strong>'.$agente.'</strong></p>
+                <p>Período: <strong>'.$periodo.'</strong></p>
+                <p>Fecha Desde: <strong>'.$f_desde.'</strong></p>
+                <p>Fecha Hasta: <strong>'.$f_hasta.'</strong</<p><hr>
+                <p>Si está seguro, presione Aceptar, de lo contrario presione Cancelar.</p>
+                </div><hr>
+            
+            <button type="submit" class="btn btn-success btn-block" name="delete_licencia" id="delete_licencia">Aceptar</button><br>
+            </form>
+            <a href="main.php"><button type="button" class="btn btn-danger btn-block">Cancelar</button></a>
+            </div>
+            </div>
+            
+            </div>
+            </div>
+            </div>';
+
+}
 
 
 
@@ -533,7 +578,22 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
 
 }
 
+/*
+** ELIMINAR REGISTRO DE LICENCIA
+*/
+function deleteLicencia($id,$conn){
 
+    mysqli_select_db($conn,'licor');
+    $sql = "delete from licencias where id = '$id'";
+    $query = mysqli_query($conn,$sql);
+    
+    if($query){
+        echo 1; // registro eliminado
+    }else{
+        echo -1; // error al eliminar el registro
+    }
+
+}
 
 
 
