@@ -365,6 +365,9 @@ $(document).ready(function(){
             if($tipo_licencia == 'Licencia Ordinaria'){
                 formNuevaLicencia($nombre,$descripcion,$conn);
             }
+            if($tipo_licencia == 'Inasistencias'){
+                formNuevaLicencia($nombre,$descripcion,$conn);
+            }
       }
       
       if(isset($_POST['eliminar_licencia'])){

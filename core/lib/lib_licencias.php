@@ -66,12 +66,9 @@ if($conn)
               echo "<thead>
 		    <th class='text-nowrap text-center'>Agente</th>
             <th class='text-nowrap text-center'>DNI</th>
-            <th class='text-nowrap text-center'>Período</th>
+            <th class='text-nowrap text-center'>Licencia</th>
             <th class='text-nowrap text-center'>Fecha Desde</th>
             <th class='text-nowrap text-center'>Fecha Hasta</th>
-            <th class='text-nowrap text-center'>Días a Tomar</th>
-            <th class='text-nowrap text-center'>Días Restantes</th>
-            <th class='text-nowrap text-center'>Fracción</th>
             <th>&nbsp;</th>
             </thead>";
 
@@ -81,15 +78,15 @@ if($conn)
 			 echo "<tr>";
 			 echo "<td align=center>".$fila['agente']."</td>";
 			 echo "<td align=center>".$fila['dni']."</td>";
-			 echo "<td align=center>".$fila['periodo']."</td>";
+			 echo "<td align=center>".$fila['tipo_licencia']."</td>";
 			 echo "<td align=center>".$fila['f_desde']."</td>";
 			 echo "<td align=center>".$fila['f_hasta']."</td>";
-			 echo "<td align=center>".$fila['dias_tomados_lor']."</td>";
-			 echo "<td align=center>".$fila['dias_restantes_lor']."</td>";
-			 echo "<td align=center>".$fila['fraccion']."</td>";
 			 echo "<td class='text-nowrap'>";
              echo '<form <action="#" method="POST">
                             <input type="hidden" name="id" value="'.$fila['id'].'">
+                            
+                            <button type="submit" class="btn btn-success btn-sm" name="more_info">
+                            <img src="../icons/status/dialog-information.png"  class="img-reponsive img-rounded"> + Info</button>
                             
                             <button type="submit" class="btn btn-danger btn-sm" name="eliminar_licencia">
                             <img src="../icons/actions/trash-empty.png"  class="img-reponsive img-rounded"> Eliminar Licencia</button>
@@ -135,7 +132,7 @@ function formNuevaLicencia($nombre,$descripcion,$conn){
                     <img class="img-reponsive img-rounded" src="../icons/actions/list-add.png" /> Cargar Licencia
                 </div>
                 <div class="panel-body">
-                     <form id="fr_nueva_licencia_ajax" method="POST">
+                     <form action="../lib/add_nueva_licencia.php" method="POST">
                     
                     <div class="container" style="margin-left:100px">
                         
@@ -199,9 +196,11 @@ function formNuevaLicencia($nombre,$descripcion,$conn){
                                     <input type="date" class="form-control" id="f_hasta" name="f_hasta">
                                 </div><hr>
                             
-                            </div>
+                            </div>';
                             
-                            <div class="col-sm-3">
+                            if($descripcion == 'Licencia Anual Ordinaria'){
+                            
+                            echo '<div class="col-sm-3">
                             
                                 <div class="form-group">
                                 <label for="periodo">Período:</label>
@@ -235,17 +234,18 @@ function formNuevaLicencia($nombre,$descripcion,$conn){
                                         si está solicitando la tercera fracción. <strong>Para utilizar la tercera fracción deberá solicitar permiso a su superior.</strong></p>
                                 </div>
                         
-                            </div>
+                            </div>';
                             
+                            }
                         
-                        </div>
+                        echo '</div>
                         
                         
                         
                         <div class="row">
                         
                             <div class="col-sm-3">
-                                <button type="submit" class="btn btn-success" name="guardar_licencia" id="add_nueva_licencia">
+                                <button type="submit" class="btn btn-success" name="guardar_licencia" >
                                 <img class="img-reponsive img-rounded" src="../icons/devices/media-floppy.png" /> Guardar</button>
                             </div>
                             
@@ -405,6 +405,40 @@ function dias_pasados($f_desde,$f_hasta){
     $dias = abs($dias); $dias = floor($dias);
     $dias = $dias + 1;
     return $dias;
+}
+
+/*
+** FUNCION QUE COMPARA FECHAS
+*/
+function dateCompare($f_desde,$f_hasta){
+
+    $f_desde = explode("-", $f_desde);   
+    $f_hasta = explode("-", $f_hasta); 
+
+    $dia_f_desde = $f_desde[2];  
+    $mes_f_desde = $f_desde[1];  
+    $anyo_f_desde = $f_desde[0]; 
+
+    $dia_f_hasta = $f_hasta[2];  
+    $mes_f_hasta = $f_hasta[1];  
+    $anyo_f_hasta = $f_hasta[0];
+
+    //$diasPrimeraJuliano = gregoriantojd($mes_f_desde, $dia_f_desde, $anyo_f_desde);  
+    //$diasSegundaJuliano = gregoriantojd($mes_f_hasta, $dia_f_hasta, $anyo_f_hasta);     
+
+    if((!checkdate($mes_f_desde, $dia_f_desde, $anyo_f_desde)) && (!checkdate($mes_f_hasta, $dia_f_hasta, $anyo_f_hasta))){
+        // "Las fechas no son válidas";
+        return -1;
+    }else{
+        
+        if(($mes_f_desde == $mes_f_hasta) && ($anyo_f_desde == $anyo_f_hasta)){
+            return 1; // el mes y año son iguales
+        }else{
+            return 0; // el mes y el año son distintos
+        }
+        
+    } 
+
 }
 
 
@@ -577,6 +611,119 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
  
 
 }
+
+
+/*
+** LICENCIA AUSENTE CON AVISO
+*/
+
+function insertAusenteAviso($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn){
+
+    mysqli_select_db($conn,'licor');
+    $sql_1 = "select * from licencias where agente = '$nombre' and tipo_licencia = '$descripcion'";
+    $query_1 = mysqli_query($conn,$sql_1);
+    while($row_1 = mysqli_fetch_array($query_1)){
+        $total_aca = $row_1['total_aca'];
+        $dias_tomados_aca = $row_1['dias_tomados_aca'];
+        $dias_resto_aca = $row_1['dias_restantes_aca'];
+        $fecha = $row_1['f_hasta'];
+    
+    }
+    
+    $cant_dias = dias_pasados($f_desde,$f_hasta);
+       
+    if(($revista == 'Planta Permanente') || ($revista == 'Ley Marco')){
+    
+        if(($total_aca == '') || ($total_aca == 'NULL') || ($total_aca == 0) &&
+            ($dias_tomados_aca == '') || ($dias_tomados_aca == 'NULL') || ($dias_tomados_aca == 0) &&
+                ($dias_restantes_aca == '') || ($dias_restantes_aca == 'NULL') || ($dias_restantes_aca == 0)){
+                
+                    $total_dias = 6;
+                
+                    if($cant_dias <= 2){
+                    
+                        $dias_restantes = $total_dias - $cant_dias;
+                        
+                        $sql_2 = "INSERT INTO licencias ".
+                                "(agente,dni,f_desde,f_hasta,tipo_licencia,total_aca,dias_tomados_aca,dias_restantes_aca)".
+                                "VALUES ".
+                                "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$total_dias','$cant_dias','$dias_restantes')";
+                                $query_2 = mysqli_query($conn,$sql_2);
+                            
+                            if($query_2){
+                                echo 1; // registro incertado correctamente
+                            }else{
+                                echo -1; // error al incertar registro
+                            }
+                                       
+                    }else if($cant_dias > 2){
+                        echo 23; // solo puede tomar hasta 2 dias seguidos de ausente con aviso
+                    }
+                               
+                }
+                
+                if(($total_aca != '') || ($total_aca != 'NULL') || ($total_aca != 0) &&
+                        ($dias_tomados_aca != '') || ($dias_tomados_aca != 'NULL') || ($dias_tomados_aca != 0) &&
+                            ($dias_restantes_aca != '') || ($dias_restantes_aca != 'NULL') || ($dias_restantes_aca != 0)){
+                        
+                            $total_dias = 6;
+                            $validarMes = dateCompare($fecha,$f_hasta);
+                                                    
+                        if($validarMes == 0){
+                        
+                            if(($dias_resto_aca >= 2) && ($dias_resto_aca <= 4)){
+                                
+                                $dias_restantes = $dias_resto_aca - $cant_dias;
+                                
+                                    $sql_3 = "INSERT INTO licencias ".
+                                            "(agente,dni,f_desde,f_hasta,tipo_licencia,total_aca,dias_tomados_aca,dias_restantes_aca)".
+                                            "VALUES ".
+                                            "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$total_dias','$cant_dias','$dias_restantes')";
+                                            $query_3 = mysqli_query($conn,$sql_3);
+                                        
+                                        if($query_3){
+                                            echo 1; // registro incertado correctamente
+                                        }else{
+                                            echo -1; // error al incertar registro
+                                        }
+                            }else if($dias_resto_aca == 0){
+                                echo 25; // ya no tiene mas dias para usar
+                            }
+                      
+                      }if(($validarMes == 1) && ($dias_tomados_aca == 2)){
+                        echo 27; // no puede tomar ausente con aviso dos veces en el mismo mes
+                      }if(($validarMes == 1) && ($dias_tomados_aca == 1)){
+                            
+                            $dias_restantes = $dias_resto_aca - $cant_dias;
+                                
+                                    $sql_4 = "INSERT INTO licencias ".
+                                            "(agente,dni,f_desde,f_hasta,tipo_licencia,total_aca,dias_tomados_aca,dias_restantes_aca)".
+                                            "VALUES ".
+                                            "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$total_dias','$cant_dias','$dias_restantes')";
+                                            $query_4 = mysqli_query($conn,$sql_4);
+                                        
+                                        if($query_4){
+                                            echo 1; // registro incertado correctamente
+                                        }else{
+                                            echo -1; // error al incertar registro
+                                        }
+                            
+                      }else if($validarMes == -1){
+                        echo 29; // las fechas no son válidas
+                      }
+                        
+                }
+    
+    }
+    
+    if($revista == 'Contrato 1109'){
+        echo 21; // solo planta permante y ley marco pueden solicitar ausentes con aviso
+    }
+    
+
+
+}
+
 
 /*
 ** ELIMINAR REGISTRO DE LICENCIA

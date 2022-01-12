@@ -1,4 +1,4 @@
-<?php session_start();
+<?php   session_start();
         include "../connection/connection.php";
         include "../lib/lib_licencias.php";
                         
@@ -16,7 +16,8 @@
         $f_desde = mysqli_real_escape_string($conn,$_POST['f_desde']);
         $f_hasta = mysqli_real_escape_string($conn,$_POST['f_hasta']);
         
-        
+        echo $f_desde .'<br>';
+        echo $f_hasta .'<br>';
         // evalua tipo de licencia
         
         if($descripcion == 'Licencia Anual Ordinaria'){
@@ -33,6 +34,17 @@
             }else{
                insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,$f_desde,$f_hasta,$periodo,$fraccion,$conn);
             }
+        }
+        
+        if($descripcion == 'Razones Particulares (Ausente con Aviso)'){
+        
+            if(($f_desde == '') || 
+                        ($f_hasta == '')){
+                echo 3; // cualquiera de los campos está vacio
+            }else{
+                insertAusenteAviso($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+            }
+        
         }
         
         
