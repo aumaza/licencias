@@ -15,11 +15,15 @@
         
         $f_desde = mysqli_real_escape_string($conn,$_POST['f_desde']);
         $f_hasta = mysqli_real_escape_string($conn,$_POST['f_hasta']);
+        $diferencia = dateDifferent($f_desde,$f_hasta);
         
-        echo $f_desde .'<br>';
-        echo $f_hasta .'<br>';
+        // evalua que las fecha hasta no sea menor a fecha desde
+        
+        if(($diferencia == 1) || ($diferencia == 0)){
+               
         // evalua tipo de licencia
         
+        // LICENCIA ANUAL ORDINARIA
         if($descripcion == 'Licencia Anual Ordinaria'){
         
             $periodo = mysqli_real_escape_string($conn,$_POST['periodo']);
@@ -36,6 +40,8 @@
             }
         }
         
+        
+        // AUSENTE CON AVISO
         if($descripcion == 'Razones Particulares (Ausente con Aviso)'){
         
             if(($f_desde == '') || 
@@ -45,6 +51,89 @@
                 insertAusenteAviso($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
             }
         
+        }
+        
+        
+        // NACIMIENTO
+        if($descripcion == 'Nacimientos'){
+            
+            if(($f_desde == '') || 
+                        ($f_hasta == '')){
+                echo 3; // cualquiera de los campos está vacio
+            }else{
+                insertLicPaternidad($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+            }
+        
+        }
+        
+        
+        // FALLECIMIENTO
+        if($descripcion == 'Fallecimiento'){
+        
+            $parentalidad = mysqli_real_escape_string($conn,$_POST['parentalidad']);
+        
+            if(($f_desde == '') || 
+                        ($f_hasta == '') ||
+                            ($parentalidad == '')){
+                echo 3; // cualquiera de los campos está vacio
+            }else{
+                insertLicFallecimiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$parentalidad,$conn);
+            }
+        
+        }
+        
+        
+        // FUERZA MAYOR
+        if($descripcion == 'Razones Especiales (Fuerza Mayor)'){
+            
+            if(($f_desde == '') || 
+                        ($f_hasta == '')){
+                echo 3; // cualquiera de los campos está vacio
+            }else{
+                insertFuerzaMayor($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+            }
+        }
+        
+        // DONACION DE SANGRE
+        if($descripcion == 'Donación de Sangre'){
+                
+                if(($f_desde == '') || 
+                            ($f_hasta == '')){
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertDonarSangre($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                }
+                
+            }
+        
+        // MESA EXAMINADORA
+        if($descripcion == 'Mesas Examinadoras'){
+        
+            if(($f_desde == '') || 
+                            ($f_hasta == '')){
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertMesaExaminadora($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                }
+            
+        
+        }
+        
+        // AUSENTE CON AVISO SIN GOCE DE HABERES
+        if($descripcion == 'Otras Inasistencias (Ausente con aviso sin goce de haberes)'){
+        
+            if(($f_desde == '') || 
+                            ($f_hasta == '')){
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertAusenteSinGoce($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                }
+            
+        
+        }
+        
+        }else if($diferencia == -1){
+            echo 31; // la fecha hasta no puede ser menor a fecha desde            
         }
         
         

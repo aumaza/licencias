@@ -76,9 +76,66 @@ while($row = mysqli_fetch_array($query)){
       }
       .row.content {height: auto;} 
     }
+    
+    .badge {
+        padding: 1px 9px 2px;
+        font-size: 12.025px;
+        font-weight: bold;
+        white-space: nowrap;
+        color: #ffffff;
+        background-color: #70b9c5;
+        -webkit-border-radius: 9px;
+        -moz-border-radius: 9px;
+        border-radius: 9px;
+    }
+    .badge:hover {
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+    }
+    .badge-error {
+    background-color: #b94a48;
+    }
+    .badge-error:hover {
+    background-color: #953b39;
+    }
+    .badge-warning {
+    background-color: #f89406;
+    }
+    .badge-warning:hover {
+    background-color: #c67605;
+    }
+    .badge-success {
+    background-color: #5cc45e;
+    }
+    .badge-success:hover {
+    background-color: #356635;
+    }
+    .badge-info {
+    background-color: #3a87ad;
+    }
+    .badge-info:hover {
+    background-color: #2d6987;
+    }
+    .badge-inverse {
+    background-color: #333333;
+    }
+    .badge-inverse:hover {
+    background-color: #1a1a1a;
+    }
+    li:hover {
+    background:#f5f5f5;
+    }
+    
   </style>
 
 <script src="main.js"></script>
+
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
 
 <!-- Guardar nuevo usuario -->
 <script type="text/javascript">
@@ -274,7 +331,7 @@ $(document).ready(function(){
  
   
 </head>
-<body>
+<body onload="nobackbutton();">
 
 <div class="container-fluid">
   <div class="row content">
@@ -373,6 +430,19 @@ $(document).ready(function(){
       if(isset($_POST['eliminar_licencia'])){
         $id = mysqli_real_escape_string($conn,$_POST['id']);
         formEliminarLicencia($id,$conn);
+      }
+      if(isset($_POST['more_info'])){
+        $id = mysqli_real_escape_string($conn,$_POST['id']);
+        formInfoLicencias($id,$conn);
+      }
+      if(isset($_POST['upload_comprobante'])){
+        $id = mysqli_real_escape_string($conn,$_POST['id']);
+        formSubirComprobante($id,$conn);
+      }
+      if(isset($_POST['subir_comprobante'])){
+        $id = mysqli_real_escape_string($conn,$_POST['id']);
+        $file = basename($_FILES["file"]["name"]);
+        insertComprobante($id,$file,$conn);
       }
       
       

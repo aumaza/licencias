@@ -1,0 +1,3 @@
+select * from licencias;
+
+delete from licencias where id = 5;

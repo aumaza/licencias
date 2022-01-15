@@ -45,7 +45,8 @@ total_enfermedad_familiar int(11),
 dias_tomados_enfermedad_familiar int(11),
 dias_restantes_enfermedad_familiar int(11),
 dias_tomados_otros int(11),
-fraccion enum('Primera','Segunda','Tercera')
+fraccion enum('Primera','Segunda','Tercera'),
+comprobante varchar(300)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 #tabla tipo_licencias
