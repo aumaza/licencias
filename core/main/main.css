@@ -1,0 +1,79 @@
+textarea {
+    overflow: scroll;
+    resize: none;
+    }
+  
+    /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+    .row.content {height: 700px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      background-color: #f1f1f1;
+      height: auto;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 10px;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 700px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height: auto;} 
+    }
+    
+    .badge {
+        padding: 1px 9px 2px;
+        font-size: 12.025px;
+        font-weight: bold;
+        white-space: nowrap;
+        color: #ffffff;
+        background-color: #70b9c5;
+        -webkit-border-radius: 9px;
+        -moz-border-radius: 9px;
+        border-radius: 9px;
+    }
+    .badge:hover {
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+    }
+    .badge-error {
+    background-color: #b94a48;
+    }
+    .badge-error:hover {
+    background-color: #953b39;
+    }
+    .badge-warning {
+    background-color: #f89406;
+    }
+    .badge-warning:hover {
+    background-color: #c67605;
+    }
+    .badge-success {
+    background-color: #5cc45e;
+    }
+    .badge-success:hover {
+    background-color: #356635;
+    }
+    .badge-info {
+    background-color: #3a87ad;
+    }
+    .badge-info:hover {
+    background-color: #2d6987;
+    }
+    .badge-inverse {
+    background-color: #333333;
+    }
+    .badge-inverse:hover {
+    background-color: #1a1a1a;
+    }
+    li:hover {
+    background:#f5f5f5;
+    }

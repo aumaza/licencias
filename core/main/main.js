@@ -1,4 +1,35 @@
 /*
+** FORMATEO DE TABLA
+*/
+$(document).ready(function(){
+      $('#myTable').DataTable({
+      "order": [[1, "asc"]],
+      "responsive": true,
+      "scrollY":        "300px",
+        "scrollX":        true,
+        "scrollCollapse": true,
+        "paging":         true,
+        "fixedColumns": true,
+      "language":{
+        "lengthMenu": "Mostrar _MENU_ registros por pagina",
+        "info": "Mostrando pagina _PAGE_ de _PAGES_",
+        "infoEmpty": "No hay registros disponibles",
+        "infoFiltered": "(filtrada de _MAX_ registros)",
+        "loadingRecords": "Cargando...",
+        "processing":     "Procesando...",
+        "search": "Buscar:",
+        "zeroRecords":    "No se encontraron registros coincidentes",
+        "paginate": {
+          "next":       "Siguiente",
+          "previous":   "Anterior"
+        },
+      }
+    });
+
+  });
+
+
+/*
 ** funcion que completa select con lo filtrado de otro select
 */
 
@@ -28,3 +59,5 @@ function nobackbutton(){
     }
     
 }
+
+

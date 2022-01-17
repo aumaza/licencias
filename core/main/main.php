@@ -7,7 +7,10 @@
            
       $usuario = $_SESSION['user'];
             
-         
+      $user_agent = $_SERVER['HTTP_USER_AGENT'];
+      $navegador = getBrowser($user_agent);
+      
+      
 $sql = "select nombre from usuarios where user = '$usuario'";
 mysqli_select_db($conn,'licor');
 $query = mysqli_query($conn,$sql);
@@ -43,92 +46,9 @@ while($row = mysqli_fetch_array($query)){
   <title>Administración de Licencias Ordinarias</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="main.css" >
   <?php skeleton(); ?>
   
-  <style>
-    
-    textarea {
-    overflow: scroll;
-    resize: none;
-    }
-  
-    /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
-    .row.content {height: 700px}
-    
-    /* Set gray background color and 100% height */
-    .sidenav {
-      background-color: #f1f1f1;
-      height: 100%;
-    }
-    
-    /* Set black background color, white text and some padding */
-    footer {
-      background-color: #555;
-      color: white;
-      padding: 10px;
-    }
-    
-    /* On small screens, set height to 'auto' for sidenav and grid */
-    @media screen and (max-width: 700px) {
-      .sidenav {
-        height: auto;
-        padding: 15px;
-      }
-      .row.content {height: auto;} 
-    }
-    
-    .badge {
-        padding: 1px 9px 2px;
-        font-size: 12.025px;
-        font-weight: bold;
-        white-space: nowrap;
-        color: #ffffff;
-        background-color: #70b9c5;
-        -webkit-border-radius: 9px;
-        -moz-border-radius: 9px;
-        border-radius: 9px;
-    }
-    .badge:hover {
-    color: #ffffff;
-    text-decoration: none;
-    cursor: pointer;
-    }
-    .badge-error {
-    background-color: #b94a48;
-    }
-    .badge-error:hover {
-    background-color: #953b39;
-    }
-    .badge-warning {
-    background-color: #f89406;
-    }
-    .badge-warning:hover {
-    background-color: #c67605;
-    }
-    .badge-success {
-    background-color: #5cc45e;
-    }
-    .badge-success:hover {
-    background-color: #356635;
-    }
-    .badge-info {
-    background-color: #3a87ad;
-    }
-    .badge-info:hover {
-    background-color: #2d6987;
-    }
-    .badge-inverse {
-    background-color: #333333;
-    }
-    .badge-inverse:hover {
-    background-color: #1a1a1a;
-    }
-    li:hover {
-    background:#f5f5f5;
-    }
-    
-  </style>
-
 <script src="main.js"></script>
 
 <script>
@@ -136,198 +56,6 @@ $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip();
 });
 </script>
-
-<!-- Guardar nuevo usuario -->
-<script type="text/javascript">
-$(document).ready(function(){
-    $('#add_nuevo_usuario').click(function(){
-        var datos=$('#fr_nuevo_usuario_ajax').serialize();
-        $.ajax({
-            type:"POST",
-            url:"../lib/add_nuevo_usuario.php",
-            data:datos,
-            success:function(r){
-                if(r==1){
-                    alert("Agente y Usuario Creado Exitosamente!!");
-                    $('#nombre').val('');
-                    $('#dni').val('');
-                    $('#email').val('');
-                    $('#antiguedad').val('');
-                    $('#revista').val('');
-                    $('#nombre').focus();
-                }else if(r==-1){
-                    alert("Hubo un problema al intentar Crear el Agente y el Usuario");
-                    console.log("Datos: " + datos);
-                }else if(r==2){
-                    alert("Hay campos en los cuales ingresó caracteres no válidos");
-                    console.log("Datos: " + datos);
-                }else if(r == 3){
-                    alert("No ha ingresado datos aún!!");
-                }
-            }
-        });
-
-        return false;
-    });
-});
-</script>
-
-<!-- Guardar nuevo tipo de licencias -->
-<script type="text/javascript">
-$(document).ready(function(){
-    $('#add_tipo_licencia').click(function(){
-        var datos=$('#fr_nuevo_tipo_licencia_ajax').serialize();
-        $.ajax({
-            type:"POST",
-            url:"../lib/add_nuevo_tipo_licencia.php",
-            data:datos,
-            success:function(r){
-                if(r==1){
-                    alert("Tipo de Licencia Agregada Exitosamente!!");
-                    $('#clase_licencia').val('');
-                    $('#descripcion').val('');
-                    $('#articulo').val('');
-                    $('#revista').val('');
-                    $('#tiempo').val('');
-                    $('#goce_haberes').val('');
-                    $('#obligatoriedad').val('');
-                    $('#particularidad').val('');
-                    $('#clase_licencia').focus();
-                }else if(r==-1){
-                    alert("Hubo un problema al intentar agregar el tipo de licencia");
-                    console.log("Datos: " + datos);
-                }else if(r==2){
-                    alert("Hay campos en los cuales ingresó caracteres no válidos");
-                    console.log("Datos: " + datos);
-                }else if(r == 3){
-                    alert("No ha ingresado datos aún!!");
-                }
-            }
-        });
-
-        return false;
-    });
-});
-</script>
-
-
-<!-- Actualizar Agente -->
-<script type="text/javascript">
-$(document).ready(function(){
-    $('#edit_agente').click(function(){
-        var datos=$('#fr_actualizar_agente_ajax').serialize();
-        $.ajax({
-            type:"POST",
-            url:"../lib/update_agente.php",
-            data:datos,
-            success:function(r){
-                if(r==1){
-                    alert("Agente Actualizado Exitosamente!!");
-                    console.log("Datos: " + datos);
-                    document.location.href="main.php";
-                }else if(r==-1){
-                    alert("Hubo un problema al intentar Actualizar el Agente");
-                    console.log("Datos: " + datos);
-                }else if(r==2){
-                    alert("Hay campos en los cuales ingresó caracteres no válidos");
-                    console.log("Datos: " + datos);
-                }
-            }
-        });
-
-        return false;
-    });
-});
-</script>
-
-<!-- Cambiar Permiso usuario -->
-<script type="text/javascript">
-$(document).ready(function(){
-    $('#cambiar_permiso').click(function(){
-        var datos=$('#frm_user_allow').serialize();
-        $.ajax({
-            type:"POST",
-            url:"../lib/cambiar_permiso_usuario.php",
-            data:datos,
-            success:function(r){
-                if(r==1){
-                    alert("Permiso de Usuario Cambiado Exitosamente!!");
-                     window.location.reload();
-                }else if(r==-1){
-                    alert("Hubo un problema al intentar cambiar el Permiso de Usuario");
-                }
-            }
-        });
-
-        return false;
-    });
-});
-</script>
-
-<!-- Cambiar Password usuario -->
-<script type="text/javascript">
-$(document).ready(function(){
-    $('#change_password').click(function(){
-        var datos=$('#frm_change_password').serialize();
-        $.ajax({
-            type:"POST",
-            url:"../lib/change_password.php",
-            data:datos,
-            success:function(r){
-                if(r == 1){
-                    alert("Password Actualizada Exitosamente!!");
-                     window.location.reload();
-                }else if(r == -1){
-                    alert("Hubo un problema al intentar actualizar el Password");
-                }else if(r == 0){
-                    alert("Los Password no Conciden");
-                    console.log("Datos: " + datos);
-                }else if(r == 2){
-                    alert("El password no puede tener menos o más de 15 caracteres");
-                    console.log("Datos: " + datos);
-                }else if(r == 3){
-                    alert("El password contiene caracteres no válidos");
-                    console.log("Datos: " + datos);
-                }
-                
-            }
-        });
-
-        return false;
-    });
-});
-</script>
-  
-<script>
-$(document).ready(function(){
-      $('#myTable').DataTable({
-      "order": [[1, "asc"]],
-      "responsive": true,
-      "scrollY":        "300px",
-        "scrollX":        true,
-        "scrollCollapse": true,
-        "paging":         true,
-        "fixedColumns": true,
-      "language":{
-        "lengthMenu": "Mostrar _MENU_ registros por pagina",
-        "info": "Mostrando pagina _PAGE_ de _PAGES_",
-        "infoEmpty": "No hay registros disponibles",
-        "infoFiltered": "(filtrada de _MAX_ registros)",
-        "loadingRecords": "Cargando...",
-        "processing":     "Procesando...",
-        "search": "Buscar:",
-        "zeroRecords":    "No se encontraron registros coincidentes",
-        "paginate": {
-          "next":       "Siguiente",
-          "previous":   "Anterior"
-        },
-      }
-    });
-
-  });
-
-</script>
-  
  
   
 </head>
@@ -372,6 +100,9 @@ $(document).ready(function(){
 <!-- Espacio de trabajo  -->
     <div class="col-sm-10"><br>
       <h4>Bienvenido/a <strong><?php echo $nombre; ?></strong></h4>
+      <div class="alert alert-success">
+      <p>Usted está utilizando el Navegador <?php echo $navegador; ?></p>
+      </div>
       
       <form action="#" method="POST">
       <p align="right">
@@ -454,6 +185,10 @@ $(document).ready(function(){
       if(isset($_POST['new_tipo_licencia'])){
         formAltaTipoLicencia();
       }
+      if(isset($_POST['editar_tipo_licencia'])){
+        $id = mysqli_real_escape_string($conn,$_POST['id']);
+        formEditTipoLicencia($id,$conn);
+      }
       
       
       }else{
@@ -468,6 +203,8 @@ $(document).ready(function(){
 </div>
 
 <script type="text/javascript" src="../lib/lib_licencias.js"></script>
+<script type="text/javascript" src="../lib/lib_usuarios.js"></script>
+
 
 <script>
   $(document).ready(function(e) {

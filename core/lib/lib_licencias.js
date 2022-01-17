@@ -147,3 +147,95 @@ $(document).ready(function(){
         return false;
     });
 });
+
+
+/*
+** AGREGAR NUEVO TIPO DE LICENCIA
+*/
+$(document).ready(function(){
+    $('#add_tipo_licencia').click(function(){
+        var datos=$('#fr_nuevo_tipo_licencia_ajax').serialize();
+        $.ajax({
+            type:"POST",
+            url:"../lib/add_nuevo_tipo_licencia.php",
+            data:datos,
+            success:function(r){
+                if(r==1){
+                    alert("Tipo de Licencia Agregada Exitosamente!!");
+                    $('#clase_licencia').val('');
+                    $('#descripcion').val('');
+                    $('#articulo').val('');
+                    $('#revista').val('');
+                    $('#tiempo').val('');
+                    $('#goce_haberes').val('');
+                    $('#obligatoriedad').val('');
+                    $('#particularidad').val('');
+                    $('#clase_licencia').focus();
+                }else if(r==-1){
+                    alert("Hubo un problema al intentar agregar el tipo de licencia");
+                    console.log("Datos: " + datos);
+                }else if(r==2){
+                    alert("Hay campos en los cuales ingresó caracteres no válidos");
+                    console.log("Datos: " + datos);
+                }else if(r == 3){
+                    alert("No ha ingresado datos aún!!");
+                }
+            }
+        });
+
+        return false;
+    });
+});
+
+
+/*
+** EDITAR NUEVO TIPO DE LICENCIA
+*/
+$(document).ready(function(){
+    $('#edit_tipo_licencia').click(function(){
+        var datos=$('#fr_edit_tipo_licencia_ajax').serialize();
+        $.ajax({
+            type:"POST",
+            url:"../lib/update_nuevo_tipo_licencia.php",
+            data:datos,
+            success:function(r){
+                if(r==1){
+                    alert("Tipo de Licencia Actualizada Exitosamente!!");
+                    document.location.href="main.php";
+                }else if(r==-1){
+                    alert("Hubo un problema al intentar actualizar el tipo de licencia");
+                    console.log("Datos: " + datos);
+                }else if(r==2){
+                    alert("Hay campos en los cuales ingresó caracteres no válidos");
+                    console.log("Datos: " + datos);
+                }else if(r == 3){
+                    alert("No ha ingresado datos aún!!");
+                }
+            }
+        });
+
+        return false;
+    });
+});
+
+
+
+/*
+** BLOQUEA LOS CAMPOS A EDITAR HASTA QUE EL USUARIO SELECCIONE EL QUE DESEA
+*/
+ var callEditLicencia = function(x){
+            
+    if((x == 'edit_descripcion') || 
+                (x == 'edit_articulo') || 
+                    (x == 'edit_tiempo') ||
+                            (x == 'edit_particularidad')){
+                
+        document.getElementById(x).readOnly = false;
+    
+    }else if((x == 'edit_clase_licencia') ||
+                (x == 'edit_revista') ||
+                    (x == 'edit_goce_haberes') ||
+                        (x == 'edit_obligatoriedad')){ 
+        document.getElementById(x).disabled = false;
+    }
+}

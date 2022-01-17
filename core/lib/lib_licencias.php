@@ -1642,13 +1642,11 @@ if($conn)
 			 echo "<td align=justify>".$fila['particularidad']."</td>";
 			 echo "<td class='text-nowrap'>";
              echo '<form <action="#" method="POST">
-                            <input type="hidden" name="name" value="'.$fila['id'].'">
+                            <input type="hidden" name="id" value="'.$fila['id'].'">
                             
                             <button type="submit" class="btn btn-primary btn-sm" name="editar_tipo_licencia">
                             <img src="../icons/actions/document-edit.png"  class="img-reponsive img-rounded"> Editar</button>
-                            
-                            <button type="submit" class="btn btn-danger btn-sm" name="borrar_tipo_licencia">
-                            <img src="../icons/actions/trash-empty.png"  class="img-reponsive img-rounded"> Borrar</button>
+                          
                         </form>';
              echo "</td>";
 			 $count++;
@@ -1667,7 +1665,7 @@ if($conn)
 }
 
 // ================================================================== //
-// FORMULARIOS
+// FORMULARIOS TIPO DE LICENCIAS
 /*
 ** funcion que llama al formulario de cargar de nuevo tipo de licencia
 */
@@ -1707,7 +1705,7 @@ function formAltaTipoLicencia(){
                                 
                                 <div class="form-group">
                                     <label for="articulo">Artículo:</label>
-                                    <input type="articulo" class="form-control" id="articulo" name="articulo" required>
+                                    <input type="text" class="form-control" id="articulo" name="articulo" required>
                                 </div><hr>
                                 
                             </div>
@@ -1778,6 +1776,142 @@ function formAltaTipoLicencia(){
 }
 
 
+/*
+** funcion que llama al formulario de cargar de nuevo tipo de licencia
+*/
+function formEditTipoLicencia($id,$conn){
+
+    $sql = "select * from tipo_licencia where id = '$id'";
+    mysqli_select_db($conn,'licor');
+    $query = mysqli_query($conn,$sql);
+    while($row = mysqli_fetch_array($query)){
+        $clase_licencia = $row['clase_licencia'];
+        $descripcion = $row['descripcion'];
+        $art_licencia = $row['art_licencia'];
+        $revista = $row['tipo_revista'];
+        $clase_licencia = $row['clase_licencia'];
+        $tiempo = $row['tiempo'];
+        $goce_haberes = $row['goce_haberes'];
+        $obligatoria = $row['obligatoria'];
+        $particularidad = $row['particularidad'];
+    }
+
+    echo '<div class="container" style="margin-top:70px">
+            <div class="panel panel-default">
+                    
+                <div class="panel-heading">
+                    <img class="img-reponsive img-rounded" src="../icons/actions/document-edit.png" /> Editar Tipo de Licencia
+                </div>
+                <div class="panel-body">
+                     <form id="fr_edit_tipo_licencia_ajax" method="POST">
+                    <div class="container" style="margin-left:100px">
+                        <input type="hidden" name="id" value="'.$id.'">
+                        
+                        <div class="row">
+                            
+                            <div class="col-sm-3">
+                                
+                                <div class="form-group">
+                                <label for="clase_licencia">Clase de Licencia:</label>
+                                <select class="form-control" id="edit_clase_licencia" name="clase_licencia" required disabled>
+                                    <option value="" selected disabled>Seleccionar</option>
+                                    <option value="1" '.(($clase_licencia == 'Licencias Ordinarias') ? ' selected = "selected"':"").'>Licencias Ordinarias</option>
+                                    <option value="2" '.(($clase_licencia == 'Licencias Especiales') ? ' selected = "selected"':"").'>Licencias Especiales</option>
+                                    <option value="3" '.(($clase_licencia == 'Licencias Extraordinarias con goce de haberes') ? ' selected = "selected"':"").'>Licencias Extraordinarias con goce de haberes</option>
+                                    <option value="4" '.(($clase_licencia == 'Licencias Extraordinarias sin goce de haberes') ? ' selected = "selected"':"").'>Licencias Extraordinarias sin goce de haberes</option>
+                                    <option value="5" '.(($clase_licencia == 'Inasistencias') ? ' selected = "selected"':"").'>Insistencias</option>
+                                    <option value="6" '.(($clase_licencia == 'Franquicias') ? ' selected = "selected"':"").'>Franquicias</option>
+                                </select><br>
+                                <button type="button" class="btn btn-warning" onclick=callEditLicencia("edit_clase_licencia")>Editar</button>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="descripcion">Descripción:</label>
+                                    <input type="text" class="form-control" id="edit_descripcion" name="descripcion" value="'.$descripcion.'" required readonly><br>
+                                    <button type="button" class="btn btn-warning" onclick=callEditLicencia("edit_descripcion")>Editar</button>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="articulo">Artículo:</label>
+                                    <input type="text" class="form-control" id="edit_articulo" name="articulo" value="'.$art_licencia.'" required readonly><br>
+                                    <button type="button" class="btn btn-warning" onclick=callEditLicencia("edit_articulo")>Editar</button>
+                                </div><hr>
+                                
+                            </div>
+                            
+                            <div class="col-sm-3">
+                                
+                                <div class="form-group">
+                                    <label for="revista">Tipo Situación de Revista:</label>
+                                    <select class="form-control" id="edit_revista" name="revista" required disabled>
+                                        <option value="" selected disabled>Seleccionar</option>
+                                        <option value="1" '.(($revista == 'Planta Permanente') ? ' selected = "selected"':"").'>Planta Permanente</option>
+                                        <option value="2" '.(($revista == 'No Permanente') ? ' selected = "selected"':"").'>No Permanente</option>
+                                        <option value="3" '.(($revista == 'Ambas') ? ' selected = "selected"':"").'>Ambas</option>
+                                    </select><br>
+                                    <button type="button" class="btn btn-warning" onclick=callEditLicencia("edit_revista")>Editar</button>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="tiempo">Plazos:</label>
+                                    <input type="text" class="form-control" id="edit_tiempo" name="tiempo" value="'.$tiempo.'" required readonly><br>
+                                    <button type="button" class="btn btn-warning" onclick=callEditLicencia("edit_tiempo")>Editar</button>
+                                </div>
+                             
+                                <div class="form-group">
+                                    <label for="goce_haberes">Goce de Haberes:</label>
+                                    <select class="form-control" id="edit_goce_haberes" name="goce_haberes" required disabled>
+                                        <option value="" selected disabled>Seleccionar</option>
+                                        <option value="1" '.(($goce_haberes == 'Si') ? ' selected = "selected"':"").'>Si</option>
+                                        <option value="2" '.(($goce_haberes == 'No') ? ' selected = "selected"':"").'>No</option>
+                                </select><br>
+                                <button type="button" class="btn btn-warning" onclick=callEditLicencia("edit_goce_haberes")>Editar</button>
+                                </div><hr>
+                                
+                                
+                            </div>
+                            
+                             <div class="col-sm-3">
+                             
+                                <div class="form-group">
+                                    <label for="obligatoriedad">Obligatoriedad:</label>
+                                    <select class="form-control" id="edit_obligatoriedad" name="obligatoriedad" required disabled>
+                                        <option value="" selected disabled>Seleccionar</option>
+                                        <option value="1" '.(($obligatoria == 'Si') ? ' selected = "selected"':"").'>Si</option>
+                                        <option value="2" '.(($obligatoria == 'No') ? ' selected = "selected"':"").'>No</option>
+                                </select><br>
+                                <button type="button" class="btn btn-warning" onclick=callEditLicencia("edit_obligatoriedad")>Editar</button>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="particularidad">Particularidades:</label>
+                                    <textarea class="form-control" rows="4" id="edit_particularidad" name="particularidad" spellcheck="true" required readonly>'.$particularidad.'</textarea><br>
+                                    <button type="button" class="btn btn-warning" onclick=callEditLicencia("edit_particularidad")>Editar</button>
+                                </div><hr>
+                                                              
+                                
+                            </div>                                 
+                        </div>
+                        
+                        <div class="row">
+                        <div class="col-sm-3">
+                        <button type="submit" class="btn btn-success" name="edit_tipo_licencia" id="edit_tipo_licencia">
+                            <img class="img-reponsive img-rounded" src="../icons/actions/document-save-as.png" /> Actualizar</button>
+                        </div>
+                        </div>
+                        
+                    </div>
+                        </form> 
+                </div>
+            </div>
+          </div>';
+
+
+}
+
+
+
+
 // ================================================================ //
 // PERSISTENCIA A LA BASE
 // persistir tipo de licencia
@@ -1814,5 +1948,46 @@ function addTipoLicencia($clase_licencia,$descripcion,$articulo,$revista,$tiempo
 
 }
 
+
+/*
+** FUNCION DE PERSISTENCIA A BASE DE ACTUALIZACION DE TIPO DE LICENCIA
+*/
+function updateTipoLicencia($id,$clase_licencia,$descripcion,$articulo,$revista,$tiempo,$goce_haberes,$obligatoriedad,$particularidad,$conn){
+
+    if((intValidator($clase_licencia) == 1) ||
+            (nameValidator($descripcion) == 1) ||
+                (nameValidator($articulo) == 1) ||
+                    (intValidator($revista) == 1) ||
+                        (nameValidator($tiempo) == 1) ||
+                            (intValidator($goce_haberes) == 1) ||
+                                (intValidator($obligatoriedad) == 1) ||
+                                    (nameValidator($particularidad) == 1)){
+
+
+    $sql = "UPDATE tipo_licencia set 
+            clase_licencia = '$clase_licencia', 
+            descripcion = '$descripcion', 
+            art_licencia = '$articulo', 
+            tipo_revista = '$revista', 
+            tiempo = '$tiempo', 
+            goce_haberes = '$goce_haberes', 
+            obligatoria = '$obligatoriedad', 
+            particularidad = '$particularidad' 
+            where id = '$id'";
+    
+    mysqli_select_db($conn,'licor');
+    $query = mysqli_query($conn,$sql);
+    
+    if($query){
+        echo 1; // el registro fue satisfactorio
+    }else{
+        echo -1; // hubo un problema al insertar el registro
+    }
+    }else{
+        echo 2; // caracteres inválidos
+    }
+
+
+}
 
 ?>
