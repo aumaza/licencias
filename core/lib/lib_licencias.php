@@ -9,6 +9,10 @@
 
 function licencias($nombre,$conn){
 
+
+$fecha_actual = date("Y-m-d");
+
+
 if($conn)
 {
 	
@@ -33,7 +37,7 @@ if($conn)
 	echo '<div class="container-fluid" style="margin-top:70px">
             <div class="panel panel-default" >
                 <div class="panel-heading"><span class="pull-center "><img src="../icons/actions/view-calendar-timeline.png"  class="img-reponsive img-rounded"> Licencias de Todos los Agentes';
-    
+                    
     echo '<p align="right">
             <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modalSelAgente" data-toggle="tooltip" title="Cargar Nueva Licencia">
                 <img src="../icons/actions/task-new.png"  class="img-reponsive img-rounded"></button>
@@ -86,11 +90,14 @@ if($conn)
                             <input type="hidden" name="id" value="'.$fila['id'].'">
                             
                             <button type="submit" class="btn btn-success btn-sm" name="more_info">
-                            <img src="../icons/status/dialog-information.png"  class="img-reponsive img-rounded"> + Info</button>
+                            <img src="../icons/status/dialog-information.png"  class="img-reponsive img-rounded"> + Info</button>';
                             
-                            <button type="submit" class="btn btn-danger btn-sm" name="eliminar_licencia">
-                            <img src="../icons/actions/trash-empty.png"  class="img-reponsive img-rounded"> Eliminar Licencia</button>
-                        </form>';
+                            if($fecha_actual <= $fila['f_desde']){
+                            
+                            echo '<button type="submit" class="btn btn-danger btn-sm" name="eliminar_licencia">
+                                    <img src="../icons/actions/trash-empty.png"  class="img-reponsive img-rounded"> Eliminar Licencia</button>';
+                            }
+             echo '</form>';
              echo "</td>";
 			 $count++;
 		}
@@ -255,7 +262,23 @@ function formNuevaLicencia($nombre,$descripcion,$conn){
                                     </div>';
                             
                             }
-                        
+                            
+                            if(($descripcion == 'Horarios para estudiantes') || ($descripcion == 'Reducción horaria para agentes madres de lactantes')){
+                            
+                                echo '<div class="col-sm-3">
+                                        <div class="form-group">
+                                        <label for="cant_horas">Cantidad Horas:</label>
+                                        <select class="form-control" id="cant_horas" name="cant_horas">
+                                            <option value="" selected disabled>Seleccionar</option>
+                                            <option value="1800">1/2 Hora</option>
+                                            <option value="1">1 Hora</option>
+                                            <option value="2">2 Horas</option>
+                                            <option value="3">3 Horas</option>
+                                            <option value="4">4 Horas</option>
+                                        </select>
+                                        </div><hr></div>';
+                            }
+                          
                         echo '</div>
                         
                         
@@ -413,6 +436,15 @@ function formInfoLicencias($id,$conn){
             }
             if($licencia == 'Mesas Examinadoras'){
                 infoMesaExaminadora($id,$conn);
+            }
+            if($licencia == 'Horarios para estudiantes'){
+                infoHorariosEstudiantes($id,$conn);
+            }
+            if($licencia == 'Reducción horaria para agentes madres de lactantes'){
+                infoMadresLactantes($id,$conn);
+            }
+            if($licencia == 'Asistencia a congresos'){
+                infoAsistenciaCongresos($id,$conn);
             }
             
                
@@ -720,6 +752,155 @@ function infoMesaExaminadora($id,$conn){
                 <li class="list-group-item"><strong>Días: </strong> <span class="badge badge-inverse">'.$dias_totales.'</span></li>
                 <li class="list-group-item"><strong>Días Tomados: </strong> <span class="badge badge-inverse">'.$dias_tomados_estudio.'</span></li>
                 <li class="list-group-item"><strong>Días Restantes: </strong> <span class="badge badge-inverse">'.$dias_resto_estudio.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
+
+
+/*
+** INFORMACION HORARIOS PARA ESTUDIANTES
+*/
+function infoHorariosEstudiantes($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $cant_horas = $fila['cant_horas'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Cantidad Horas: </strong> <span class="badge badge-inverse">'.$cant_horas.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
+
+
+/*
+** INFORMACION HORARIOS PARA ESTUDIANTES
+*/
+function infoMadresLactantes($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $cant_horas = $fila['cant_horas'];
+                $cant_dias = $fila['dias_tomados_otros'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Cantidad Horas: </strong> <span class="badge badge-inverse">'.$cant_horas.'</span></li>
+                <li class="list-group-item"><strong>Cantidad Días: </strong> <span class="badge badge-inverse">'.$cant_dias.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
+
+
+/*
+** INFORMACION HORARIOS PARA ESTUDIANTES
+*/
+function infoAsistenciaCongresos($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $cant_dias = $fila['dias_tomados_otros'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Cantidad Días: </strong> <span class="badge badge-inverse">'.$cant_dias.'</span></li>';
                 
                 if($comprobante != ''){
                     echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
@@ -1497,6 +1678,172 @@ function insertMesaExaminadora($nombre,$dni,$revista,$descripcion,$f_desde,$f_ha
     }
  
 }
+
+
+// ================================================================== //
+// FRAQUICIAS //
+/*
+** INSERTAR LICENCIA HORARIO PARA ESTUDIANTES
+*/
+function insertLicenciaHorEstudiante($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_horas,$conn){
+
+    $cant_horas = intval($cant_horas);
+
+
+    if(is_int($cant_horas)){
+
+    if(($cant_horas < 2) || ($cant_horas > 2) || ($cant_horas == 1800)){
+       echo 55; // la cantidad de horas no pueden ser mayores ni menores a 2
+    }else if($cant_horas == 2){
+        
+            mysqli_select_db($conn,'licor');
+            $sql = "INSERT INTO licencias ".
+                     "(agente,dni,f_desde,f_hasta,tipo_licencia,cant_horas)".
+                     "VALUES ".
+                     "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$cant_horas')";
+                     $query = mysqli_query($conn,$sql);
+                     
+                    if($query){
+                        echo 1; // registro incertado correctamente
+                    }else{
+                        echo -1; // error al incertar registro
+                    }
+    }
+    }else{
+        echo 56; // no es un entero
+    }
+    
+    
+}
+
+
+/*
+** REDUCCION HORARIA PARA MADRES EN PERÍODO DE LACTANCIA
+*/
+function insertLicenciaMadreLactante($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_horas,$conn){
+
+    $cant_horas = intval($cant_horas);
+    $cant_dias = dias_pasados($f_desde,$f_hasta);
+    
+    $sql = "select * from licencias where agente = '$nombre' and descripcion = '$descripcion'";
+    mysqli_select_db($conn,'licor');
+    $query = mysqli_query($conn,$sql);
+    $row = mysqli_num_rows($query);
+    while($rows = mysqli_fetch_array($query)){
+        $dias_tomados = $rows['dias_tomados_otros'];
+    }
+    
+        
+    if($row == 0){
+    
+    if($cant_dias <= 240){
+    
+        
+        if($cant_horas == 1){
+        
+            mysqli_select_db($conn,'licor');
+            $sql_1 = "INSERT INTO licencias ".
+                   "(agente,dni,f_desde,f_hasta,tipo_licencia,cant_horas,dias_tomados_otros)".
+                   "VALUES ".
+                   "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$cant_horas','$cant_dias')";
+            $query_1 = mysqli_query($conn,$sql_1);
+                     
+                    if($query_1){
+                        echo 1; // registro incertado correctamente
+                    }else{
+                        echo -1; // error al incertar registro
+                    }
+    
+        }else if($cant_horas > 1){
+            echo 57; // no se puede exceder la cantidad de 1 hr
+        }
+
+    }else if($cant_dias > 240){
+        echo 59; // el valor no puede ser superior a 240
+    }else if($cant_horas == 1800){
+        $cant_horas = 30;
+        
+            mysqli_select_db($conn,'licor');
+            $sql_2 = "INSERT INTO licencias ".
+                   "(agente,dni,f_desde,f_hasta,tipo_licencia,cant_horas,dias_tomados_otros)".
+                   "VALUES ".
+                   "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$cant_horas','$cant_dias')";
+            $query_2 = mysqli_query($conn,$sql_2);
+                     
+                    if($query_2){
+                        echo 1; // registro incertado correctamente
+                    }else{
+                        echo -1; // error al incertar registro
+                    }
+    }
+    
+    }
+    
+    if($row > 0){
+        
+        $dias_restantes = 365 - $dias_tomados;
+        
+            if($cant_horas == 1){
+        
+                mysqli_select_db($conn,'licor');
+                $sql_3 = "INSERT INTO licencias ".
+                    "(agente,dni,f_desde,f_hasta,tipo_licencia,cant_horas,dias_tomados_otros)".
+                    "VALUES ".
+                    "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$cant_horas','$dias_restantes')";
+                $query_3 = mysqli_query($conn,$sql_3);
+                        
+                        if($query_3){
+                            echo 1; // registro incertado correctamente
+                        }else{
+                            echo -1; // error al incertar registro
+                        }
+    
+            }else if($cant_horas > 1){
+                echo 57; // no se puede exceder la cantidad de 1 hr
+            }else if($cant_horas == 1800){
+        
+                $cant_horas = 30;
+            
+                mysqli_select_db($conn,'licor');
+                $sql_4 = "INSERT INTO licencias ".
+                    "(agente,dni,f_desde,f_hasta,tipo_licencia,cant_horas,dias_tomados_otros)".
+                    "VALUES ".
+                    "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$cant_horas','$dias_restantes')";
+                $query_4 = mysqli_query($conn,$sql_4);
+                        
+                        if($query_4){
+                            echo 1; // registro incertado correctamente
+                        }else{
+                            echo -1; // error al incertar registro
+                        }
+        }
+    
+    }
+
+}
+
+/*
+** INSERTAR EN BASE ASISTENCIA A CONGRESOS
+*/
+function insertAsistenciaCongresos($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn){
+
+    $cant_dias = dias_pasados($f_desde,$f_hasta);
+    
+    mysqli_select_db($conn,'licor');
+    $sql = "INSERT INTO licencias ".
+            "(agente,dni,f_desde,f_hasta,tipo_licencia,dias_tomados_otros)".
+            "VALUES ".
+            "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$cant_dias')";
+    $query = mysqli_query($conn,$sql);
+                        
+                        if($query){
+                            echo 1; // registro incertado correctamente
+                        }else{
+                            echo -1; // error al incertar registro
+                        }
+
+}
+
 
 
 

@@ -8,8 +8,7 @@
       $usuario = $_SESSION['user'];
             
       $user_agent = $_SERVER['HTTP_USER_AGENT'];
-      $navegador = getBrowser($user_agent);
-      
+           
       
 $sql = "select nombre from usuarios where user = '$usuario'";
 mysqli_select_db($conn,'licor');
@@ -100,9 +99,7 @@ $(document).ready(function(){
 <!-- Espacio de trabajo  -->
     <div class="col-sm-10"><br>
       <h4>Bienvenido/a <strong><?php echo $nombre; ?></strong></h4>
-      <div class="alert alert-success">
-      <p>Usted está utilizando el Navegador <?php echo $navegador; ?></p>
-      </div>
+      <?php messageBrowser($user_agent); ?>
       
       <form action="#" method="POST">
       <p align="right">
@@ -154,6 +151,8 @@ $(document).ready(function(){
                 formNuevaLicencia($nombre,$descripcion,$conn);
             }
             if($tipo_licencia == 'Inasistencias'){
+                formNuevaLicencia($nombre,$descripcion,$conn);
+            }if($tipo_licencia == 'Franquicias'){
                 formNuevaLicencia($nombre,$descripcion,$conn);
             }
       }

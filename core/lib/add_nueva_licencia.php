@@ -132,6 +132,48 @@
         
         }
         
+        // HORARIOS PARA ESTUDIANTES
+        if($descripcion == 'Horarios para estudiantes'){
+            
+            $cant_horas = mysqli_real_escape_string($conn,$_POST['cant_horas']);
+            
+            if(($f_desde == '') || 
+                            ($f_hasta == '') ||
+                                ($cant_horas == '')){
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertLicenciaHorEstudiante($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_horas,$conn);
+                }
+        
+        }
+        
+        // MADRES LACTANTES
+        if($descripcion == 'Reducción horaria para agentes madres de lactantes'){
+        
+            $cant_horas = mysqli_real_escape_string($conn,$_POST['cant_horas']);
+            
+            if(($f_desde == '') || 
+                            ($f_hasta == '') ||
+                                ($cant_horas == '')){
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertLicenciaMadreLactante($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_horas,$conn);
+                }
+        
+        }
+        
+        // ASISTENCIA A CONGRESOS
+        if($descripcion == 'Asistencia a congresos'){
+            
+            if(($f_desde == '') || 
+                    ($f_hasta == '')){
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertAsistenciaCongresos($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                }
+        }
+        
+        
         }else if($diferencia == -1){
             echo 31; // la fecha hasta no puede ser menor a fecha desde            
         }

@@ -104,6 +104,27 @@ $(document).ready(function(){
                     console.log("Datos: " + datos);
                 }
                 
+                // FRANQUICIAS //
+                // HORARIOS PARA ESTUDIANTES
+                else if(r == 55){
+                    alert("La Cantidad de Horas no pueden ser Mayor o Menor a 2!!");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 56){
+                    alert("El valor de la hora debe ser un valor numérico!!");
+                    console.log("Datos: " + datos);
+                }
+                
+                // MADRES LACTANTES
+                else if(r == 57){
+                    alert("La cantidad de horas no puede ser mayor a 1!!");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 59){
+                    alert("La Cantidad de días a tomar no puede exceder los 240!!");
+                    console.log("Datos: " + datos);
+                }
+                
                 else if(r == ''){
                     console.log("Datos: " + datos);
                 }

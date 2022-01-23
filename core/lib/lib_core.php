@@ -327,23 +327,68 @@ function getBrowser($user_agent){
         elseif(strpos($user_agent, 'Opera') || strpos($user_agent, 'OPR') !== FALSE){
             return "Opera";
         }
-        elseif(strpos($user_agent, 'Firefox') !== FALSE){
-            
-            return 'Mozilla Firefox';
-            
-        }
         elseif(strpos($user_agent, 'Chrome') !== FALSE){
             return 'Google Chrome';
         }
         elseif(strpos($user_agent, 'Safari') !== FALSE){
             return "Safari";
         }
-        elseif(strpos($user_agent, 'SeaMonkey/') !== FALSE){
+        elseif((strpos($user_agent, 'SeaMonkey') != FALSE) && (strpos($user_agent, 'Firefox') !== FALSE)){
             return "SeaMonkey";
+        }
+        elseif(strpos($user_agent, 'Firefox') !== FALSE){
+            return 'Mozilla Firefox';
         }
         else{
             return 'No hemos podido detectar su navegador';
         }
+
+}
+
+/*
+** FUNCOIN QUE MUESTRA MENSAJE DE BROWSER UTILIZADO
+*/
+function messageBrowser($user_agent){
+
+    $browser = getBrowser($user_agent);
+       
+    if($browser == 'Internet Explorer'){
+        echo '<div class="alert alert-success">
+                Navegando desde <img src="../browser_icons/chrome_logo_32.png"  class="img-reponsive img-rounded">
+              </div>';
+    }else if($browser == 'Microsoft Edge'){
+        echo '<div class="alert alert-success">
+                Navegando desde <img src="../browser_icons/chrome_logo_32.png"  class="img-reponsive img-rounded">
+              </div>';
+    }else if($browser == 'Opera Mini'){
+        echo '<div class="alert alert-success">
+                Navegando desde <img src="../browser_icons/opera_logo_32.png"  class="img-reponsive img-rounded">
+              </div>';
+    }else if($browser == 'Opera'){
+        echo '<div class="alert alert-success">
+                Navegando desde <img src="../browser_icons/opera_logo_32.png"  class="img-reponsive img-rounded">
+              </div>';
+    }else if($browser == 'Mozilla Firefox'){
+        echo '<div class="alert alert-success">
+                Navegando desde <img src="../browser_icons/firefox_logo_32.png"  class="img-reponsive img-rounded">
+              </div>';
+    }else if($browser == 'Google Chrome'){
+        echo '<div class="alert alert-success">
+                Navegando desde <img src="../browser_icons/chrome_logo_32.png"  class="img-reponsive img-rounded">
+              </div>';
+    }else if($browser == 'Safari'){
+        echo '<div class="alert alert-success">
+                Navegando desde <img src="../browser_icons/safari_logo_32.png"  class="img-reponsive img-rounded">
+              </div>';
+    }else if($browser == 'SeaMonkey'){
+        echo '<div class="alert alert-success">
+                Navegando desde <img src="../browser_icons/seamonkey_logo_32.png"  class="img-reponsive img-rounded">
+              </div>';
+    }else if($browser == 'Chrome'){
+        echo '<div class="alert alert-success">
+                Navegando desde <img src="../browser_icons/vivaldi_logo_32.png"  class="img-reponsive img-rounded">
+              </div>';
+    }
 
 
 }
