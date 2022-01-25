@@ -1844,6 +1844,57 @@ function insertAsistenciaCongresos($nombre,$dni,$revista,$descripcion,$f_desde,$
 
 }
 
+// =========================================================================================================================== //
+// LICENCIAS ESPECIALES //
+/*
+** AFECCIONES DE CORTO TRATAMIENTO
+*/
+function insertCortoTratamiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn){
+    
+    $cant_dias = dias_pasados($f_desde,$f_hasta);
+    
+    mysqli_select_db($conn,'licor');
+    $sql = "select * from licencias where agente = '$nombre' and tipo_licencia = '$descripcion'";
+    $query = mysqli_query($conn,$sql);
+    $rows = mysqli_num_rows($query);
+    while($row = mysqli_fetch_array($query)){
+        $tomados_enfermedad = $row['dias_tomados_enfermedad'];
+        $restantes_enfermedad = $row['dias_restantes_enfermedad'];    
+    }
+    
+    if($rows == 0){
+    
+        $total_dias = 45;
+        $dias_restantes = $total_dias - $cant_dias;
+        
+        if($cant_dias <= 45){
+        
+            $sql_1 = "INSERT INTO licencias ".
+            "(agente,dni,f_desde,f_hasta,tipo_licencia,total_enfermedad,dias_tomados_enfermedad,dias_restantes_enfermedad)".
+            "VALUES ".
+            "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$total_dias','$cant_dias','$dias_restantes')";
+            $query_1 = mysqli_query($conn,$sql_1);
+                        
+                        if($query_1){
+                            echo 1; // registro incertado correctamente
+                        }else{
+                            echo -1; // error al incertar registro
+                        }
+        
+        }else if($cant_dias > 45){
+            echo 61; // LA CANTIDAD DE DIAS A TOMAR NO PUEDE EXCEDER LOS 45
+        }
+    
+    }else if($rows > 1){
+    
+        
+    
+    }
+
+
+
+}
+
 
 
 

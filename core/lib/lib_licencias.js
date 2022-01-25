@@ -125,6 +125,13 @@ $(document).ready(function(){
                     console.log("Datos: " + datos);
                 }
                 
+                // ENFEREMEDAD COROTO TRATAMIENTO
+                else if(r == 61){
+                    alert("La Cantidad de días a tomar no puede exceder los 45!!");
+                    console.log("Datos: " + datos);
+                }
+                
+                
                 else if(r == ''){
                     console.log("Datos: " + datos);
                 }
