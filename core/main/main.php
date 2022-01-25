@@ -1,4 +1,5 @@
 <?php session_start();
+      ini_set('display_errors', 1);
       include "../connection/connection.php";
       include "../lib/lib_core.php";
       include "../lib/lib_usuarios.php";
@@ -8,7 +9,7 @@
       $usuario = $_SESSION['user'];
             
       $user_agent = $_SERVER['HTTP_USER_AGENT'];
-           
+      
       
 $sql = "select nombre from usuarios where user = '$usuario'";
 mysqli_select_db($conn,'licor');
@@ -47,7 +48,7 @@ while($row = mysqli_fetch_array($query)){
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="main.css" >
   <?php skeleton(); ?>
-  
+
 <script src="main.js"></script>
 
 <script>
@@ -153,6 +154,8 @@ $(document).ready(function(){
             if($tipo_licencia == 'Inasistencias'){
                 formNuevaLicencia($nombre,$descripcion,$conn);
             }if($tipo_licencia == 'Franquicias'){
+                formNuevaLicencia($nombre,$descripcion,$conn);
+            }if($tipo_licencia == 'Licencias Especiales'){
                 formNuevaLicencia($nombre,$descripcion,$conn);
             }
       }

@@ -173,6 +173,30 @@
                 }
         }
         
+        // AFECCIONES DE CORTO TRATAMIENTO 
+        if($descripcion == 'Afecciones de corto tratamiento'){
+        
+            if(($f_desde == '') || 
+                    ($f_hasta == '')){
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertCortoTratamiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                }
+        }
+        
+        // ENFERMEDAD EN HORAS DE LABOR
+        if($descripcion == 'Enfermedad en horas de labor'){
+        
+            if(($f_desde == '') || 
+                    ($f_hasta == '')){
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertEnfHorasLabor($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                }
+        
+        
+        }
+        
         
         }else if($diferencia == -1){
             echo 31; // la fecha hasta no puede ser menor a fecha desde            

@@ -130,7 +130,10 @@ $(document).ready(function(){
                     alert("La Cantidad de días a tomar no puede exceder los 45!!");
                     console.log("Datos: " + datos);
                 }
-                
+                else if(r == 63){
+                    alert("La Cantidad de días a tomar excede la cantidad de días que quedan!!");
+                    console.log("Datos: " + datos);
+                }
                 
                 else if(r == ''){
                     console.log("Datos: " + datos);

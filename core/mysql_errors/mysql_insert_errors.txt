@@ -1,0 +1,1 @@
+Incorrect integer value: '' for column `licor`.`licencias`.`total_enfermedad` at row 1

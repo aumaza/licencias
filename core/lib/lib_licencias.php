@@ -446,6 +446,9 @@ function formInfoLicencias($id,$conn){
             if($licencia == 'Asistencia a congresos'){
                 infoAsistenciaCongresos($id,$conn);
             }
+            if($licencia == 'Afecciones de corto tratamiento'){
+                infoCortoTratamiento($id,$conn);
+            }
             
                
                 
@@ -821,7 +824,7 @@ function infoHorariosEstudiantes($id,$conn){
 
 
 /*
-** INFORMACION HORARIOS PARA ESTUDIANTES
+** INFORMACION MADRES LACTANTES
 */
 function infoMadresLactantes($id,$conn){
 
@@ -872,7 +875,7 @@ function infoMadresLactantes($id,$conn){
 
 
 /*
-** INFORMACION HORARIOS PARA ESTUDIANTES
+** INFORMACION ASISTENCIA A CONGRESOS
 */
 function infoAsistenciaCongresos($id,$conn){
 
@@ -918,6 +921,60 @@ function infoAsistenciaCongresos($id,$conn){
              echo '</ul>';
 
 }
+
+
+/*
+** INFORMACION AFECCIONES DE CORTO TRATAMIENTO
+*/
+function infoCortoTratamiento($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $total_dias = $fila['total_enfermedad'];
+                $tomados_enfermedad = $fila['dias_tomados_enfermedad'];
+                $restantes_enfermedad = $fila['dias_restantes_enfermedad'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Total Días: </strong> <span class="badge badge-inverse">'.$total_dias.'</span></li>
+                <li class="list-group-item"><strong>Días Tomados: </strong> <span class="badge badge-inverse">'.$tomados_enfermedad.'</span></li>
+                <li class="list-group-item"><strong>Días Restantes: </strong> <span class="badge badge-inverse">'.$restantes_enfermedad.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
+
 
 
 // ========================================================================================= //
@@ -1065,6 +1122,24 @@ function dateDifferent($f_desde,$f_hasta){
         return -1; // fecha hasta no puede ser menor a la de inicio
     }
 
+}
+
+/*
+** FUNCION PARA GUARDAR REGISTRO DE ERROR DE MYSQL INSERT
+*/
+function mysqlInsertsErrors($error){
+    
+    $file = '../mysql_errors/mysql_insert_errors.txt';
+    $fecha_actual = date("Y-m-d H:i:s");
+    $text = $fecha_actual .' / '. $error;
+    
+    if(file_exists($file)){
+        $fp = fopen($file, "a+");
+        fwrite($fp, $text);
+        fclose($fp);
+    }else{
+        exit();
+    }
 }
 
 // ================================================================== //
@@ -1547,7 +1622,7 @@ function insertLicFallecimiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_h
 
 
 /*
-** INSERTAR LICENCIA POR FUARZA MAYOR
+** INSERTAR LICENCIA POR FUERZA MAYOR
 */
 function insertFuerzaMayor($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn){
     
@@ -1723,7 +1798,7 @@ function insertLicenciaHorEstudiante($nombre,$dni,$revista,$descripcion,$f_desde
 function insertLicenciaMadreLactante($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_horas,$conn){
 
     $cant_horas = intval($cant_horas);
-    $cant_dias = dias_pasados($f_desde,$f_hasta);
+    $cant_dias = dias_pasados($f_desde,$f_hasta);formNuevaLicencia($nombre,$descripcion,$conn);
     
     $sql = "select * from licencias where agente = '$nombre' and descripcion = '$descripcion'";
     mysqli_select_db($conn,'licor');
@@ -1744,7 +1819,7 @@ function insertLicenciaMadreLactante($nombre,$dni,$revista,$descripcion,$f_desde
             mysqli_select_db($conn,'licor');
             $sql_1 = "INSERT INTO licencias ".
                    "(agente,dni,f_desde,f_hasta,tipo_licencia,cant_horas,dias_tomados_otros)".
-                   "VALUES ".
+                   "VALUES ".formNuevaLicencia($nombre,$descripcion,$conn);
                    "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$cant_horas','$cant_dias')";
             $query_1 = mysqli_query($conn,$sql_1);
                      
@@ -1885,18 +1960,152 @@ function insertCortoTratamiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_h
             echo 61; // LA CANTIDAD DE DIAS A TOMAR NO PUEDE EXCEDER LOS 45
         }
     
-    }else if($rows > 1){
+    }else if($rows > 0){
     
+        $total_dias = 45;
         
+        if($cant_dias <= $restantes_enfermedad){
+        
+            $dias_restantes = $restantes_enfermedad - $cant_dias;
+            
+                $sql_2 = "INSERT INTO licencias ".
+                         "(agente,dni,f_desde,f_hasta,tipo_licencia,total_enfermedad,dias_tomados_enfermedad,dias_restantes_enfermedad)".
+                         "VALUES ".
+                         "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$total_dias','$cant_dias','$dias_restantes')";
+                $query_2 = mysqli_query($conn,$sql_2);
+                        
+                        if($query_2){
+                            echo 1; // registro incertado correctamente
+                        }else{
+                            echo -1; // error al incertar registro
+                        }
+        
+        }else if($cant_dias > $restantes_enfermedad){
+            echo 63; // la cantidad de dias a tomar es mayor a los que quedan
+        }
     
     }
 
-
-
 }
 
+/*
+** INSERTAR ENFERMEDAD EN HORAS DE LABOR
+*/
+function insertEnfHorasLabor($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn){
 
+    $cant_dias = dias_pasados($f_desde,$f_hasta);
+    date_default_timezone_set('America/Argentina/Buenos_Aires');
+    $hora_actual = time('H:i:s');
+    $hora_actual = strtotime($hora_actual);
+    $medio_dia = strtotime('12:00:00');
+    
+    mysqli_select_db($conn,'licor');
+    $sql = "select * from licencias where agente = '$nombre' and tipo_licencia = 'Afecciones de corto tratamiento'";
+    $query = mysqli_query($conn,$sql);
+    $rows = mysqli_num_rows($query);
+    while($row = mysqli_fetch_array($query)){
+        $tomados_enfermedad = $row['dias_tomados_enfermedad'];
+        $restantes_enfermedad = $row['dias_restantes_enfermedad'];    
+    }
+    
+    if($rows == 0){
+    
+    if($hora_actual > $medio_dia){
+    
+        $sql_1 = "INSERT INTO licencias ".
+                         "(agente,dni,f_desde,f_hasta,tipo_licencia,dias_tomados_enfermedad)".
+                         "VALUES ".
+                         "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$cant_dias')";
+        $query_1 = mysqli_query($conn,$sql_1);
+                        
+                        if($query_1){
+                            echo 1; // registro incertado correctamente
+                        }else{
+                            echo -1; // error al incertar registro
+                            $error = mysqli_error($conn);
+                            mysqlInsertsErrors($error);
+                        }
+    }
+    
+    if($hora_actual < $medio_dia){
+    
+        $descripcion = 'Afecciones de corto tratamiento';
+    
+        if($cant_dias <= $restantes_enfermedad){
+            
+            $total_dias = 45;
+            $dias_restantes = $restantes_enfermedad - $cant_dias;
+            
+                $sql_2 = "INSERT INTO licencias ".
+                         "(agente,dni,f_desde,f_hasta,tipo_licencia,total_enfermedad,dias_tomados_enfermedad,dias_restantes_enfermedad)".
+                         "VALUES ".
+                         "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$total_dias','$cant_dias','$dias_restantes')";
+                $query_2 = mysqli_query($conn,$sql_2);
+                        
+                        if($query_2){
+                            echo 1; // registro incertado correctamente
+                        }else{
+                            echo -1; // error al incertar registro
+                            $error = mysqli_error($conn);
+                            mysqlInsertsErrors($error);
+                        }
+        
+        }else if($cant_dias > $restantes_enfermedad){
+            echo 63; // la cantidad de dias a tomar es mayor a los que quedan
+        }
+    
+    }
+    
+    }else if($rows > 0){ 
+    
+        if($hora_actual > $medio_dia){
+    
+                $sql_3 = "INSERT INTO licencias ".
+                                "(agente,dni,f_desde,f_hasta,tipo_licencia,dias_tomados_enfermedad)".
+                                "VALUES ".
+                                "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$cant_dias')";
+                $query_3 = mysqli_query($conn,$sql_3_);
+                                
+                                if($query_3){
+                                    echo 1; // registro incertado correctamente
+                                }else{
+                                    echo -1; // error al incertar registro
+                                    $error = mysqli_error($conn);
+                                    mysqlInsertsErrors($error);
+                                }
+            
+        }
+        if($hora_actual < $medio_dia){
+    
+            $descripcion = 'Afecciones de corto tratamiento';
+    
+            if($cant_dias <= $restantes_enfermedad){
+                    
+                    $total_dias = 45;
+                    $dias_restantes = $restantes_enfermedad - $cant_dias;
+                    
+                        $sql_4 = "INSERT INTO licencias ".
+                                "(agente,dni,f_desde,f_hasta,tipo_licencia,total_enfermedad,dias_tomados_enfermedad,dias_restantes_enfermedad)".
+                                "VALUES ".
+                                "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$total_dias','$cant_dias','$dias_restantes')";
+                        $query_4 = mysqli_query($conn,$sql_4);
+                                
+                                if($query_4){
+                                    echo 1; // registro incertado correctamente
+                                }else{
+                                    echo -1; // error al incertar registro
+                                    $error = mysqli_error($conn);
+                                    mysqlInsertsErrors($error);
+                                }
 
+            }else if($cant_dias > $restantes_enfermedad){
+                echo 63; // la cantidad de dias a tomar es mayor a los que quedan
+            }
+
+        }
+    }
+
+}
 
 /*
 ** ELIMINAR REGISTRO DE LICENCIA
@@ -2019,7 +2228,7 @@ if($conn)
             <th class='text-nowrap text-center'>Descripción</th>
             <th class='text-nowrap text-center'>Artículo</th>
             <th class='text-nowrap text-center'>Revista</th>
-            <th class='text-nowrap text-center'>Tiempo Licencia</th>
+            <th class='text-nowrap text-center'>Tiempo Licencia</th>enfermedad
             <th class='text-nowrap text-center'>Goce Haberes</th>
             <th class='text-nowrap text-center'>Obligatoriedad</th>
             <th class='text-nowrap text-center'>Particularidades</th>
@@ -2043,7 +2252,7 @@ if($conn)
                             <input type="hidden" name="id" value="'.$fila['id'].'">
                             
                             <button type="submit" class="btn btn-primary btn-sm" name="editar_tipo_licencia">
-                            <img src="../icons/actions/document-edit.png"  class="img-reponsive img-rounded"> Editar</button>
+                            <img src="../icons/actions/document-edit.png"enfermedad  class="img-reponsive img-rounded"> Editar</button>
                           
                         </form>';
              echo "</td>";
@@ -2115,7 +2324,7 @@ function formAltaTipoLicencia(){
                                     <select class="form-control" id="revista" name="revista" required>
                                         <option value="" selected disabled>Seleccionar</option>
                                         <option value="1">Planta Permanente</option>
-                                        <option value="2">No Permanente</option>
+                                        <option value="2">No Permanente</enfermedadoption>
                                         <option value="3">Ambas</option>
                                     </select>
                                 </div>
@@ -2310,7 +2519,7 @@ function formEditTipoLicencia($id,$conn){
 
 
 
-// ================================================================ //
+// ================================================================ //enfermedad
 // PERSISTENCIA A LA BASE
 // persistir tipo de licencia
 /*
