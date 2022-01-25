@@ -1196,6 +1196,8 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
                     echo 1; // registro incertado correctamente
                  }else{
                     echo -1; // error al incertar registro
+                    $error = mysqli_error($conn);
+                    mysqlInsertsErrors($error);
                  }
         }
         if($cantidad_dias > $total_lic){
@@ -1244,6 +1246,8 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
                     echo 1; // registro agregado correctamente
                 }else{
                     echo -1; // hubo un problema al agregar el registro
+                    $error = mysqli_error($conn);
+                    mysqlInsertsErrors($error);
                 }
             }
             else if($dias_restantes_agente == 0){
@@ -1303,6 +1307,8 @@ function insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,
                     echo 1; // registro agregado correctamente
                 }else{
                     echo -1; // hubo un problema al agregar el registro
+                    $error = mysqli_error($conn);
+                    mysqlInsertsErrors($error);
                 }
         
         }
@@ -1354,6 +1360,8 @@ function insertAusenteAviso($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta
                                 echo 1; // registro incertado correctamente
                             }else{
                                 echo -1; // error al incertar registro
+                                $error = mysqli_error($conn);
+                                mysqlInsertsErrors($error);
                             }
                                        
                     }else if($cant_dias > 2){
@@ -1383,6 +1391,8 @@ function insertAusenteAviso($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta
                                             echo 1; // registro incertado correctamente
                                         }else{
                                             echo -1; // error al incertar registro
+                                            $error = mysqli_error($conn);
+                                            mysqlInsertsErrors($error);
                                         }
                             }else if(($dias_resto_aca == 0) && ($dias_resto_aca != 'NULL')){
                                 echo 25; // ya no tiene mas dias para usar
@@ -1404,6 +1414,8 @@ function insertAusenteAviso($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta
                                             echo 1; // registro incertado correctamente
                                         }else{
                                             echo -1; // error al incertar registro
+                                            $error = mysqli_error($conn);
+                                            mysqlInsertsErrors($error);
                                         }
                             
                       }else if($validarMes == -1){
@@ -1471,6 +1483,8 @@ function insertAusenteSinGoce($nombre,$dni,$revista,$descripcion,$f_desde,$f_has
                                 echo 1; // registro incertado correctamente
                             }else{
                                 echo -1; // error al incertar registro
+                                $error = mysqli_error($conn);
+                                mysqlInsertsErrors($error);
                             }
                                        
                     }else if($cant_dias > 2){
@@ -1500,6 +1514,8 @@ function insertAusenteSinGoce($nombre,$dni,$revista,$descripcion,$f_desde,$f_has
                                             echo 1; // registro incertado correctamente
                                         }else{
                                             echo -1; // error al incertar registro
+                                            $error = mysqli_error($conn);
+                                            mysqlInsertsErrors($error);
                                         }
                             }else if(($dias_resto_aca == 0) && ($dias_resto_aca != 'NULL')){
                                 echo 49; // ya no tiene mas dias para usar
@@ -1521,6 +1537,8 @@ function insertAusenteSinGoce($nombre,$dni,$revista,$descripcion,$f_desde,$f_has
                                             echo 1; // registro incertado correctamente
                                         }else{
                                             echo -1; // error al incertar registro
+                                            $error = mysqli_error($conn);
+                                            mysqlInsertsErrors($error);
                                         }
                             
                       }else if($validarMes == -1){
@@ -1561,6 +1579,8 @@ function insertLicPaternidad($nombre,$dni,$revista,$descripcion,$f_desde,$f_hast
         echo 1; // registro incertado correctamente
     }else{
         echo -1; // error al incertar registro
+        $error = mysqli_error($conn);
+        mysqlInsertsErrors($error);
     }
     }if(($cant_dias < 3) || ($cant_dias > 3)){
         echo 33; // la cantidad de dias no puede ser menor ni mayor a tres
@@ -1589,6 +1609,8 @@ function insertLicFallecimiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_h
                     echo 1; // registro incertado correctamente
                 }else{
                     echo -1; // error al incertar registro
+                    $error = mysqli_error($conn);
+                    mysqlInsertsErrors($error);
                 }
         
         }else if(($cant_dias < 5) || ($cant_dias > 5)){
@@ -1611,6 +1633,8 @@ function insertLicFallecimiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_h
                     echo 1; // registro incertado correctamente
                 }else{
                     echo -1; // error al incertar registro
+                    $error = mysqli_error($conn);
+                    mysqlInsertsErrors($error);
                 }
         }else if(($cant_dias < 3) || ($cant_dias > 3)){
             echo 37; // para fallecimiento de sobrinos, tios la cantidad de días es de 3
@@ -1638,6 +1662,8 @@ function insertFuerzaMayor($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,
             echo 1; // registro incertado correctamente
         }else{
             echo -1; // error al incertar registro
+            $error = mysqli_error($conn);
+            mysqlInsertsErrors($error);
         }
 
 }
@@ -1662,6 +1688,8 @@ function insertDonarSangre($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,
                 echo 1; // registro incertado correctamente
             }else{
                 echo -1; // error al incertar registro
+                $error = mysqli_error($conn);
+                mysqlInsertsErrors($error);
             }
         }else if($cant_dias > 1){
             echo 39; // solo se puede tomar un dia
@@ -1710,6 +1738,8 @@ function insertMesaExaminadora($nombre,$dni,$revista,$descripcion,$f_desde,$f_ha
                                 echo 1; // registro incertado correctamente
                             }else{
                                 echo -1; // error al incertar registro
+                                $error = mysqli_error($conn);
+                                mysqlInsertsErrors($error);
                             }
                                        
                     }else if($cant_dias > 12){
@@ -1737,6 +1767,8 @@ function insertMesaExaminadora($nombre,$dni,$revista,$descripcion,$f_desde,$f_ha
                                             echo 1; // registro incertado correctamente
                                         }else{
                                             echo -1; // error al incertar registro
+                                            $error = mysqli_error($conn);
+                                            mysqlInsertsErrors($error);
                                         }
                             }else if($dias_resto_estudio == 0){
                                 echo 43; // ya no tiene mas dias para usar
@@ -1782,6 +1814,8 @@ function insertLicenciaHorEstudiante($nombre,$dni,$revista,$descripcion,$f_desde
                         echo 1; // registro incertado correctamente
                     }else{
                         echo -1; // error al incertar registro
+                        $error = mysqli_error($conn);
+                        mysqlInsertsErrors($error);
                     }
     }
     }else{
@@ -1827,6 +1861,8 @@ function insertLicenciaMadreLactante($nombre,$dni,$revista,$descripcion,$f_desde
                         echo 1; // registro incertado correctamente
                     }else{
                         echo -1; // error al incertar registro
+                        $error = mysqli_error($conn);
+                        mysqlInsertsErrors($error);
                     }
     
         }else if($cant_horas > 1){
@@ -1849,6 +1885,8 @@ function insertLicenciaMadreLactante($nombre,$dni,$revista,$descripcion,$f_desde
                         echo 1; // registro incertado correctamente
                     }else{
                         echo -1; // error al incertar registro
+                        $error = mysqli_error($conn);
+                        mysqlInsertsErrors($error);
                     }
     }
     
@@ -1871,6 +1909,8 @@ function insertLicenciaMadreLactante($nombre,$dni,$revista,$descripcion,$f_desde
                             echo 1; // registro incertado correctamente
                         }else{
                             echo -1; // error al incertar registro
+                            $error = mysqli_error($conn);
+                            mysqlInsertsErrors($error);
                         }
     
             }else if($cant_horas > 1){
@@ -1890,6 +1930,8 @@ function insertLicenciaMadreLactante($nombre,$dni,$revista,$descripcion,$f_desde
                             echo 1; // registro incertado correctamente
                         }else{
                             echo -1; // error al incertar registro
+                            $error = mysqli_error($conn);
+                            mysqlInsertsErrors($error);
                         }
         }
     
@@ -1915,6 +1957,8 @@ function insertAsistenciaCongresos($nombre,$dni,$revista,$descripcion,$f_desde,$
                             echo 1; // registro incertado correctamente
                         }else{
                             echo -1; // error al incertar registro
+                            $error = mysqli_error($conn);
+                            mysqlInsertsErrors($error);
                         }
 
 }
@@ -1954,6 +1998,8 @@ function insertCortoTratamiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_h
                             echo 1; // registro incertado correctamente
                         }else{
                             echo -1; // error al incertar registro
+                            $error = mysqli_error($conn);
+                            mysqlInsertsErrors($error);
                         }
         
         }else if($cant_dias > 45){
@@ -1978,6 +2024,8 @@ function insertCortoTratamiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_h
                             echo 1; // registro incertado correctamente
                         }else{
                             echo -1; // error al incertar registro
+                            $error = mysqli_error($conn);
+                            mysqlInsertsErrors($error);
                         }
         
         }else if($cant_dias > $restantes_enfermedad){
