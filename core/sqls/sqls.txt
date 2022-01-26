@@ -46,6 +46,7 @@ dias_tomados_enfermedad_familiar int(11),
 dias_restantes_enfermedad_familiar int(11),
 dias_tomados_otros int(11),
 cant_horas int(11),
+cant_anios varchar(1),
 fraccion enum('Primera','Segunda','Tercera'),
 comprobante varchar(300)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

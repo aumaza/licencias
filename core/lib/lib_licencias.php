@@ -278,6 +278,22 @@ function formNuevaLicencia($nombre,$descripcion,$conn){
                                         </select>
                                         </div><hr></div>';
                             }
+                            
+                            if($descripcion == 'Afecciones largo tratamiento'){
+                            
+                                echo '<div class="col-sm-3">
+                                        <div class="form-group">
+                                        <label for="cant_anios">Cantidad Años:</label>
+                                        <select class="form-control" id="cant_anios" name="cant_anios">
+                                            <option value="" selected disabled>Seleccionar</option>
+                                            <option value="1">1 Año</option>
+                                            <option value="2">2 Años</option>
+                                            <option value="3">3 Años</option>
+                                            <option value="4">4 Años</option>
+                                        </select>
+                                        </div><hr></div>';
+                            
+                            }
                           
                         echo '</div>
                         
@@ -448,6 +464,9 @@ function formInfoLicencias($id,$conn){
             }
             if($licencia == 'Afecciones de corto tratamiento'){
                 infoCortoTratamiento($id,$conn);
+            }
+            if($licencia == 'Afecciones largo tratamiento'){
+                infoLargoTratamiento($id,$conn);
             }
             
                
@@ -975,6 +994,53 @@ function infoCortoTratamiento($id,$conn){
 
 }
 
+/*
+** INFORMACION AFECCIONES DE LARGO TRATAMIENTO
+*/
+function infoLargoTratamiento($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $cant_anios = $fila['cant_anios'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Cantidad de Años: </strong> <span class="badge badge-inverse">'.$cant_anios.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
 
 
 // ========================================================================================= //
@@ -1140,6 +1206,26 @@ function mysqlInsertsErrors($error){
     }else{
         exit();
     }
+}
+
+/*
+** GUARDAR DATOS ALEATORIOS
+*/
+function datos($string){
+
+    $file = '../lost+found/lost_found.txt';
+    $fecha_actual = date("Y-m-d H:i:s");
+    $text = "\n".$fecha_actual .' / '. $string;
+    
+    if(file_exists($file)){
+        $fp = fopen($file, "a+");
+        fwrite($fp, $text);
+        fclose($fp);
+    }else{
+        exit();
+    }
+
+
 }
 
 // ================================================================== //
@@ -2065,7 +2151,7 @@ function insertEnfHorasLabor($nombre,$dni,$revista,$descripcion,$f_desde,$f_hast
                          "VALUES ".
                          "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$cant_dias')";
         $query_1 = mysqli_query($conn,$sql_1);
-                        
+                      
                         if($query_1){
                             echo 1; // registro incertado correctamente
                         }else{
@@ -2152,6 +2238,89 @@ function insertEnfHorasLabor($nombre,$dni,$revista,$descripcion,$f_desde,$f_hast
 
         }
     }
+
+}
+
+/*
+** AFECCIONES LARGO TRATAMIENTO
+*/
+function insertAfeccionLargoTratamiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_anios,$conn){
+
+    $cant_dias = dias_pasados($f_desde,$f_hasta);
+   
+    mysqli_select_db($conn,'licor');
+    $sql = "select * from licencias where agente = '$nombre' and tipo_licencia = '$descripcion'";
+    $query = mysqli_query($conn,$sql);
+    $rows = mysqli_num_rows($query);
+    while($row = mysqli_fetch_array($query)){
+        $cant_anios_usados = $row['cant_anios'];
+    }
+        
+        if(($cant_dias == 365) && ($cant_anios == 1) || 
+                ($cant_dias == 730) && ($cant_anios == 2) || 
+                    ($cant_dias == 1095) && (cant_anios == 3) || 
+                        ($cant_dias == 1460) && ($cant_anios == 4)){
+        
+        $string = 'cantidad dias: '.$cant_dias;
+        datos($string);
+        
+        if($rows <= 0){
+        
+            $sql_1 = "INSERT INTO licencias ".
+                     "(agente,dni,f_desde,f_hasta,tipo_licencia,cant_anios)".
+                     "VALUES ".
+                     "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$cant_anios')";
+            $query_1 = mysqli_query($conn,$sql_1);
+                                
+                if($query_1){
+                    echo 1; // registro incertado correctamente
+                }else{
+                    echo -1; // error al incertar registro
+                    $error = mysqli_error($conn);
+                    mysqlInsertsErrors($error);
+                }
+        
+        }
+        if($rows > 0){
+        
+            if(($cant_anios_usados > 0) && ($cant_anios_usados < 4)){
+            
+                if($cant_anios_usados > $cant_anios){
+            
+                    $anios = $cant_anios_usados - $cant_anios;
+                        
+                        $sql_2 = "INSERT INTO licencias ".
+                                 "(agente,dni,f_desde,f_hasta,tipo_licencia,cant_anios)".
+                                 "VALUES ".
+                                 "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$anios')";
+                        $query_2 = mysqli_query($conn,$sql_2);
+                                
+                            if($query_2){
+                                echo 1; // registro incertado correctamente
+                            }else{
+                                echo -1; // error al incertar registro
+                                $error = mysqli_error($conn);
+                                mysqlInsertsErrors($error);
+                            }
+                    
+                }else if($cant_anios_usados < $cant_anios){
+                    echo 65; // cantidad de años seleccionados en mayor a los que quedan por usar
+                }
+            
+            }else if($cant_anios_usados == 0){
+                echo 67; // ya no tiene mas años para usar
+            }
+        
+        }
+        
+        }else if(($cant_dias != 365) && ($cant_anios != 1) || 
+                    ($cant_dias != 730) && ($cant_anios != 2) || 
+                        ($cant_dias != 1095) && (cant_anios != 3) || 
+                            ($cant_dias != 1460) && ($cant_anios != 4)){
+            echo 69; // el perído de entre la fecha inicial y la final debe coincidir con la cantidad de años elegidos
+            $string = 'cantidad dias: '.$cant_dias;
+            datos($string);
+        }
 
 }
 

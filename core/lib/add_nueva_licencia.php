@@ -194,9 +194,23 @@
                     insertEnfHorasLabor($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
                 }
         
-        
         }
         
+        // AFFECCIONES DE LARGO TRATAMIENTO
+        if($descripcion == 'Afecciones largo tratamiento'){
+            
+            $cant_anios = mysqli_real_escape_string($conn,$_POST['cant_anios']);
+            
+            if(($f_desde == '') || 
+                    ($f_hasta == '') ||
+                        ($cant_anios == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    
+                    insertAfeccionLargoTratamiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_anios,$conn);
+                }
+        
+        }
         
         }else if($diferencia == -1){
             echo 31; // la fecha hasta no puede ser menor a fecha desde            

@@ -6,6 +6,7 @@ $(document).ready(function(){
     $('#add_nueva_licencia').click(function(){
         
         var datos=$('#fr_nueva_licencia_ajax').serialize();
+       
         
         $.ajax({
             type:"POST",
@@ -125,13 +126,27 @@ $(document).ready(function(){
                     console.log("Datos: " + datos);
                 }
                 
-                // ENFEREMEDAD COROTO TRATAMIENTO
+                // ENFEREMEDAD CORTO TRATAMIENTO
                 else if(r == 61){
                     alert("La Cantidad de días a tomar no puede exceder los 45!!");
                     console.log("Datos: " + datos);
                 }
                 else if(r == 63){
                     alert("La Cantidad de días a tomar excede la cantidad de días que quedan!!");
+                    console.log("Datos: " + datos);
+                }
+                
+                // AFECCIONES DE LARGO TRATAMIENTO
+                else if(r == 65){
+                    alert("La Cantidad de Años es mayor a los que quedan por usar!!");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 67){
+                    alert("Agotó la cantidad de años a usufructuar!!");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 69){
+                    alert("El cantidad de días entre Fecha desde y Fecha hasta debe coincidir con la cantidad de años elegidos!!");
                     console.log("Datos: " + datos);
                 }
                 
