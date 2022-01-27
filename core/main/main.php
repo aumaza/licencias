@@ -59,11 +59,11 @@ $(document).ready(function(){
  
   
 </head>
-<body onload="nobackbutton();">
+<body style="background-color: #566573;" onload="nobackbutton();">
 
-<div class="container-fluid">
+<div class="container-fluid"><hr>
   <div class="row content">
-    <div class="col-sm-2 sidenav"><br>
+    <div class="col-sm-2 sidenav"><br><br><br>
       
       <?php
       
@@ -99,7 +99,7 @@ $(document).ready(function(){
 
 <!-- Espacio de trabajo  -->
     <div class="col-sm-10"><br>
-      <h4>Bienvenido/a <strong><?php echo $nombre; ?></strong></h4>
+      <h4 style="color: white;">Bienvenido/a <strong><?php echo $nombre; ?></strong></h4>
       <?php messageBrowser($user_agent); ?>
       
       <form action="#" method="POST">

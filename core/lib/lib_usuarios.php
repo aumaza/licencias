@@ -75,7 +75,7 @@ function loadUser($conn,$nombre){
 if($conn){
 	
 	$sql = "SELECT * FROM usuarios where nombre = '$nombre'";
-    	mysqli_select_db('licor');
+    	mysqli_select_db($conn,'licor');
     	$resultado = mysqli_query($conn,$sql);
 	//mostramos fila x fila
 	$count = 0;

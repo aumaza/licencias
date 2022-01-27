@@ -2285,11 +2285,11 @@ function insertAfeccionLargoTratamiento($nombre,$dni,$revista,$descripcion,$f_de
         
             if(($cant_anios_usados > 0) && ($cant_anios_usados < 4)){
             
-                if($cant_anios_usados > $cant_anios){
+                if($cant_anios_usados >= $cant_anios){
             
                     $anios = $cant_anios_usados + $cant_anios;
                         
-                       if($anios < 4){
+                       if($anios <= 4){
                        
                             $sql_2 = "INSERT INTO licencias ".
                                     "(agente,dni,f_desde,f_hasta,tipo_licencia,cant_anios)".

@@ -2,13 +2,14 @@ textarea {
     overflow: scroll;
     resize: none;
     }
-  
+
+
     /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
     .row.content {height: 700px}
     
     /* Set gray background color and 100% height */
     .sidenav {
-      background-color: #f1f1f1;
+      background-color: #566573;
       height: auto;
     }
     
