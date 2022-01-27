@@ -1,1 +1,2 @@
-Incorrect integer value: '' for column `licor`.`licencias`.`total_enfermedad` at row 1
+
+2022-01-26 20:15:59 / Unknown column 'cant_anios' in 'field list'

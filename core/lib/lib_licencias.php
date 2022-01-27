@@ -1197,7 +1197,7 @@ function mysqlInsertsErrors($error){
     
     $file = '../mysql_errors/mysql_insert_errors.txt';
     $fecha_actual = date("Y-m-d H:i:s");
-    $text = $fecha_actual .' / '. $error;
+    $text = "\n".$fecha_actual .' / '. $error;
     
     if(file_exists($file)){
         $fp = fopen($file, "a+");
@@ -2287,27 +2287,31 @@ function insertAfeccionLargoTratamiento($nombre,$dni,$revista,$descripcion,$f_de
             
                 if($cant_anios_usados > $cant_anios){
             
-                    $anios = $cant_anios_usados - $cant_anios;
+                    $anios = $cant_anios_usados + $cant_anios;
                         
-                        $sql_2 = "INSERT INTO licencias ".
-                                 "(agente,dni,f_desde,f_hasta,tipo_licencia,cant_anios)".
-                                 "VALUES ".
-                                 "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$anios')";
-                        $query_2 = mysqli_query($conn,$sql_2);
-                                
-                            if($query_2){
-                                echo 1; // registro incertado correctamente
-                            }else{
-                                echo -1; // error al incertar registro
-                                $error = mysqli_error($conn);
-                                mysqlInsertsErrors($error);
-                            }
-                    
+                       if($anios < 4){
+                       
+                            $sql_2 = "INSERT INTO licencias ".
+                                    "(agente,dni,f_desde,f_hasta,tipo_licencia,cant_anios)".
+                                    "VALUES ".
+                                    "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$anios')";
+                            $query_2 = mysqli_query($conn,$sql_2);
+                                    
+                                if($query_2){
+                                    echo 1; // registro incertado correctamente
+                                }else{
+                                    echo -1; // error al incertar registro
+                                    $error = mysqli_error($conn);
+                                    mysqlInsertsErrors($error);
+                                }
+                        }else{
+                            echo 67; // ya no tiene mas años para usar
+                        }
                 }else if($cant_anios_usados < $cant_anios){
-                    echo 65; // cantidad de años seleccionados en mayor a los que quedan por usar
+                    echo 65; // cantidad de años seleccionados es mayor a los que quedan por usar
                 }
             
-            }else if($cant_anios_usados == 0){
+            }else if($cant_anios_usados == 4){
                 echo 67; // ya no tiene mas años para usar
             }
         
