@@ -136,7 +136,7 @@ $(document).ready(function(){
                     console.log("Datos: " + datos);
                 }
                 
-                // AFECCIONES DE LARGO TRATAMIENTO
+                // AFECCIONES DE LARGO TRATAMIENTO Y ACCIDENTE DE TRABAJO
                 else if(r == 65){
                     alert("La Cantidad de Años es mayor a los que quedan por usar!!");
                     console.log("Datos: " + datos);
@@ -147,6 +147,16 @@ $(document).ready(function(){
                 }
                 else if(r == 69){
                     alert("El cantidad de días entre Fecha desde y Fecha hasta debe coincidir con la cantidad de años elegidos!!");
+                    console.log("Datos: " + datos);
+                }
+                
+                // INCAPACIDAD
+                else if(r == 71){
+                    alert("El cantidad de días entre Fecha desde y Fecha hasta no puede ser menor o mayor a 365!!");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 73){
+                    alert("Ya está usufructuando de Licencia por Incapacidad!!");
                     console.log("Datos: " + datos);
                 }
                 

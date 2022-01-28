@@ -209,8 +209,34 @@
                     
                     insertAfeccionLargoTratamiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_anios,$conn);
                 }
+        }
+        
+        // ACCIDENTE DE TRABAJO
+        if($descripcion == 'Accidente de trabajo'){
+            
+            $cant_anios = mysqli_real_escape_string($conn,$_POST['cant_anios']);
+            
+            if(($f_desde == '') || 
+                    ($f_hasta == '') ||
+                        ($cant_anios == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertAccidenteTrabajo($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_anios,$conn);
+                }
+        }
+        
+        // INCAPACIDAD
+        if($descripcion == 'Incapacidad'){
+        
+            if(($f_desde == '') || 
+                    ($f_hasta == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertIncapacidad($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                }
         
         }
+        
         
         }else if($diferencia == -1){
             echo 31; // la fecha hasta no puede ser menor a fecha desde            
