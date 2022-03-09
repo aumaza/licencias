@@ -160,9 +160,24 @@ $(document).ready(function(){
                     console.log("Datos: " + datos);
                 }
                 
+                // ANTICIPO POR PASIVIDAD
+                else if(r == 75){
+                    alert("El cantidad de días entre Fecha desde y Fecha hasta no puede ser menor o mayor a 365!!");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 77){
+                    alert("Ya está usufructuando de Licencia Anticipo de haberes por pasividad!!");
+                    console.log("Datos: " + datos);
+                }else if(r == -5){
+                    alert("No se pudo realizar la comprobación");
+                    console.log("Datos: " + datos);
+                }
+                
                 else if(r == ''){
                     console.log("Datos: " + datos);
                 }
+                
+                
                 
                 
             }

@@ -237,6 +237,19 @@
         
         }
         
+        // ANTICIPO DE HABERES POR PASIVIDAD
+        if($descripcion == 'Anticipo de haber por pasividad'){
+        
+            if(($f_desde == '') || 
+                    ($f_hasta == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertAnticipoPasividad($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                }
+        
+        }
+        
+        
         
         }else if($diferencia == -1){
             echo 31; // la fecha hasta no puede ser menor a fecha desde            
