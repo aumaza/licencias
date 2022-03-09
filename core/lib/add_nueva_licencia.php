@@ -249,6 +249,21 @@
         
         }
         
+        // MATERNIDAD
+        if($descripcion == 'Maternidad'){
+            
+            $parto_multiple = mysqli_real_escape_string($conn,$_POST['parto_multiple']);
+            
+            if(($f_desde == '') || 
+                    ($f_hasta == '') ||
+                        ($parto_multiple == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertMaternidad($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$parto_multiple,$conn);
+                }
+        
+        }
+        
         
         
         }else if($diferencia == -1){

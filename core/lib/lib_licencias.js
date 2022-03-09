@@ -173,6 +173,16 @@ $(document).ready(function(){
                     console.log("Datos: " + datos);
                 }
                 
+                // MATERNIDAD
+                else if(r == 79){
+                    alert("Si el Parto es Múltiple la cantidad de días no puede ser mayor o menor a 110 días!!");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 81){
+                    alert("Si el parto es simple la cantidad de días no puede ser mayor o menor a 100 días!!");
+                    console.log("Datos: " + datos);
+                }
+                
                 else if(r == ''){
                     console.log("Datos: " + datos);
                 }

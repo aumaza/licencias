@@ -1,7 +1,7 @@
 <?php
 
-$dbhost = '192.168.0.47';
-//$dbhost = 'localhost';
+//$dbhost = '192.168.0.47';
+$dbhost = 'localhost';
 $dbuser = 'root';
 $dbpass = 'slack142';
 $dbase = 'licor';

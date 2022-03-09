@@ -294,6 +294,20 @@ function formNuevaLicencia($nombre,$descripcion,$conn){
                                         </div><hr></div>';
                             
                             }
+                            
+                            if($descripcion == 'Maternidad'){
+                                
+                                echo '<div class="col-sm-3">
+                                        <div class="form-group">
+                                        <label for="parto_multiple">Parto Multiple:</label>
+                                        <select class="form-control" id="parto_multiple" name="parto_multiple">
+                                            <option value="" selected disabled>Seleccionar</option>
+                                            <option value="Si">Si</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                        </div><hr></div>';
+                            
+                            }
                           
                         echo '</div>
                         
@@ -476,6 +490,9 @@ function formInfoLicencias($id,$conn){
             }
             if($licencia == 'Anticipo de haber por pasividad'){
                 infoAnticipoPasividad($id,$conn);
+            }
+            if($licencia == 'Maternidad'){
+                infoMaternidad($id,$conn);
             }
             
                
@@ -710,7 +727,7 @@ function infoDonarSangre($id,$conn){
         $query = mysqli_query($conn,$sql);
         while($fila = mysqli_fetch_array($query)){
                 $licencia = $fila['tipo_licencia'];
-                $agente = $fila['agente'];
+                $agente = $fila['ageninfoMaternidad($id,$conn)te'];
                 $f_desde = $fila['f_desde'];
                 $f_hasta = $fila['f_hasta'];
                 $dias_tomados = $fila['dias_tomados_otros'];
@@ -782,7 +799,7 @@ function infoMesaExaminadora($id,$conn){
                 <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
                 <li class="list-group-item"><strong>Días: </strong> <span class="badge badge-inverse">'.$dias_totales.'</span></li>
                 <li class="list-group-item"><strong>Días Tomados: </strong> <span class="badge badge-inverse">'.$dias_tomados_estudio.'</span></li>
-                <li class="list-group-item"><strong>Días Restantes: </strong> <span class="badge badge-inverse">'.$dias_resto_estudio.'</span></li>';
+                <li class="list-groupinfoMaternidad($id,$conn)-item"><strong>Días Restantes: </strong> <span class="badge badge-inverse">'.$dias_resto_estudio.'</span></li>';
                 
                 if($comprobante != ''){
                     echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
@@ -824,7 +841,7 @@ function infoHorariosEstudiantes($id,$conn){
         while($row = mysqli_fetch_array($query_2)){
             $articulo = $row['art_licencia'];
         }
-            
+           
         echo '<ul class="list-group">
                 <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
                     <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
@@ -1197,6 +1214,53 @@ function infoAnticipoPasividad($id,$conn){
 
 }
 
+/*
+** INFORMACION MATERNIDAD
+*/
+function infoMaternidad($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $total_maternidad = $fila['total_maternidad'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Cantidad de Días: </strong> <span class="badge badge-inverse">'.$total_maternidad.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
 
 // ========================================================================================= //
 // MODAL //
@@ -1956,7 +2020,8 @@ function insertMesaExaminadora($nombre,$dni,$revista,$descripcion,$f_desde,$f_ha
     }
     
     $rows = mysqli_num_rows($query_1);
-    
+    $string = 'cantidad dias: '.$cant_dias;
+            datos($string);
     $cant_dias = dias_pasados($f_desde,$f_hasta);
        
     if(($revista == 'Planta Permanente') || ($revista == 'Ley Marco')){
@@ -2094,7 +2159,7 @@ function insertLicenciaMadreLactante($nombre,$dni,$revista,$descripcion,$f_desde
             mysqli_select_db($conn,'licor');
             $sql_1 = "INSERT INTO licencias ".
                    "(agente,dni,f_desde,f_hasta,tipo_licencia,cant_horas,dias_tomados_otros)".
-                   "VALUES ".formNuevaLicencia($nombre,$descripcion,$conn);
+                   "VALUES ".
                    "('$nombre','$dni','$f_desde','$f_hasta','$descripcion','$cant_horas','$cant_dias')";
             $query_1 = mysqli_query($conn,$sql_1);
                      
@@ -2250,7 +2315,8 @@ function insertCortoTratamiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_h
     }else if($rows > 0){
     
         $total_dias = 45;
-        
+        $string = 'cantidad dias: '.$cant_dias;
+            datos($string);
         if($cant_dias <= $restantes_enfermedad){
         
             $dias_restantes = $restantes_enfermedad - $cant_dias;
@@ -2683,6 +2749,88 @@ function insertAnticipoPasividad($nombre,$dni,$revista,$descripcion,$f_desde,$f_
 }
 
 
+/*
+** LICENCIA POR MATERNIDAD (art. 10g)
+*/
+function insertMaternidad($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$parto_multiple,$conn){
+    
+    $cant_dias = dias_pasados($f_desde,$f_hasta);
+    
+    if($parto_multiple == 'Si'){
+        
+        if($cant_dias == 110){
+        
+            $sql_1 = "INSERT INTO licencias ".
+                     "(agente,
+                       dni,
+                       f_desde,
+                       f_hasta,
+                       tipo_licencia,
+                       total_maternidad)".
+                     "VALUES ".
+                     "('$nombre',
+                       '$dni',
+                       '$f_desde',
+                       '$f_hasta',
+                       '$descripcion',
+                       '$cant_dias')";
+                
+                    $query_1 = mysqli_query($conn,$sql_1);
+                                
+                    if($query_1){
+                        echo 1; // registro incertado correctamente
+                    }else{
+                        echo -1; // error al incertar registro
+                        $error = mysqli_error($conn);
+                        mysqlInsertsErrors($error);
+                    }
+        
+        }else if(($cant_dias > 110) || ($cant_dias < 110)){
+            echo 79; // para parto multiple no puede exceder los 110 dias
+            $string = 'cantidad dias: '.$cant_dias;
+            datos($string);
+        }
+    
+    }
+    
+    if($parto_multiple == 'No'){
+    
+        if($cant_dias == 100){
+        
+            $sql_1 = "INSERT INTO licencias ".
+                     "(agente,
+                       dni,
+                       f_desde,
+                       f_hasta,
+                       tipo_licencia,
+                       total_maternidad)".
+                     "VALUES ".
+                     "('$nombre',
+                       '$dni',
+                       '$f_desde',
+                       '$f_hasta',
+                       '$descripcion',
+                       '$cant_dias')";
+                
+                    $query_1 = mysqli_query($conn,$sql_1);
+                                
+                    if($query_1){
+                        echo 1; // registro incertado correctamente
+                    }else{
+                        echo -1; // error al incertar registro
+                        $error = mysqli_error($conn);
+                        mysqlInsertsErrors($error);
+                    }
+               
+        }else if(($cant_dias > 100) || ($cant_dias < 100)){
+            echo 81; // si el parto no es multiple no puede superar los 100 dias
+            $string = 'cantidad dias: '.$cant_dias;
+            datos($string);
+        }
+       
+    }
+
+} // end of function
 
 // ============================================================================================================================== //
 // FIN PERSISNTENCIA A BASE
