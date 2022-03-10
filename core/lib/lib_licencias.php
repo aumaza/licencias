@@ -333,6 +333,24 @@ function formNuevaLicencia($nombre,$descripcion,$conn){
                                         </div><hr></div>';
                             
                             }
+                            
+                            if($descripcion == 'Maternidad Excedencia'){
+                            
+                                echo '<div class="col-sm-3">
+                                        <div class="form-group">
+                                        <label for="opciones">Opción de Usufructo:</label>
+                                        <select class="form-control" id="opciones" name="opciones">
+                                            <option value="" selected disabled>Seleccionar</option>
+                                            <option value="1">Rescindir el 25% de haber por cada año</option>
+                                            <option value="2">Sin percibir haberes por un período de 3 meses</option>
+                                            <option value="3">Sin percibir haberes por un período de 6 meses</option>
+                                            
+                                        </select>
+                                        </div>                                       
+                                        <hr>
+                                        </div>';
+                            
+                            }
                           
                         echo '</div>
                         
@@ -3090,7 +3108,14 @@ function insertNacimientoSinVida($nombre,$dni,$revista,$descripcion,$f_desde,$f_
         }
        
     }
+}
 
+/*
+** MATERNIDAD EXCEDENCIA
+*/
+function insertMaternidadExcedencia($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_meses,$opciones,$conn){
+
+    
 
 }
 
