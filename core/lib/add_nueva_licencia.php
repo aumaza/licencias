@@ -264,8 +264,37 @@
         
         }
         
+        // ADOPCION DE NIÑO HASTA 7 AÑOS DE EDAD
+        if($descripcion == 'Tenencia para adopción'){
+            
+            $edad = mysqli_real_escape_string($conn,$_POST['edad_ninio']);
+            
+            if(($f_desde == '') || 
+                    ($f_hasta == '') ||
+                        ($edad == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertAdopcion($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$edad,$conn);
+                }
         
+        }
         
+        // MATERNIDAD (NACIMIENTO SIN VIDA) ART 135CCTG
+        if($descripcion == 'Maternidad (Nac. sin vida)'){
+            
+            $parto_multiple = mysqli_real_escape_string($conn,$_POST['parto_multiple']);
+            
+            if(($f_desde == '') || 
+                    ($f_hasta == '') ||
+                        ($parto_multiple == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertNacimientoSinVida($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$parto_multiple,$conn);
+                }
+        
+        }
+        
+        // VERIFICACION DE QUE LA FECHA HASTA NO SEA MAYOR A FECHA DESDE
         }else if($diferencia == -1){
             echo 31; // la fecha hasta no puede ser menor a fecha desde            
         }

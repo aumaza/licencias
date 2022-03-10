@@ -183,6 +183,26 @@ $(document).ready(function(){
                     console.log("Datos: " + datos);
                 }
                 
+                // ADOPCION DE MENOR HASTA 7 AÑOS DE EDAD
+                else if(r == 83){
+                    alert("La cantidad de días no puede ser menor a 60 días!!");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 85){
+                    alert("La edad del niño no puede ser mayor a 7 años!!");
+                    console.log("Datos: " + datos);
+                }
+                
+                // MATERNIDAD (NACIMIENTO SIN VIDA) ART135CCTG
+                else if(r == 87){
+                    alert("Si el Parto es Múltiple la cantidad de días no puede ser mayor o menor a 111 días!!");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 89){
+                    alert("Si el parto es simple la cantidad de días no puede ser mayor o menor a 101 días!!");
+                    console.log("Datos: " + datos);
+                }
+                
                 else if(r == ''){
                     console.log("Datos: " + datos);
                 }
