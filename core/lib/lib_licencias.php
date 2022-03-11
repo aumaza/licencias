@@ -341,9 +341,8 @@ function formNuevaLicencia($nombre,$descripcion,$conn){
                                         <label for="opciones">Opción de Usufructo:</label>
                                         <select class="form-control" id="opciones" name="opciones">
                                             <option value="" selected disabled>Seleccionar</option>
-                                            <option value="1">Rescindir el 25% de haber por cada año</option>
-                                            <option value="2">Sin percibir haberes por un período de 3 meses</option>
-                                            <option value="3">Sin percibir haberes por un período de 6 meses</option>
+                                            <option value="1">Sin percibir haberes por un período de 3 meses</option>
+                                            <option value="2">Sin percibir haberes por un período de 6 meses</option>
                                             
                                         </select>
                                         </div>                                       
@@ -542,6 +541,9 @@ function formInfoLicencias($id,$conn){
             }
             if($licencia == 'Maternidad (Nac. sin vida)'){
                 infoNacimientoSinVida($id,$conn);
+            }
+            if($licencia == 'Maternidad Excedencia'){
+                infoMaternidadExcedencia($id,$conn);
             }
             
                
@@ -1097,7 +1099,7 @@ function infoLargoTratamiento($id,$conn){
                     <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
                 <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
                 <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
-                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: infoMaternidadExcedencia($id,$conn)</strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
                 <li class="list-group-item"><strong>Cantidad de Años: </strong> <span class="badge badge-inverse">'.$cant_anios.'</span></li>';
                 
                 if($comprobante != ''){
@@ -1408,6 +1410,54 @@ function infoNacimientoSinVida($id,$conn){
 
 }
 
+
+/*
+** MATERNIDAD EXCEDENCIA
+*/
+function infoMaternidadExcedencia($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $total_maternidad = $fila['total_maternidad'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Cantidad de Días: </strong> <span class="badge badge-inverse">'.$total_maternidad.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
 
 // ========================================================================================= //
 // MODAL //
@@ -3113,8 +3163,79 @@ function insertNacimientoSinVida($nombre,$dni,$revista,$descripcion,$f_desde,$f_
 /*
 ** MATERNIDAD EXCEDENCIA
 */
-function insertMaternidadExcedencia($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_meses,$opciones,$conn){
+function insertMaternidadExcedencia($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$opciones,$conn){
 
+    $cant_dias = dias_pasados($f_desde,$f_hasta);
+    
+       
+    if(($opciones == 1) && ($cant_dias == 90)){
+    
+        $sql_1 = "INSERT INTO licencias ".
+                     "(agente,
+                       dni,
+                       f_desde,
+                       f_hasta,
+                       tipo_licencia,
+                       total_maternidad)".
+                     "VALUES ".
+                     "('$nombre',
+                       '$dni',
+                       '$f_desde',
+                       '$f_hasta',
+                       '$descripcion',
+                       '$cant_dias')";
+                
+                    $query_1 = mysqli_query($conn,$sql_1);
+                                
+                    if($query_1){
+                        echo 1; // registro incertado correctamente
+                    }else{
+                        echo -1; // error al incertar registro
+                        $error = mysqli_error($conn);
+                        mysqlInsertsErrors($error);
+                    }
+    
+    }else if(($opciones == 1) && ($cant_dias < 90) || ($opciones == 1) || ($cant_dias > 90)){
+       echo 91; // si seleccionó tres meses de excedencia la cantidad de dias no puede ser menor o mayor a 90
+       $string = 'cantidad dias: '.$cant_dias;
+       datos($string);
+    }
+    
+    
+        
+    
+    if(($opciones == 2) && ($cant_dias == 180)){
+    
+        $sql_2 = "INSERT INTO licencias ".
+                     "(agente,
+                       dni,
+                       f_desde,
+                       f_hasta,
+                       tipo_licencia,
+                       total_maternidad)".
+                     "VALUES ".
+                     "('$nombre',
+                       '$dni',
+                       '$f_desde',
+                       '$f_hasta',
+                       '$descripcion',
+                       '$cant_dias')";
+                
+                    $query_2 = mysqli_query($conn,$sql_2);
+                                
+                    if($query_2){
+                        echo 1; // registro incertado correctamente
+                    }else{
+                        echo -1; // error al incertar registro
+                        $error = mysqli_error($conn);
+                        mysqlInsertsErrors($error);
+                    }
+    
+    }else if(($opciones == 2) && ($cant_dias < 180) || ($opciones == 2) && ($cant_dias > 180)){
+        echo 93; // si la cantidad de meses seleccionada es 6 la cantidad de dias no puede ser menor o mayor a 180
+        $string = 'cantidad dias: '.$cant_dias;
+        datos($string);
+    }
     
 
 }

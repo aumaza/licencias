@@ -203,6 +203,16 @@ $(document).ready(function(){
                     console.log("Datos: " + datos);
                 }
                 
+                // MTERNIDAD EXCEDENCIA
+                else if(r == 91){
+                    alert("Si la cantidad de meses es de 3, el rango de fechas no puede ser menor o mayor a 90 días!!");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 92){
+                    alert("Si la cantidad de meses es de 6, el rango de fechas no puede ser mayor o menor a 180 días!!");
+                    console.log("Datos: " + datos);
+                }
+                
                 else if(r == ''){
                     console.log("Datos: " + datos);
                 }

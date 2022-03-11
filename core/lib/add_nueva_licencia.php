@@ -294,6 +294,22 @@
         
         }
         
+        // MATERNIDAD EXCEDENCIA
+        if($descripcion == 'Maternidad Excedencia'){
+            
+            $opciones = mysqli_real_escape_string($conn,$_POST['opciones']);
+            
+            if(($f_desde == '') || 
+                    ($f_hasta == '') ||
+                        ($opciones == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertMaternidadExcedencia($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$opciones,$conn);
+                }
+        
+        }
+        
+        
         // VERIFICACION DE QUE LA FECHA HASTA NO SEA MAYOR A FECHA DESDE
         }else if($diferencia == -1){
             echo 31; // la fecha hasta no puede ser menor a fecha desde            
