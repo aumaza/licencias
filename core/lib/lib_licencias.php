@@ -350,7 +350,82 @@ function formNuevaLicencia($nombre,$descripcion,$conn){
                                         </div>';
                             
                             }
-                          
+                            
+                            if($descripcion == 'Para Rendir Examenes'){
+                            
+                                echo '<div class="col-sm-3">
+                                        <div class="form-group">
+                                        <label for="cursando">Estudios en Curso:</label>
+                                        <select class="form-control" id="cursando" name="cursando">
+                                            <option value="" selected disabled>Seleccionar</option>
+                                            <option value="1">Secundario</option>
+                                            <option value="2">Terciario / Universitario / Postgrado</option>
+                                            
+                                        </select>
+                                        </div>                                       
+                                        <hr>
+                                        </div>';                      
+                            
+                            }
+                            
+                            if($descripcion == 'Para Realizar estudios o Investigaciones'){
+                                
+                                echo '<div class="col-sm-3">
+                                        <div class="form-group">
+                                        <label for="anios_investigacion">Cantidad de Años de Investigación:</label>
+                                        <select class="form-control" id="anios_investigacion" name="anios_investigacion">
+                                            <option value="" selected disabled>Seleccionar</option>
+                                            <option value="1">1 Año</option>
+                                            <option value="2">2 Años</option>
+                                            
+                                        </select>
+                                        </div>                                       
+                                        <hr>
+                                        </div>';
+                                
+                            }
+                            
+                            if($descripcion == 'Matrimonio del agente o hijos'){
+                                
+                                echo '<div class="col-sm-3">
+                                        <div class="form-group">
+                                        <label for="matrimonio">Persona que Contrae Matrimonio:</label>
+                                        <select class="form-control" id="matrimonio" name="matrimonio">
+                                            <option value="" selected disabled>Seleccionar</option>
+                                            <option value="1">Matrimonio del Agente</option>
+                                            <option value="2">Matrimonio del Hijo del Agente</option>
+                                            
+                                        </select>
+                                        </div>                                       
+                                        <hr>
+                                        </div>';
+                                
+                            }
+                            
+                            if($descripcion == 'Razones Particulares'){
+                                
+                                echo '<div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="mese">Cantidad Meses:</label>
+                                            <input type="text" class="form-control" id="meses" name="meses" value="6" readonly required>
+                                        </div>                                       
+                                        <hr>
+                                        </div>';
+                                
+                            }
+                            
+                            if($descripcion == 'Razones de Estudio'){
+                                
+                                echo '<div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="anio">Período Máximo (1 año):</label>
+                                            <input type="text" class="form-control" id="anio" name="anio" value="1" readonly required>
+                                        </div>                                       
+                                        <hr>
+                                        </div>';
+                                
+                            }
+                            
                         echo '</div>
                         
                         
@@ -544,6 +619,36 @@ function formInfoLicencias($id,$conn){
             }
             if($licencia == 'Maternidad Excedencia'){
                 infoMaternidadExcedencia($id,$conn);
+            }
+            if($licencia == 'Para Rendir Examenes'){
+                infoRendirExamen($id,$conn);
+            }
+            if($licencia == 'Para Realizar estudios o Investigaciones'){
+                infoEstudiosInvestigaciones($id,$conn);
+            }
+            if($licencia == 'Estudios en Escuela Defensa Nacional'){
+                infoEstudiosDefensaNacional($id,$conn);
+            }
+            if($licencia == 'Matrimonio del agente o hijos'){
+                infoMatrimonioAgente($id,$conn);
+            }
+            if($licencia == 'Actividades Deportivas no rentadas'){
+                infoActividadesDeportivas($id,$conn);
+            }
+            if($licencia == 'Ejercicio Transitorio de otros cargos'){
+                infoCargosTransitorios($id,$conn);
+            }
+            if($licencia == 'Razones Particulares'){
+                infoRazonesparticulares($id,$conn);
+            }
+            if($licencia == 'Razones de Estudio'){
+                infoRazonesEstudios($id,$conn);
+            }
+            if($licencia == 'Acompañar Cónyuge'){
+                infoAcompañarConyuge($id,$conn);
+            }
+            if($licencia == 'Cargos, horas Cátedra'){
+                infoHorasCatedra($id,$conn);
             }
             
                
@@ -1441,6 +1546,494 @@ function infoMaternidadExcedencia($id,$conn){
                 <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
                 <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
                 <li class="list-group-item"><strong>Cantidad de Días: </strong> <span class="badge badge-inverse">'.$total_maternidad.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
+
+
+/*
+** PARA RENDIR EXAMENES
+*/
+function infoRendirExamen($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $total_estudio = $fila['total_estudio'];
+                $dias_tomados = $fila['dias_tomados_estudio'];
+                $dias_restantes = $fila['dias_restantes_estudio'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Total Días: </strong> <span class="badge badge-inverse">'.$total_estudio.'</span></li>
+                <li class="list-group-item"><strong>Días Tomados: </strong> <span class="badge badge-inverse">'.$dias_tomados.'</span></li>
+                <li class="list-group-item"><strong>Días Restantes: </strong> <span class="badge badge-inverse">'.$dias_restantes.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
+
+
+/*
+** PARA REALIZAR ESTUDIOS O INVESTIGACIONES
+*/
+function infoEstudiosInvestigaciones($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $cant_anios = $fila['cant_anios'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Cantidad de Años: </strong> <span class="badge badge-inverse">'.$cant_anios.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
+
+
+/*
+** PARA REALIZAR ESTUDIOS ESCUELA DE DEFENSA NACIONAL
+*/
+function infoEstudiosDefensaNacional($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
+
+
+/*
+** MATRIMONIO DEL AGENTE O LOS HIJOS DEL AGENTE
+*/
+function infoMatrimonioAgente($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
+
+/*
+** ACTIVIDADES DEPORTIVAS NO RENTADAS
+*/
+function infoActividadesDeportivas($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $cant_dias = $fila['dias_tomados_otros'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Cantidad de Días: </strong> <span class="badge badge-inverse">'.$cant_dias.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
+
+
+/*
+** EJERCICIO TRANSITORIO DE OTROS CARGOS
+*/
+function infoCargosTransitorios($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $cant_dias = $fila['dias_tomados_otros'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Cantidad de Días: </strong> <span class="badge badge-inverse">'.$cant_dias.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
+
+/*
+** INFO RAZONES PARTICULARES
+*/
+function infoRazonesparticulares($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $cant_dias = $fila['dias_tomados_otros'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Cantidad de Días: </strong> <span class="badge badge-inverse">'.$cant_dias.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
+
+
+/*
+** INFO RAZONES DE ESTUDIOS
+*/
+function infoRazonesEstudios($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $cant_dias = $fila['dias_tomados_otros'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Cantidad de Días: </strong> <span class="badge badge-inverse">'.$cant_dias.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
+
+
+/*
+** INFO ACOMPAÑAR CONYUGE
+*/
+function infoAcompañarConyuge($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $cant_dias = $fila['dias_tomados_otros'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Cantidad de Días: </strong> <span class="badge badge-inverse">'.$cant_dias.'</span></li>';
+                
+                if($comprobante != ''){
+                    echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
+                            <img src="../icons/actions/layer-visible-on.png"  class="img-reponsive img-rounded"> Ver Comprobante</a></li>';
+                }else{
+                    echo '<form action="#" method="POST">
+                            <input type="hidden" name="id" value="'.$id.'">
+                            <hr>
+                            <button type="submit" class="btn btn-warning btn-block" name="upload_comprobante">
+                                <img src="../icons/actions/svn-commit.png"  class="img-reponsive img-rounded"> Subir Comprobante</button>
+                            <hr>
+                          </form>';
+                }
+                
+             echo '</ul>';
+
+}
+
+
+/*
+** INFO CARGOS Y HORAS CÁTEDRA
+*/
+function infoHorasCatedra($id,$conn){
+
+        $sql = "select * from licencias where id = '$id'";
+        mysqli_select_db($conn,'licor');
+        $query = mysqli_query($conn,$sql);
+        while($fila = mysqli_fetch_array($query)){
+                $licencia = $fila['tipo_licencia'];
+                $agente = $fila['agente'];
+                $f_desde = $fila['f_desde'];
+                $f_hasta = $fila['f_hasta'];
+                $cant_dias = $fila['dias_tomados_otros'];
+                $comprobante = $fila['comprobantes'];
+        }
+        
+        $sql_2 = "select art_licencia from tipo_licencia where descripcion = '$licencia'";
+        $query_2 = mysqli_query($conn,$sql_2);
+        while($row = mysqli_fetch_array($query_2)){
+            $articulo = $row['art_licencia'];
+        }
+            
+        echo '<ul class="list-group">
+                <li class="list-group-item"><strong>Tipo de Licencia: </strong><span class="badge badge-warning">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
+                <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
+                <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Cantidad de Días: </strong> <span class="badge badge-inverse">'.$cant_dias.'</span></li>';
                 
                 if($comprobante != ''){
                     echo '<li class="list-group-item"><a href="../lib/download_comprobante.php?file_name='.$comprobante.'" class="list-group-item active">
@@ -3240,6 +3833,869 @@ function insertMaternidadExcedencia($nombre,$dni,$revista,$descripcion,$f_desde,
 
 }
 
+// ============================================================================================================================== //
+// LICENCIAS EXTRAORDINARIAS CON GOCE DE HABERES
+// ============================================================================================================================== //
+
+/*
+** PARA RENDIR EXAMENES
+*/
+function insertRendirExamen($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cursando,$conn){
+
+    mysqli_select_db($conn,'licor'); // seleccionamos base de datos
+    
+    $sql = "select total_estudio, dias_tomados_estudio, dias_restantes_estudio from licencias where agente = '$nombre' and tipo_licencia = '$descripcion'";
+    $query = mysqli_query($conn,$sql);
+    while ($row = mysqli_fetch_array($query)){
+        $total_estudio = $row['total_estudio'];
+        $dias_tomados_estudio = $row['dias_tomados_estudio'];
+        $dias_restantes_estudio = $row['dias_restantes_estudio'];
+    }
+    
+    $cant_dias = dias_pasados($f_desde,$f_hasta);
+    
+    if($cursando == 1){
+    
+        $total_dias = 12;
+        
+        if(($total_estudio == 0) || ($total_estudio == 'NULL')){
+        
+            if(($cant_dias > 0) || ($cant_dias <= 3)){
+                    
+                    $dias_restantes = $total_dias - $cant_dias;
+                
+                    $sql_1 = "INSERT INTO licencias ".
+                            "(agente,
+                            dni,
+                            f_desde,
+                            f_hasta,
+                            tipo_licencia,
+                            total_estudio,
+                            dias_tomados_estudio,
+                            dias_restantes_estudio)".
+                            "VALUES ".
+                            "('$nombre',
+                            '$dni',
+                            '$f_desde',
+                            '$f_hasta',
+                            '$descripcion',
+                            '$total_dias',
+                            '$cant_dias',
+                            '$dias_restantes')";
+                        
+                            $query_1 = mysqli_query($conn,$sql_1);
+                                        
+                            if($query_1){
+                                echo 1; // registro incertado correctamente
+                            }else{
+                                echo -1; // error al incertar registro
+                                $error = mysqli_error($conn);
+                                mysqlInsertsErrors($error);
+                            }
+            
+            }else if($cant_dias > 3){
+                echo 95; // la cantidad de dias a tomar no puede ser mayor a 3
+            }
+        
+        }
+        
+        if($total_estudio != 0){
+            
+            if(($cant_dias > 0) || ($cant_dias <= 3)){
+                    
+                    if($dias_restantes_estudio >= 3){
+                    
+                            $dias_restantes = $dias_restantes_estudio - $cant_dias;
+                        
+                            $sql_2 = "INSERT INTO licencias ".
+                                    "(agente,
+                                    dni,
+                                    f_desde,
+                                    f_hasta,
+                                    tipo_licencia,
+                                    total_estudio,
+                                    dias_tomados_estudio,
+                                    dias_restantes_estudio)".
+                                    "VALUES ".
+                                    "('$nombre',
+                                    '$dni',
+                                    '$f_desde',
+                                    '$f_hasta',
+                                    '$descripcion',
+                                    '$total_dias',
+                                    '$cant_dias',
+                                    '$dias_restantes')";
+                                
+                                    $query_2 = mysqli_query($conn,$sql_2);
+                                                
+                                    if($query_2){
+                                        echo 1; // registro incertado correctamente
+                                    }else{
+                                        echo -1; // error al incertar registro
+                                        $error = mysqli_error($conn);
+                                        mysqlInsertsErrors($error);
+                                    }
+                }else if($dias_restantes_estudio == 0){
+                    echo 97; // ya no posee más dias
+                }else if($dias_restantes_estudio < 3){
+                    echo 99; // la cantidad de dias restantes son insuficientes
+                }
+            }else if($cant_dias > 3){
+                echo 95; // la cantidad de dias a tomar no puede ser mayor a 3
+            }
+        
+        }
+    
+    }
+    
+    if($cursando == 2){
+    
+        $total_dias = 28;
+        
+            if(($total_estudio == 0) || ($total_estudio == 'NULL')){
+        
+            if(($cant_dias > 0) || ($cant_dias <= 6)){
+                    
+                    $dias_restantes = $total_dias - $cant_dias;
+                
+                    $sql_3 = "INSERT INTO licencias ".
+                            "(agente,
+                            dni,
+                            f_desde,
+                            f_hasta,
+                            tipo_licencia,
+                            total_estudio,
+                            dias_tomados_estudio,
+                            dias_restantes_estudio)".
+                            "VALUES ".
+                            "('$nombre',
+                            '$dni',
+                            '$f_desde',
+                            '$f_hasta',
+                            '$descripcion',
+                            '$total_dias',
+                            '$cant_dias',
+                            '$dias_restantes')";
+                        
+                            $query_3 = mysqli_query($conn,$sql_3);
+                                        
+                            if($query_3){
+                                echo 1; // registro incertado correctamente
+                            }else{
+                                echo -1; // error al incertar registro
+                                $error = mysqli_error($conn);
+                                mysqlInsertsErrors($error);
+                            }
+            
+            }else if($cant_dias > 6){
+                echo 101; // la cantidad de dias a tomar no puede ser mayor a 6
+            }
+        
+        }
+        
+        if($total_estudio != 0){
+            
+            if(($cant_dias > 0) || ($cant_dias <= 6)){
+                    
+                    if($dias_restantes_estudio >= 6){
+                    
+                            $dias_restantes = $dias_restantes_estudio - $cant_dias;
+                        
+                            $sql_4 = "INSERT INTO licencias ".
+                                    "(agente,
+                                    dni,
+                                    f_desde,
+                                    f_hasta,
+                                    tipo_licencia,
+                                    total_estudio,
+                                    dias_tomados_estudio,
+                                    dias_restantes_estudio)".
+                                    "VALUES ".
+                                    "('$nombre',
+                                    '$dni',
+                                    '$f_desde',
+                                    '$f_hasta',
+                                    '$descripcion',
+                                    '$total_dias',
+                                    '$cant_dias',
+                                    '$dias_restantes')";
+                                
+                                    $query_4 = mysqli_query($conn,$sql_4);
+                                                
+                                    if($query_4){
+                                        echo 1; // registro incertado correctamente
+                                    }else{
+                                        echo -1; // error al incertar registro
+                                        $error = mysqli_error($conn);
+                                        mysqlInsertsErrors($error);
+                                    }
+                }else if($dias_restantes_estudio == 0){
+                    echo 105; // ya no posee más dias
+                }else if($dias_restantes_estudio < 6){
+                    echo 103; // la cantidad de dias restantes son insuficientes
+                }
+            }else if($cant_dias > 6){
+                echo 101; // la cantidad de dias a tomar no puede ser mayor a 6
+            }
+        
+        }
+        
+        
+        
+    }
+    
+
+}
+
+/*
+** PARA REALIZAR ESTUDIOS O INVESTIGACIONES
+*/
+function insertEstudiosInvestigaciones($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$anios_investigacion,$conn){
+
+    mysqli_select_db($conn,'licor');
+    $sql = "select antiguedad from agentes where nombre = '$nombre'";
+    $query = mysqli_query($conn,$sql);
+    while($row = mysqli_fetch_array($query)){
+        $antiguedad = $row['antiguedad'];
+    }
+    
+    $sql_1 = "select cant_anios from licencias where agente = '$nombre' and tipo_licencia = '$descripcion'";
+    $query_1 = mysqli_query($conn,$sql_1);
+    while($row_1 = mysqli_fetch_array($query_1)){
+        $cant_anios = $row_1['cant_anios'];
+    }
+
+    $cant_dias = dias_pasados($f_desde,$f_hasta);
+    
+    if(($cant_anios == 0) || ($cant_anios == 'NULL')){
+    
+        if(($cant_dias == 365) && ($anios_investigacion == 1)){
+        
+            if($antiguedad >= 1){
+            
+                    $sql_2 = "INSERT INTO licencias ".
+                             "(agente,
+                               dni,
+                               f_desde,
+                               f_hasta,
+                               tipo_licencia,
+                               cant_anios)".
+                              "VALUES ".
+                              "('$nombre',
+                                '$dni',
+                                '$f_desde',
+                                '$f_hasta',
+                                '$descripcion',
+                                '$anios_investigacion')";
+                     $query_2 = mysqli_query($conn,$sql_2);
+                     
+                     if($query_2){
+                         echo 1; // registro incertado correctamente
+                     }else{
+                         echo -1; // error al incertar registro
+                         $error = mysqli_error($conn);
+                         mysqlInsertsErrors($error);
+                     }
+            
+            }else if($antiguedad < 1){
+                echo 109; // aun no tiene la antiguedad para solicitar dicha licencia
+            }
+                
+        }else if(($cant_dias < 365) && ($anios_investigacion == 1) || ($cant_dias > 365) && ($anios_investigacion == 1)){
+            echo 107; // la cantidad de dias no puede exceder de 365 o ser menor a 365
+            $string = 'cantidad dias: '.$cant_dias;
+            datos($string);
+        }
+    
+            if(($cant_dias == 730) && ($anios_investigacion == 2)){
+            
+                if($antiguedad >= 1){
+            
+                    $sql_3 = "INSERT INTO licencias ".
+                             "(agente,
+                               dni,
+                               f_desde,
+                               f_hasta,
+                               tipo_licencia,
+                               cant_anios)".
+                              "VALUES ".
+                              "('$nombre',
+                                '$dni',
+                                '$f_desde',
+                                '$f_hasta',
+                                '$descripcion',
+                                '$anios_investigacion')";
+                     $query_3 = mysqli_query($conn,$sql_3);
+                     
+                     if($query_3){
+                         echo 1; // registro incertado correctamente
+                     }else{
+                         echo -1; // error al incertar registro
+                         $error = mysqli_error($conn);
+                         mysqlInsertsErrors($error);
+                     }
+            
+            }else if($antiguedad < 1){
+                echo 109; // aun no tiene la antiguedad para solicitar dicha licencia
+            }
+            
+        }else if(($cant_dias < 730) && ($anios_investigacion == 2) || ($cant_dias > 730) && ($anios_investigacion == 2)){
+            echo 111; // la cantidad de dias no puede exceder de 730 o ser menor a 730
+            $string = 'cantidad dias: '.$cant_dias;
+            datos($string);
+        }
+    
+    }
+    
+    if($cant_anios == 1){
+    
+        if(($cant_dias == 365) && ($anios_investigacion == 1)){
+        
+            if($antiguedad >= 1){
+            
+                $anios_investigacion += 1;
+            
+                    $sql_2 = "INSERT INTO licencias ".
+                             "(agente,
+                               dni,
+                               f_desde,
+                               f_hasta,
+                               tipo_licencia,
+                               cant_anios)".
+                              "VALUES ".
+                              "('$nombre',
+                                '$dni',
+                                '$f_desde',
+                                '$f_hasta',
+                                '$descripcion',
+                                '$anios_investigacion')";
+                     $query_2 = mysqli_query($conn,$sql_2);
+                     
+                     if($query_2){
+                         echo 1; // registro incertado correctamente
+                     }else{
+                         echo -1; // error al incertar registro
+                         $error = mysqli_error($conn);
+                         mysqlInsertsErrors($error);
+                     }
+            
+            }else if($antiguedad < 1){
+                echo 109; // aun no tiene la antiguedad para solicitar dicha licencia
+            }
+                
+        }else if(($cant_dias < 365) && ($anios_investigacion == 1) || ($cant_dias > 365) && ($anios_investigacion == 1)){
+            echo 107; // la cantidad de dias no puede exceder de 365 o ser menor a 365
+            $string = 'cantidad dias: '.$cant_dias;
+            datos($string);
+        }
+    }
+    
+    if(($cant_anios == 2) && ($anios_investigacion == 1) || ($cant_anios == 2) && ($anios_investigacion == 2)){
+        echo 113; // ya no posee más años para tomar dicha licencia
+    }
+    
+    if(($cant_anios == 1) && ($anios_investigacion == 2)){
+        echo 115; // solo le queda un año 
+    }
+    
+
+}
+
+
+/*
+** ESTUDIO EN ESCUELA DE DEFENSA NACIONAL
+*/
+function insertEstudiosDefensaNacional($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn){
+
+    mysqli_select_db($conn,'licor');
+        
+    if($revista == 'Planta Permanente'){
+    
+        $sql_1 = "INSERT INTO licencias ".
+                 "(agente,
+                   dni,
+                   f_desde,
+                   f_hasta,
+                   tipo_licencia)".
+                 "VALUES ".
+                 "('$nombre',
+                   '$dni',
+                   '$f_desde',
+                   '$f_hasta',
+                   '$descripcion')";
+        $query_1 = mysqli_query($conn,$sql_1);
+        
+            if($query_1){
+                echo 1; // registro incertado correctamente
+            }else{
+                echo -1; // error al incertar registro
+                $error = mysqli_error($conn);
+                mysqlInsertsErrors($error);
+            }
+    }else{
+        echo 117; // solo planta permanente puede solicitar dicha licencia
+    }
+
+}
+
+/*
+** MATROMIO DEL AGENTE O DEL HIJO DEL AGENTE
+*/
+function insertCasamientoAgente($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$matrimonio,$conn){
+    
+    $cant_dias = dias_pasados($f_desde,$f_hasta);
+
+    if($matrimonio == 1){
+    
+        if(($cant_dias >= 12) || ($cant_dias <= 14)){
+        
+        $sql = "INSERT INTO licencias ".
+                 "(agente,
+                   dni,
+                   f_desde,
+                   f_hasta,
+                   tipo_licencia)".
+                 "VALUES ".
+                 "('$nombre',
+                   '$dni',
+                   '$f_desde',
+                   '$f_hasta',
+                   '$descripcion')";
+        $query = mysqli_query($conn,$sql);
+        
+            if($query){
+                echo 1; // registro incertado correctamente
+            }else{
+                echo -1; // error al incertar registro
+                $error = mysqli_error($conn);
+                mysqlInsertsErrors($error);
+            }
+    
+    }else if(($cant_dias < 12) || ($cant_dias > 14))
+        echo 119; // los dias deben estar entre 12 y 14 dias
+   }
+   
+   if($matrimonio == 2){
+   
+        if(($cant_dias >= 3) || ($cant_dias <= 5)){
+        
+                $sql = "INSERT INTO licencias ".
+                        "(agente,
+                        dni,
+                        f_desde,
+                        f_hasta,
+                        tipo_licencia)".
+                        "VALUES ".
+                        "('$nombre',
+                        '$dni',
+                        '$f_desde',
+                        '$f_hasta',
+                        '$descripcion')";
+                $query = mysqli_query($conn,$sql);
+                
+                    if($query){
+                        echo 1; // registro incertado correctamente
+                    }else{
+                        echo -1; // error al incertar registro
+                        $error = mysqli_error($conn);
+                        mysqlInsertsErrors($error);
+                    }
+    
+      }else if(($cant_dias < 3) || ($cant_dias > 5)){
+            echo 121; // la cantidad de dias debe estar entre 3 y 5 dias.
+      }
+   
+   }
+
+}
+
+/*
+** ACTIVIDADES DEPORTIVAS NO RENTADAS
+*/
+function insertActividadesDeportivas($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn){
+
+    $cant_dias = dias_pasados($f_desde,$f_hasta);
+
+    mysqli_select_db($conn,'licor');
+    
+    $sql = "INSERT INTO licencias ".
+           "(agente,
+             dni,
+             f_desde,
+             f_hasta,
+             tipo_licencia,
+             dias_tomados_otros)".
+           "VALUES ".
+           "('$nombre',
+             '$dni',
+             '$f_desde',
+             '$f_hasta',
+             '$descripcion',
+             '$cant_dias')";
+           $query = mysqli_query($conn,$sql);
+           
+           if($query){
+              echo 1; // registro incertado correctamente
+           }else{
+              echo -1; // error al incertar registro
+              $error = mysqli_error($conn);
+              mysqlInsertsErrors($error);
+           }
+    
+}
+
+
+// ============================================================================================================================== //
+// LICENCIAS EXTRAORDINARIAS SIN GOCE DE HABERES
+// ============================================================================================================================== //
+/*
+** EJERCICIO TRANSITORIO DE OTROS CARGOS
+*/
+function insertCargosTransitorios($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn){
+    
+    $cant_dias = dias_pasados($f_desde,$f_hasta);
+
+    mysqli_select_db($conn,'licor');
+    
+    if($revista == 'Planta Permanente'){
+    
+    $sql = "INSERT INTO licencias ".
+           "(agente,
+             dni,
+             f_desde,
+             f_hasta,
+             tipo_licencia,
+             dias_tomados_otros)".
+           "VALUES ".
+           "('$nombre',
+             '$dni',
+             '$f_desde',
+             '$f_hasta',
+             '$descripcion',
+             '$cant_dias')";
+           $query = mysqli_query($conn,$sql);
+           
+           if($query){
+              echo 1; // registro incertado correctamente
+           }else{
+              echo -1; // error al incertar registro
+              $error = mysqli_error($conn);
+              mysqlInsertsErrors($error);
+           }
+    }else{
+        echo 123; // solo planta permanente
+    }
+    
+}
+
+/*
+** RAZONES PARTICULARES (ART. 13b2)
+*/
+function insertRazonesParticulares($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$meses,$conn){
+    
+    $cant_dias = dias_pasados($f_desde,$f_hasta); // se obtiene la cantidad de dias entre fechas
+    
+    mysqli_select_db($conn,'licor');
+    $sql = "select f_hasta, dias_tomados_otros from licencias where agente = '$nombre' and tipo_licencia = '$descripcion'";
+    $query = mysqli_query($conn,$sql);
+    $rows = mysqli_num_rows($query);
+    while($row = mysqli_fetch_array($query)){
+        $f_fin = $row['f_hasta'];
+        $dias_tomados = $row['dias_tomados_otros'];
+    }
+       
+    $decada = dias_pasados($f_fin,$f_desde);
+    
+    if(($rows == 0) || ($rows == 'NULL')){
+    
+            if($revista == 'Planta Permanente'){
+                    
+                if(($cant_dias == 180) && ($meses == 6)){
+                
+                        $sql_1 = "INSERT INTO licencias ".
+                                "(agente,
+                                    dni,
+                                    f_desde,
+                                    f_hasta,
+                                    tipo_licencia,
+                                    dias_tomados_otros)".
+                                "VALUES ".
+                                "('$nombre',
+                                    '$dni',
+                                    '$f_desde',
+                                    '$f_hasta',
+                                    '$descripcion',
+                                    '$cant_dias')";
+                                $query_1 = mysqli_query($conn,$sql_1);
+                                
+                                if($query_1){
+                                    echo 1; // registro incertado correctamente
+                                }else{
+                                    echo -1; // error al incertar registro
+                                    $error = mysqli_error($conn);
+                                    mysqlInsertsErrors($error);
+                                }
+                }else if(($cant_dias < 180) && ($meses == 6) || ($cant_dias > 180) && ($meses == 6)){
+                    echo 124; // la cantidad de dias no debe ser menor o superior a 180
+                    $string = 'cantidad dias: '.$cant_dias;
+                    datos($string);
+                }
+            
+            
+            }else{
+                echo 123; // solo personal que reviste en planta permanente
+            }
+    }
+    
+    if($rows > 0){
+    
+        if($decada >= 3600){
+        
+            if($revista == 'Planta Permanente'){
+                    
+                if(($cant_dias == 180) && ($meses == 6)){
+                
+                        $sql_1 = "INSERT INTO licencias ".
+                                "(agente,
+                                    dni,
+                                    f_desde,
+                                    f_hasta,
+                                    tipo_licencia,
+                                    dias_tomados_otros)".
+                                "VALUES ".
+                                "('$nombre',
+                                    '$dni',
+                                    '$f_desde',
+                                    '$f_hasta',
+                                    '$descripcion',
+                                    '$cant_dias')";
+                                $query_1 = mysqli_query($conn,$sql_1);
+                                
+                                if($query_1){
+                                    echo 1; // registro incertado correctamente
+                                }else{
+                                    echo -1; // error al incertar registro
+                                    $error = mysqli_error($conn);
+                                    mysqlInsertsErrors($error);
+                                }
+                }else if(($cant_dias < 180) && ($meses == 6) || ($cant_dias > 180) && ($meses == 6)){
+                    echo 124; // la cantidad de dias no debe ser menor o superior a 180
+                    $string = 'cantidad dias: '.$cant_dias;
+                    datos($string);
+                }
+            
+            
+            }else{
+                echo 123; // solo personal que reviste en planta permanente
+            }
+        
+        }else if($decada < 3600){
+            echo 125; // aún no han pasado 10 años para volver a tomar dicha licencia
+        }
+        
+    }
+
+}
+
+
+/*
+** RAZONES DE ESTUDIO (ART. 13c2)
+*/
+function insertRazonesEstudio($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$anio,$conn){
+    
+    $cant_dias = dias_pasados($f_desde,$f_hasta); // se obtiene la cantidad de dias entre fechas
+    
+    mysqli_select_db($conn,'licor');
+    $sql = "select f_hasta, dias_tomados_otros from licencias where agente = '$nombre' and tipo_licencia = '$descripcion'";
+    $query = mysqli_query($conn,$sql);
+    $rows = mysqli_num_rows($query);
+    while($row = mysqli_fetch_array($query)){
+        $f_fin = $row['f_hasta'];
+        $dias_tomados = $row['dias_tomados_otros'];
+    }
+       
+    $decada = dias_pasados($f_fin,$f_desde);
+    
+    if(($rows == 0) || ($rows == 'NULL')){
+    
+            if($revista == 'Planta Permanente'){
+                    
+                if(($cant_dias == 365) && ($anio == 1)){
+                
+                        $sql_1 = "INSERT INTO licencias ".
+                                "(agente,
+                                    dni,
+                                    f_desde,
+                                    f_hasta,
+                                    tipo_licencia,
+                                    dias_tomados_otros)".
+                                "VALUES ".
+                                "('$nombre',
+                                    '$dni',
+                                    '$f_desde',
+                                    '$f_hasta',
+                                    '$descripcion',
+                                    '$cant_dias')";
+                                $query_1 = mysqli_query($conn,$sql_1);
+                                
+                                if($query_1){
+                                    echo 1; // registro incertado correctamente
+                                }else{
+                                    echo -1; // error al incertar registro
+                                    $error = mysqli_error($conn);
+                                    mysqlInsertsErrors($error);
+                                }
+                }else if(($cant_dias < 365) && ($anio == 1) || ($cant_dias > 365) && ($anio == 1)){
+                    echo 127; // la cantidad de dias no debe ser menor o superior a 365
+                    $string = 'cantidad dias: '.$cant_dias;
+                    datos($string);
+                }
+            
+            
+            }else{
+                echo 123; // solo personal que reviste en planta permanente
+            }
+    }
+    
+    if($rows > 0){
+    
+        if($decada >= 3600){
+        
+            if($revista == 'Planta Permanente'){
+                    
+                if(($cant_dias == 365) && ($anio == 1)){
+                
+                        $sql_1 = "INSERT INTO licencias ".
+                                "(agente,
+                                    dni,
+                                    f_desde,
+                                    f_hasta,
+                                    tipo_licencia,
+                                    dias_tomados_otros)".
+                                "VALUES ".
+                                "('$nombre',
+                                    '$dni',
+                                    '$f_desde',
+                                    '$f_hasta',
+                                    '$descripcion',
+                                    '$cant_dias')";
+                                $query_1 = mysqli_query($conn,$sql_1);
+                                
+                                if($query_1){
+                                    echo 1; // registro incertado correctamente
+                                }else{
+                                    echo -1; // error al incertar registro
+                                    $error = mysqli_error($conn);
+                                    mysqlInsertsErrors($error);
+                                }
+                }else if(($cant_dias < 365) && ($anio == 1) || ($cant_dias > 365) && ($anio == 1)){
+                    echo 124; // la cantidad de dias no debe ser menor o superior a 180
+                    $string = 'cantidad dias: '.$cant_dias;
+                    datos($string);
+                }
+            
+            
+            }else{
+                echo 123; // solo personal que reviste en planta permanente
+            }
+        
+        }else if($decada < 3600){
+            echo 125; // aún no han pasado 10 años para volver a tomar dicha licencia
+        }
+        
+    }
+
+}
+
+
+/*
+** LICENCIA PARA ACOMPAÑAR A CONYUGE
+*/
+function insertAcompañarConyuge($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn){
+
+    $cant_dias = dias_pasados($f_desde,$f_hasta);
+    mysqli_select_db($conn,'licor');
+        
+        if($revista == 'Planta Permanente'){
+                    
+                if($cant_dias >= 60){
+                
+                        $sql_1 = "INSERT INTO licencias ".
+                                "(agente,
+                                    dni,
+                                    f_desde,
+                                    f_hasta,
+                                    tipo_licencia,
+                                    dias_tomados_otros)".
+                                "VALUES ".
+                                "('$nombre',
+                                    '$dni',
+                                    '$f_desde',
+                                    '$f_hasta',
+                                    '$descripcion',
+                                    '$cant_dias')";
+                                $query_1 = mysqli_query($conn,$sql_1);
+                                
+                                if($query_1){
+                                    echo 1; // registro incertado correctamente
+                                }else{
+                                    echo -1; // error al incertar registro
+                                    $error = mysqli_error($conn);
+                                    mysqlInsertsErrors($error);
+                                }
+                }else if($cant_dias < 60){
+                    echo 129; // la cantidad de dias no debe ser menor a 60
+                    $string = 'cantidad dias: '.$cant_dias;
+                    datos($string);
+                }
+            
+            
+            }else{
+                echo 123; // solo personal que reviste en planta permanente
+            }
+
+}
+
+
+/*
+** LICENCIA PARA CARGOS Y HORAS CATEDRA
+*/
+function insertHorasCatedra($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn){
+
+    $cant_dias = dias_pasados($f_desde,$f_hasta);
+    mysqli_select_db($conn,'licor');
+        
+        if($revista == 'Planta Permanente'){
+                                
+                        $sql_1 = "INSERT INTO licencias ".
+                                "(agente,
+                                    dni,
+                                    f_desde,
+                                    f_hasta,
+                                    tipo_licencia,
+                                    dias_tomados_otros)".
+                                "VALUES ".
+                                "('$nombre',
+                                    '$dni',
+                                    '$f_desde',
+                                    '$f_hasta',
+                                    '$descripcion',
+                                    '$cant_dias')";
+                                $query_1 = mysqli_query($conn,$sql_1);
+                                
+                                if($query_1){
+                                    echo 1; // registro incertado correctamente
+                                }else{
+                                    echo -1; // error al incertar registro
+                                    $error = mysqli_error($conn);
+                                    mysqlInsertsErrors($error);
+                                }
+                
+            }else{
+                echo 123; // solo personal que reviste en planta permanente
+            }
+
+}
 
 // ============================================================================================================================== //
 // FIN PERSISNTENCIA A BASE

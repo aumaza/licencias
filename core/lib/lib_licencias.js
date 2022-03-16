@@ -213,6 +213,103 @@ $(document).ready(function(){
                     console.log("Datos: " + datos);
                 }
                 
+                // DIAS PARA RENDIR EXAMENES NIVEL SECUNDARIO
+                else if(r == 95){
+                    alert("Si la cantidad de días a tomar no puede ser mayor a 3!!");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 97){
+                    alert("Ya no posee más días para usufructuar!!");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 99){
+                    alert("La cantidad de días restantes son insufientes, seleccione una cantidad menor a 3");
+                    console.log("Datos: " + datos);
+                }
+                
+                // PARA RENDIR EXAMENES NIVEL TERCIARIO / UNIVERSITARIO / POSTGRADO
+                else if(r == 101){
+                    alert("Si la cantidad de días a tomar no puede ser mayor a 6!!");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 103){
+                    alert("La cantidad de días restantes son insufientes, seleccione una cantidad menor a 6");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 105){
+                    alert("Ya no posee más días para usufructuar!!");
+                    console.log("Datos: " + datos);
+                }
+                
+                // PARA REALIZAR ESTUDIOS O INVESTIGACIONES
+                else if(r == 109){
+                    alert("Aún no tiene la Antiguedad para solicitar dicha licencia");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 107){
+                    alert("Si seleccionó 1 Año de licencia, la cantidad de días entre fecha desde y fecha hasta no puede ser inferior ni superior a 365");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 111){
+                    alert("Si seleccionó 2 Años de licencia, la cantidad de días entre fecha desde y fecha hasta no puede ser inferior ni superior a 730");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 113){
+                    alert("Ha agotado la cantidad de años de dicha licencia");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 115){
+                    alert("Ha seleccionado 2 Años de investigación y solo le queda 1 año más, por favor reduzca el plazo de la licencia a solicitar!!");
+                    console.log("Datos: " + datos);
+                }
+                
+                // PARA REALIZAR ESTUDIOS EN ESCUELA DE DEFENSA NACIONAL
+                else if(r == 117){
+                    alert("Licencia sólo permitida para personal de Planta Permanente");
+                    console.log("Datos: " + datos);
+                }
+                
+                // MATRIMONIO DEL AGENTE O HIJOS
+                else if(r == 119){
+                    alert("Debe tener en cuenta los sábados y domingos que sumarán días, para que sean 10 días laborables");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 121){
+                    alert("Debe tener en cuenta los sábados y domingos que sumarán días, para que sean 3 días laborables");
+                    console.log("Datos: " + datos);
+                }
+                
+                // EJERCICIO TRANSITORIO DE OTROS CARGOS && RAZONES PARTICULARES
+                else if(r == 123){
+                    alert("Licencia sólo disponible para personal de Planta Permanente!!");
+                    console.log("Datos: " + datos);
+                }
+                
+                // RAZONES PARTICULARES
+                else if(r == 124){
+                    alert("La Cantidad de días no puede ser inferior o superior a 180");
+                    console.log("Datos: " + datos);
+                }
+                else if(r == 125){
+                    alert("Desde la fecha de finalización de dicha licencia hasta la fecha de inicio de una nueva solicitud, deben transcurrir 10 años!!");
+                    console.log("Datos: " + datos);
+                }
+                
+                // RAZONES DE ESTUDIOS
+                else if(r == 127){
+                    alert("La Cantidad de días no puede ser inferior o superior a 365");
+                    console.log("Datos: " + datos);
+                }
+                
+                // ACOMPAÑAR A CONYUGE
+                else if(r == 129){
+                    alert("La Cantidad de días no puede ser inferior a 60");
+                    console.log("Datos: " + datos);
+                }
+                
+                
+                
+                // SI NO RETORNA VALOR
                 else if(r == ''){
                     console.log("Datos: " + datos);
                 }

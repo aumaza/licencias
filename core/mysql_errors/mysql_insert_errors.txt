@@ -1,3 +1,4 @@
 
 2022-01-26 20:15:59 / Unknown column 'cant_anios' in 'field list'
 2022-03-08 19:15:34 / Unknown column 'cant_anios' in 'field list'
+2022-03-14 15:56:01 / Column count doesn't match value count at row 1

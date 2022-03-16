@@ -309,6 +309,140 @@
         
         }
         
+        // PARA RENDIR EXAMENES
+        if($descripcion == 'Para Rendir Examenes'){
+            
+            $cursando = mysqli_real_escape_string($conn,$_POST['cursando']);
+            
+            if(($f_desde == '') || 
+                    ($f_hasta == '') ||
+                        ($cursando == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertRendirExamen($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cursando,$conn);
+                }
+        
+        }
+        
+        //PARA REALIZAR ESTUDIOS O INVESTIGACIONES
+        if($descripcion == 'Para Realizar estudios o Investigaciones'){
+            
+            $anios_investigacion = mysqli_real_escape_string($conn,$_POST['anios_investigacion']);
+            
+            if(($f_desde == '') || 
+                    ($f_hasta == '') ||
+                        ($anios_investigacion == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertEstudiosInvestigaciones($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$anios_investigacion,$conn);
+                }
+        
+        }
+        
+        // PARA REALIZAR ESTUDIOS EN ESCUELA DE DEFENSA NACIONAL
+        if($descripcion == 'Estudios en Escuela Defensa Nacional'){
+                     
+            if(($f_desde == '') || 
+                    ($f_hasta == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertEstudiosDefensaNacional($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                }
+        
+        }
+        
+        // MATRIMONIO DEL AGENTE O DE LOS HIJOS
+        if($descripcion == 'Matrimonio del agente o hijos'){
+             
+             $matrimonio = mysqli_real_escape_string($conn,$_POST['matrimonio']);
+                     
+            if(($f_desde == '') || 
+                    ($f_hasta == '') ||
+                        ($matrimonio == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertCasamientoAgente($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$matrimonio,$conn);
+                }
+        
+        }
+        
+        // ACTIVIDADES DEPORTIVAS NO RENTADAS
+        if($descripcion == 'Actividades Deportivas no rentadas'){
+                     
+            if(($f_desde == '') || 
+                    ($f_hasta == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertActividadesDeportivas($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                }
+        
+        }
+        
+        // EJERCICIO TRANSITORIO DE OTROS CARGOS
+        if($descripcion == 'Ejercicio Transitorio de otros cargos'){
+                     
+            if(($f_desde == '') || 
+                    ($f_hasta == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertCargosTransitorios($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                }
+        
+        }
+        
+        // RAZONES PARTICULARES
+        if($descripcion == 'Razones Particulares'){
+             
+             $meses = mysqli_real_escape_string($conn,$_POST['meses']);
+                     
+            if(($f_desde == '') || 
+                    ($f_hasta == '') ||
+                        ($meses == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertRazonesParticulares($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$meses,$conn);
+                }
+        
+        }
+        
+        // RAZONES DE ESTUDIOS
+        if($descripcion == 'Razones de Estudio'){
+             
+             $anio = mysqli_real_escape_string($conn,$_POST['anio']);
+                     
+            if(($f_desde == '') || 
+                    ($f_hasta == '') ||
+                        ($anio == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertRazonesEstudio($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$anio,$conn);
+                }
+        
+        }
+        
+        // ACOMPAÑAR A CONYUGE
+        if($descripcion == 'Acompañar Cónyuge'){
+             
+            if(($f_desde == '') || 
+                    ($f_hasta == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertAcompañarConyuge($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                }
+        
+        }
+        
+        // CARGOS Y HORAS CATEDRA
+        if($descripcion == 'Cargos, horas Cátedra'){
+             
+            if(($f_desde == '') || 
+                    ($f_hasta == '')) {
+                    echo 3; // cualquiera de los campos está vacio
+                }else{
+                    insertHorasCatedra($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                }
+        
+        }
         
         // VERIFICACION DE QUE LA FECHA HASTA NO SEA MAYOR A FECHA DESDE
         }else if($diferencia == -1){

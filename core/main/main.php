@@ -56,7 +56,8 @@ $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip();
 });
 </script>
- 
+
+
   
 </head>
 <body style="background-color: #566573;" onload="nobackbutton();">
@@ -150,12 +151,15 @@ $(document).ready(function(){
         
             if($tipo_licencia == 'Licencia Ordinaria'){
                 formNuevaLicencia($nombre,$descripcion,$conn);
-            }
-            if($tipo_licencia == 'Inasistencias'){
+            }if($tipo_licencia == 'Inasistencias'){
                 formNuevaLicencia($nombre,$descripcion,$conn);
             }if($tipo_licencia == 'Franquicias'){
                 formNuevaLicencia($nombre,$descripcion,$conn);
             }if($tipo_licencia == 'Licencias Especiales'){
+                formNuevaLicencia($nombre,$descripcion,$conn);
+            }if($tipo_licencia == 'Licencias Extraordinarias con goce de haberes'){
+                formNuevaLicencia($nombre,$descripcion,$conn);
+            }if($tipo_licencia == 'Licencias Extraordinarias sin goce de haberes'){
                 formNuevaLicencia($nombre,$descripcion,$conn);
             }
       }
