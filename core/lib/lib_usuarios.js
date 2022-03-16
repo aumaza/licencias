@@ -105,7 +105,7 @@ $(document).ready(function(){
                 }else if(r == -1){
                     alert("Hubo un problema al intentar actualizar el Password");
                 }else if(r == 0){
-                    alert("Los Password no Conciden");
+                    alert("Los Passwords no Coinciden");
                     console.log("Datos: " + datos);
                 }else if(r == 2){
                     alert("El password no puede tener menos o más de 15 caracteres");
