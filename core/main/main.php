@@ -186,7 +186,7 @@ $(document).ready(function(){
       // ====================================== //
       // TIPO DE LICENCIAS
       if(isset($_POST['tipo_licencia'])){
-        listarTipoLicencia($conn);
+        listarTipoLicencia($nombre,$conn);
       }
       if(isset($_POST['new_tipo_licencia'])){
         formAltaTipoLicencia();

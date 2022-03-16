@@ -287,7 +287,12 @@ function userMain($nombre){
                     <li class="list-group-item">
                         <button type="submit" class="btn btn-default btn-xs btn-block" name="mis_licencias" data-toggle="tooltip" title="Listar todas las Licencias, Agregar, Editar, Borrar">
                             <img src="../icons/actions/view-calendar-month.png"  class="img-reponsive img-rounded"> Mis Licencias</button>
-                    </li>                    
+                    </li>
+                    
+                    <li class="list-group-item">
+                        <button type="submit" class="btn btn-default btn-xs btn-block" name="tipo_licencia" data-toggle="tooltip" title="Listar todos los tipos de licencias existentes">
+                            <img src="../icons/actions/view-calendar-upcoming-events.png"  class="img-reponsive img-rounded"> Tipo Licencias</button>
+                    </li>
                 
                 </ul>
                 </form>

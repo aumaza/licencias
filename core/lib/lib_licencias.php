@@ -18,7 +18,7 @@ if($conn)
 	
 	if($nombre == 'Administrador'){
         
-        $sql = "SELECT * FROM licencias";
+        $sql = "SELECT * FROM licencias order by f_desde ASC";
     	mysqli_select_db($conn,'licor');
     	$resultado = mysqli_query($conn,$sql);
     }
@@ -64,7 +64,11 @@ if($conn)
 			 echo "<td align=center>".$fila['agente']."</td>";
 			 echo "<td align=center>".$fila['dni']."</td>";
 			 echo "<td align=center>".$fila['tipo_licencia']."</td>";
-			 echo "<td align=center>".$fila['f_desde']."</td>";
+			 if($fila['f_desde'] == $fecha_actual){
+			 echo '<td align=center style="background-color:green"><font color="white">'.$fila['f_desde'].'</font></td>';
+			 }else{
+			 echo '<td align=center>'.$fila['f_desde'].'</td>';
+			 }
 			 echo "<td align=center>".$fila['f_hasta']."</td>";
 			 echo "<td class='text-nowrap'>";
              echo '<form <action="#" method="POST">
@@ -695,7 +699,7 @@ function infoLicor($id,$conn){
                     echo '<li class="list-group-item"><strong>Fracción: </strong> <span class="badge badge-danger">'.$fraccion.'</span></li>';
                 }
           echo '<li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
-                <li class="lTenencia para adopciónist-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
                 <li class="list-group-item"><strong>Total Días: </strong> <span class="badge badge-inverse">'.$total_lic.'</span></li>
                 <li class="list-group-item"><strong>Días Tomados: </strong> <span class="badge badge-inverse">'.$dias_tomados.'</span></li>
                 <li class="list-group-item"><strong>Días Restantes: </strong> <span class="badge badge-inverse">'.$dias_restantes.'</span></li>
@@ -864,7 +868,7 @@ function infoDonarSangre($id,$conn){
         $query = mysqli_query($conn,$sql);
         while($fila = mysqli_fetch_array($query)){
                 $licencia = $fila['tipo_licencia'];
-                $agente = $fila['ageninfoMaternidad($id,$conn)te'];
+                $agente = $fila['agente'];
                 $f_desde = $fila['f_desde'];
                 $f_hasta = $fila['f_hasta'];
                 $dias_tomados = $fila['dias_tomados_otros'];
@@ -1185,7 +1189,7 @@ function infoLargoTratamiento($id,$conn){
                     <a href="#" data-toggle="tooltip" data-placement="top" title="'.$articulo.'">'.$licencia.'</a></span></li>
                 <li class="list-group-item"><strong>Agente: </strong> <span class="badge badge-inverse">'.$agente.'</span></li>
                 <li class="list-group-item"><strong>Fecha Desde: </strong> <span class="badge badge-inverse">'.$f_desde.'</span></li>
-                <li class="list-group-item"><strong>Fecha Hasta: infoMaternidadExcedencia($id,$conn)</strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
+                <li class="list-group-item"><strong>Fecha Hasta: </strong> <span class="badge badge-inverse">'.$f_hasta.'</span></li>
                 <li class="list-group-item"><strong>Cantidad de Años: </strong> <span class="badge badge-inverse">'.$cant_anios.'</span></li>';
                 
                 if($comprobante != ''){
@@ -4791,7 +4795,7 @@ if(!empty($_FILES["file"]["tmp_name"])){
 /*
 ** funcion que carga la tabla de todos los tipos de licencias existentes
 */
-function listarTipoLicencia($conn){
+function listarTipoLicencia($nombre,$conn){
 
 if($conn)
 {
@@ -4840,12 +4844,16 @@ if($conn)
 			 echo "<td align=justify>".$fila['particularidad']."</td>";
 			 echo "<td class='text-nowrap'>";
              echo '<form <action="#" method="POST">
-                            <input type="hidden" name="id" value="'.$fila['id'].'">
+                            <input type="hidden" name="id" value="'.$fila['id'].'">';
                             
-                            <button type="submit" class="btn btn-primary btn-sm" name="editar_tipo_licencia">
-                            <img src="../icons/actions/document-edit.png"enfermedad  class="img-reponsive img-rounded"> Editar</button>
+                            if($nombre == 'Administrador'){
+                            
+                            echo '<button type="submit" class="btn btn-primary btn-sm" name="editar_tipo_licencia">
+                            <img src="../icons/actions/document-edit.png"enfermedad  class="img-reponsive img-rounded"> Editar</button>';
+                            
+                            }
                           
-                        </form>';
+             echo '</form>';
              echo "</td>";
 			 $count++;
 		}
@@ -5022,7 +5030,7 @@ function formEditTipoLicencia($id,$conn){
                                 </select><br>
                                 <button type="button" class="btn btn-warning" onclick=callEditLicencia("edit_clase_licencia")>Editar</button>
                                 </div>
-                                max="7"
+                           
                                 <div class="form-group">
                                     <label for="descripcion">Descripción:</label>
                                     <input type="text" class="form-control" id="edit_descripcion" name="descripcion" value="'.$descripcion.'" required readonly><br>
