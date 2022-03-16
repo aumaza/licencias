@@ -32,11 +32,11 @@ if($conn)
 	//mostramos fila x fila
 	$count = 0;
 	
-	if($nombre == 'Administrador'){
+	if(($nombre == 'Administrador') || ($nombre != 'Administrador')){
 	
 	echo '<div class="container-fluid" style="margin-top:70px">
             <div class="panel panel-default" >
-                <div class="panel-heading"><span class="pull-center "><img src="../icons/actions/view-calendar-timeline.png"  class="img-reponsive img-rounded"> Licencias de Todos los Agentes';
+                <div class="panel-heading"><span class="pull-center "><img src="../icons/actions/view-calendar-timeline.png"  class="img-reponsive img-rounded"> Licencias';
                     
     echo '<p align="right">
             <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modalSelAgente" data-toggle="tooltip" title="Cargar Nueva Licencia">
@@ -44,26 +44,7 @@ if($conn)
           </p>';
                   
     }
-    if($nombre != 'Administrador'){
-    
-    echo '<div class="container-fluid" style="margin-top:70px">
-            <div class="panel panel-default" >
-	      <div class="panel-heading"><span class="pull-center "><img src="../icons/actions/view-calendar-timeline.png"  class="img-reponsive img-rounded"> Licencias de ' .$nombre;
-	      
-    echo '<form <action="#" method="POST">
-            <input type="hidden" name="nombre" value="'.$nombre.'">
-            <p align="right">
-                <button type="submit" class="btn btn-default btn-sm" name="new_licencia" data-toggle="tooltip" title="Cargar Nueva Licencia">
-                    <img src="../icons/actions/task-new.png"  class="img-reponsive img-rounded">
-                </button>
-            </p>
-          </form>';
-    
-    }
-    
-    
-    
-	      
+    	      
 	echo '</div><br>';
 
             echo "<table class='table table-condensed table-hover' style='width:100%' id='myTable'>";
@@ -2054,7 +2035,7 @@ function infoHorasCatedra($id,$conn){
 
 // ========================================================================================= //
 // MODAL //
-function modalSelAgente($conn){
+function modalSelAgente($nombre,$conn){
     
        
     echo '<div id="modalSelAgente" class="modal fade" role="dialog">
@@ -2075,8 +2056,9 @@ function modalSelAgente($conn){
                     <select class="form-control" name="agente" id="agente" >
                     <option value="" disabled selected>Seleccionar</option>';
                         
-                        
-                        $query = "SELECT nombre FROM agentes order by nombre ASC";
+                    if($nombre == 'Administrador'){
+                       
+                       $query = "SELECT nombre FROM agentes order by nombre ASC";
                         mysqli_select_db($conn,'licor');
                         $res = mysqli_query($conn,$query);
 
@@ -2085,6 +2067,21 @@ function modalSelAgente($conn){
                                 echo '<option value="'.$valores[nombre].'" >'.$valores[nombre].'</option>';
                             }
                             }
+                    }
+                    
+                    if($nombre != 'Administrador'){
+                    
+                        $query = "SELECT nombre FROM agentes where nombre = '$nombre'";
+                        mysqli_select_db($conn,'licor');
+                        $res = mysqli_query($conn,$query);
+
+                        if($res){
+                            while($valores = mysqli_fetch_array($res)){
+                                echo '<option value="'.$valores[nombre].'" >'.$valores[nombre].'</option>';
+                            }
+                            }
+                                       
+                    }
                         
                     echo '</select>
                             </div><hr>

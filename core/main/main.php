@@ -139,7 +139,7 @@ $(document).ready(function(){
       }
       // ====================================== //
       // ADMINSTRACION DE LICENCIAS
-      modalSelAgente($conn);
+      modalSelAgente($nombre,$conn);
       
       if((isset($_POST['licencias'])) || (isset($_POST['mis_licencias']))){
         licencias($nombre,$conn);
