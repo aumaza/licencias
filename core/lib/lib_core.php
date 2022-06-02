@@ -43,10 +43,10 @@ function skeleton(){
 ** Funcion que elimina un registro
 */
 
-function delUser($id,$conn){
+function delUser($id,$conn,$dbase){
 
 		
-	mysqli_select_db('licor');
+	mysqli_select_db($conn,$dbase);
 	$sql = "delete from usuarios where id = '$id'";
            
 	$res = mysqli_query($conn,$sql);
@@ -72,12 +72,12 @@ function delUser($id,$conn){
 
 
 
-function usuarios($conn){
+function usuarios($conn,$dbase){
 
 if($conn)
 {
 	$sql = "SELECT * FROM usuarios";
-    	mysqli_select_db('licor');
+    	mysqli_select_db($conn,$dbase);
     	$resultado = mysqli_query($conn,$sql);
 	//mostramos fila x fila
 	$count = 0;
@@ -127,9 +127,9 @@ if($conn)
 /*
 ** Funcion de validación de ingreso
 */
-function logIn($user,$pass,$conn){
+function logIn($user,$pass,$conn,$dbase){
 
-    mysqli_select_db('licor');
+    mysqli_select_db($conn,$dbase);
     
 	$_SESSION['user'] = $user;
 	$_SESSION['pass'] = $pass;

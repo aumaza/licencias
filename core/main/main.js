@@ -36,7 +36,7 @@ $(document).ready(function(){
 function CargarLicencias(val){
     $.ajax({
         type: "POST",
-        url: '../lib/consulta_licencia.php',
+        url: '../lib/licencias/consulta_licencia.php',
         data: 'tipo_licencia='+val,
         success: function(resp){
             $('#descripcion').html(resp);

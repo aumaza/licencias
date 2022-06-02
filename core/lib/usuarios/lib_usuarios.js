@@ -6,7 +6,7 @@ $(document).ready(function(){
         var datos=$('#fr_nuevo_usuario_ajax').serialize();
         $.ajax({
             type:"POST",
-            url:"../lib/add_nuevo_usuario.php",
+            url:"../lib/usuarios/add_nuevo_usuario.php",
             data:datos,
             success:function(r){
                 if(r==1){
@@ -41,7 +41,7 @@ $(document).ready(function(){
         var datos=$('#fr_actualizar_agente_ajax').serialize();
         $.ajax({
             type:"POST",
-            url:"../lib/update_agente.php",
+            url:"../lib/agentes/update_agente.php",
             data:datos,
             success:function(r){
                 if(r==1){
@@ -71,7 +71,7 @@ $(document).ready(function(){
         var datos=$('#frm_user_allow').serialize();
         $.ajax({
             type:"POST",
-            url:"../lib/cambiar_permiso_usuario.php",
+            url:"../lib/usuarios/cambiar_permiso_usuario.php",
             data:datos,
             success:function(r){
                 if(r==1){
@@ -96,7 +96,7 @@ $(document).ready(function(){
         var datos=$('#frm_change_password').serialize();
         $.ajax({
             type:"POST",
-            url:"../lib/change_password.php",
+            url:"../lib/usuarios/change_password.php",
             data:datos,
             success:function(r){
                 if(r == 1){

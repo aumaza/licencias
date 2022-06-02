@@ -1,9 +1,9 @@
 <?php session_start();
-        include "../connection/connection.php";
-        include "../lib/lib_usuarios.php";
-        include "../lib/lib_licencias.php";
+        include "../../connection/connection.php";
+        include "../lib/usarios/lib_usuarios.php";
+        include "lib_licencias.php";
                         
-                                
+        $id = mysqli_real_escape_string($conn,$_POST['id']);                        
         $clase_licencia = mysqli_real_escape_string($conn,$_POST['clase_licencia']);
         $descripcion = mysqli_real_escape_string($conn,$_POST['descripcion']);
         $articulo = mysqli_real_escape_string($conn,$_POST['articulo']);
@@ -23,7 +23,7 @@
                                         ($particularidad == '')){
             echo 3; // cualquiera de los campos está vacio
         }else{
-            addTipoLicencia($clase_licencia,$descripcion,$articulo,$revista,$tiempo,$goce_haberes,$obligatoriedad,$particularidad,$conn);
+            updateTipoLicencia($id,$clase_licencia,$descripcion,$articulo,$revista,$tiempo,$goce_haberes,$obligatoriedad,$particularidad,$conn,$dbase);
         }
         
         

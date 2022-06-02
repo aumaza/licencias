@@ -1,6 +1,6 @@
 <?php   session_start();
-        include "../connection/connection.php";
-        include "../lib/lib_licencias.php";
+        include "../../connection/connection.php";
+        include "lib_licencias.php";
                         
         
         // datos del usuario
@@ -36,7 +36,7 @@
                             ($fraccion == '')){
                 echo 3; // cualquiera de los campos está vacio
             }else{
-               insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,$f_desde,$f_hasta,$periodo,$fraccion,$conn);
+               insertLicenciaOrdinaria($nombre,$dni,$antiguedad,$revista,$descripcion,$f_desde,$f_hasta,$periodo,$fraccion,$conn,$dbase);
             }
         }
         
@@ -48,7 +48,7 @@
                         ($f_hasta == '')){
                 echo 3; // cualquiera de los campos está vacio
             }else{
-                insertAusenteAviso($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                insertAusenteAviso($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn,$dbase);
             }
         
         }
@@ -61,7 +61,7 @@
                         ($f_hasta == '')){
                 echo 3; // cualquiera de los campos está vacio
             }else{
-                insertLicPaternidad($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                insertLicPaternidad($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn,$dbase);
             }
         
         }
@@ -77,7 +77,7 @@
                             ($parentalidad == '')){
                 echo 3; // cualquiera de los campos está vacio
             }else{
-                insertLicFallecimiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$parentalidad,$conn);
+                insertLicFallecimiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$parentalidad,$conn,$dbase);
             }
         
         }
@@ -90,7 +90,7 @@
                         ($f_hasta == '')){
                 echo 3; // cualquiera de los campos está vacio
             }else{
-                insertFuerzaMayor($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                insertFuerzaMayor($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn,$dbase);
             }
         }
         
@@ -101,7 +101,7 @@
                             ($f_hasta == '')){
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertDonarSangre($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                    insertDonarSangre($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn,$dbase);
                 }
                 
             }
@@ -113,7 +113,7 @@
                             ($f_hasta == '')){
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertMesaExaminadora($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                    insertMesaExaminadora($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn,$dbase);
                 }
             
         
@@ -126,7 +126,7 @@
                             ($f_hasta == '')){
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertAusenteSinGoce($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                    insertAusenteSinGoce($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn,$dbase);
                 }
             
         
@@ -142,7 +142,7 @@
                                 ($cant_horas == '')){
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertLicenciaHorEstudiante($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_horas,$conn);
+                    insertLicenciaHorEstudiante($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_horas,$conn,$dbase);
                 }
         
         }
@@ -157,7 +157,7 @@
                                 ($cant_horas == '')){
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertLicenciaMadreLactante($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_horas,$conn);
+                    insertLicenciaMadreLactante($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_horas,$conn,$dbase);
                 }
         
         }
@@ -169,7 +169,7 @@
                     ($f_hasta == '')){
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertAsistenciaCongresos($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                    insertAsistenciaCongresos($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn,$dbase);
                 }
         }
         
@@ -180,7 +180,7 @@
                     ($f_hasta == '')){
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertCortoTratamiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                    insertCortoTratamiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn,$dbase);
                 }
         }
         
@@ -191,7 +191,7 @@
                     ($f_hasta == '')){
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertEnfHorasLabor($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                    insertEnfHorasLabor($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn,$dbase);
                 }
         
         }
@@ -207,7 +207,7 @@
                     echo 3; // cualquiera de los campos está vacio
                 }else{
                     
-                    insertAfeccionLargoTratamiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_anios,$conn);
+                    insertAfeccionLargoTratamiento($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_anios,$conn,$dbase);
                 }
         }
         
@@ -221,7 +221,7 @@
                         ($cant_anios == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertAccidenteTrabajo($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_anios,$conn);
+                    insertAccidenteTrabajo($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cant_anios,$conn,$dbase);
                 }
         }
         
@@ -232,7 +232,7 @@
                     ($f_hasta == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertIncapacidad($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                    insertIncapacidad($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn,$dbase);
                 }
         
         }
@@ -244,7 +244,7 @@
                     ($f_hasta == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertAnticipoPasividad($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                    insertAnticipoPasividad($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn,$dbase);
                 }
         
         }
@@ -259,7 +259,7 @@
                         ($parto_multiple == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertMaternidad($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$parto_multiple,$conn);
+                    insertMaternidad($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$parto_multiple,$conn,$dbase);
                 }
         
         }
@@ -274,7 +274,7 @@
                         ($edad == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertAdopcion($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$edad,$conn);
+                    insertAdopcion($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$edad,$conn,$dbase);
                 }
         
         }
@@ -289,7 +289,7 @@
                         ($parto_multiple == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertNacimientoSinVida($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$parto_multiple,$conn);
+                    insertNacimientoSinVida($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$parto_multiple,$conn,$dbase);
                 }
         
         }
@@ -304,7 +304,7 @@
                         ($opciones == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertMaternidadExcedencia($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$opciones,$conn);
+                    insertMaternidadExcedencia($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$opciones,$conn,$dbase);
                 }
         
         }
@@ -319,7 +319,7 @@
                         ($cursando == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertRendirExamen($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cursando,$conn);
+                    insertRendirExamen($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$cursando,$conn,$dbase);
                 }
         
         }
@@ -334,7 +334,7 @@
                         ($anios_investigacion == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertEstudiosInvestigaciones($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$anios_investigacion,$conn);
+                    insertEstudiosInvestigaciones($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$anios_investigacion,$conn,$dbase);
                 }
         
         }
@@ -346,7 +346,7 @@
                     ($f_hasta == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertEstudiosDefensaNacional($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                    insertEstudiosDefensaNacional($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn,$dbase);
                 }
         
         }
@@ -361,7 +361,7 @@
                         ($matrimonio == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertCasamientoAgente($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$matrimonio,$conn);
+                    insertCasamientoAgente($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$matrimonio,$conn,$dbase);
                 }
         
         }
@@ -373,7 +373,7 @@
                     ($f_hasta == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertActividadesDeportivas($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                    insertActividadesDeportivas($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn,$dbase);
                 }
         
         }
@@ -385,7 +385,7 @@
                     ($f_hasta == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertCargosTransitorios($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                    insertCargosTransitorios($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn,$dbase);
                 }
         
         }
@@ -400,7 +400,7 @@
                         ($meses == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertRazonesParticulares($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$meses,$conn);
+                    insertRazonesParticulares($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$meses,$conn,$dbase);
                 }
         
         }
@@ -415,7 +415,7 @@
                         ($anio == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertRazonesEstudio($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$anio,$conn);
+                    insertRazonesEstudio($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$anio,$conn,$dbase);
                 }
         
         }
@@ -427,7 +427,7 @@
                     ($f_hasta == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertAcompañarConyuge($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                    insertAcompañarConyuge($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn,$dbase);
                 }
         
         }
@@ -439,7 +439,7 @@
                     ($f_hasta == '')) {
                     echo 3; // cualquiera de los campos está vacio
                 }else{
-                    insertHorasCatedra($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn);
+                    insertHorasCatedra($nombre,$dni,$revista,$descripcion,$f_desde,$f_hasta,$conn,$dbase);
                 }
         
         }

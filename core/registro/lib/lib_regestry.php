@@ -79,11 +79,12 @@ function genPass(){
 ** Funcion para blanquear password
 */
 
-function resetPass($conn,$usuario){
+function resetPass($conn,$usuario,$dbase){
 
   $password = genPass();
   $passHash = password_hash($password, PASSWORD_BCRYPT);
   
+  mysqli_select_db($conn,$dbase);
   $sql = "UPDATE usuarios SET password = '$passHash' where user = '$usuario'";
   
   $retval = mysqli_query($conn,$sql);

@@ -2,9 +2,9 @@
       ini_set('display_errors', 1);
       include "../connection/connection.php";
       include "../lib/lib_core.php";
-      include "../lib/lib_usuarios.php";
-      include "../lib/lib_agentes.php";
-      include "../lib/lib_licencias.php";
+      include "../lib/usuarios/lib_usuarios.php";
+      include "../lib/agentes/lib_agentes.php";
+      include "../lib/licencias/lib_licencias.php";
            
       $usuario = $_SESSION['user'];
             
@@ -117,32 +117,32 @@ $(document).ready(function(){
       // ====================================== //
       // ADMINSTRACION DE USUARIOS
       if(isset($_POST['usuarios'])){
-        listarUsuarios($conn);
+        listarUsuarios($conn,$dbase);
       }
       // FORMULARIO ALTA USUARIO
       if(isset($_POST['new_user'])){
         formAltaUsuarios();
       }
       if(isset($_POST['mis_datos'])){
-        loadUser($conn,$nombre);
+        loadUser($conn,$nombre,$dbase);
       }
       
       // ====================================== //
       // ADMINSTRACION DE AGENTES
       if(isset($_POST['agentes'])){
-        listarAgentes($conn);
+        listarAgentes($conn,$dbase);
       }
       if((isset($_POST['editar_agente'])) || (isset($_POST['editar_datos_personales']))) {
         $id = mysqli_real_escape_string($conn,$_POST['id']);
         $name = mysqli_real_escape_string($conn,$_POST['name']);
-        formEditAgente($id,$name,$conn);
+        formEditAgente($id,$name,$conn,$dbase);
       }
       // ====================================== //
       // ADMINSTRACION DE LICENCIAS
-      modalSelAgente($nombre,$conn);
+      modalSelAgente($nombre,$conn,$dbase);
       
       if((isset($_POST['licencias'])) || (isset($_POST['mis_licencias']))){
-        licencias($nombre,$conn);
+        licencias($nombre,$conn,$dbase);
       }
       if(isset($_POST['select_agente'])){
         $nombre = mysqli_real_escape_string($conn,$_POST['agente']);
@@ -150,27 +150,27 @@ $(document).ready(function(){
         $descripcion = mysqli_real_escape_string($conn,$_POST['descripcion']);
         
             if($tipo_licencia == 'Licencia Ordinaria'){
-                formNuevaLicencia($nombre,$descripcion,$conn);
+                formNuevaLicencia($nombre,$descripcion,$conn,$dbase);
             }if($tipo_licencia == 'Inasistencias'){
-                formNuevaLicencia($nombre,$descripcion,$conn);
+                formNuevaLicencia($nombre,$descripcion,$conn,$dbase);
             }if($tipo_licencia == 'Franquicias'){
-                formNuevaLicencia($nombre,$descripcion,$conn);
+                formNuevaLicencia($nombre,$descripcion,$conn,$dbase);
             }if($tipo_licencia == 'Licencias Especiales'){
-                formNuevaLicencia($nombre,$descripcion,$conn);
+                formNuevaLicencia($nombre,$descripcion,$conn,$dbase);
             }if($tipo_licencia == 'Licencias Extraordinarias con goce de haberes'){
-                formNuevaLicencia($nombre,$descripcion,$conn);
+                formNuevaLicencia($nombre,$descripcion,$conn,$dbase);
             }if($tipo_licencia == 'Licencias Extraordinarias sin goce de haberes'){
-                formNuevaLicencia($nombre,$descripcion,$conn);
+                formNuevaLicencia($nombre,$descripcion,$conn,$dbase);
             }
       }
       
       if(isset($_POST['eliminar_licencia'])){
         $id = mysqli_real_escape_string($conn,$_POST['id']);
-        formEliminarLicencia($id,$conn);
+        formEliminarLicencia($id,$conn,$dbase);
       }
       if(isset($_POST['more_info'])){
         $id = mysqli_real_escape_string($conn,$_POST['id']);
-        formInfoLicencias($id,$conn);
+        formInfoLicencias($id,$conn,$dbase);
       }
       if(isset($_POST['upload_comprobante'])){
         $id = mysqli_real_escape_string($conn,$_POST['id']);
@@ -179,21 +179,21 @@ $(document).ready(function(){
       if(isset($_POST['subir_comprobante'])){
         $id = mysqli_real_escape_string($conn,$_POST['id']);
         $file = basename($_FILES["file"]["name"]);
-        insertComprobante($id,$file,$conn);
+        insertComprobante($id,$file,$conn,$dbase);
       }
       
       
       // ====================================== //
       // TIPO DE LICENCIAS
       if(isset($_POST['tipo_licencia'])){
-        listarTipoLicencia($nombre,$conn);
+        listarTipoLicencia($nombre,$conn,$dbase);
       }
       if(isset($_POST['new_tipo_licencia'])){
         formAltaTipoLicencia();
       }
       if(isset($_POST['editar_tipo_licencia'])){
         $id = mysqli_real_escape_string($conn,$_POST['id']);
-        formEditTipoLicencia($id,$conn);
+        formEditTipoLicencia($id,$conn,$dbase);
       }
       
       
@@ -208,8 +208,8 @@ $(document).ready(function(){
   </div>
 </div>
 
-<script type="text/javascript" src="../lib/lib_licencias.js"></script>
-<script type="text/javascript" src="../lib/lib_usuarios.js"></script>
+<script type="text/javascript" src="../lib/licencias/lib_licencias.js"></script>
+<script type="text/javascript" src="../lib/usuarios/lib_usuarios.js"></script>
 
 
 <script>

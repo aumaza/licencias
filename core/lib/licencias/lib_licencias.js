@@ -10,7 +10,7 @@ $(document).ready(function(){
         
         $.ajax({
             type:"POST",
-            url:"../lib/add_nueva_licencia.php",
+            url:"../lib/licencias/add_nueva_licencia.php",
             data:datos,
             success:function(r){
                 if(r == 1){
@@ -336,7 +336,7 @@ $(document).ready(function(){
         
         $.ajax({
             type:"POST",
-            url:"../lib/delete_licencia.php",
+            url:"../lib/licencias/delete_licencia.php",
             data:datos,
             success:function(r){
                 if(r == 1){
@@ -365,7 +365,7 @@ $(document).ready(function(){
         var datos=$('#fr_nuevo_tipo_licencia_ajax').serialize();
         $.ajax({
             type:"POST",
-            url:"../lib/add_nuevo_tipo_licencia.php",
+            url:"../lib/licencias/add_nuevo_tipo_licencia.php",
             data:datos,
             success:function(r){
                 if(r==1){
@@ -404,7 +404,7 @@ $(document).ready(function(){
         var datos=$('#fr_edit_tipo_licencia_ajax').serialize();
         $.ajax({
             type:"POST",
-            url:"../lib/update_nuevo_tipo_licencia.php",
+            url:"../lib/licencias/update_nuevo_tipo_licencia.php",
             data:datos,
             success:function(r){
                 if(r==1){

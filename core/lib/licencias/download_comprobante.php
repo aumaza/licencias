@@ -1,6 +1,6 @@
 <?php   session_start();
-        include "../conncection/connection.php";
-        include "../lib/lib_licencias.php";
+        include "../../conncection/connection.php";
+        include "lib_licencias.php";
         
         
         $archivo = basename($_GET['file_name']);
@@ -11,7 +11,7 @@
         if($archivo){
         //if (!isset($_GET['file_name']) || empty($_GET['file_name'])) {
         
-        $path = '../comprobantes/'.$archivo;
+        $path = '../../comprobantes/'.$archivo;
         
         
         //Utilizamos basename por seguridad, devuelve el 

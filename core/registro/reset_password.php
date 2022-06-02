@@ -55,7 +55,7 @@
 					      echo "</div>";
 					      echo "</div>";
 					    }else{
-						resetPass($conn,$usuario);
+						resetPass($conn,$usuario,$dbase);
 					    }
                                           }
                                           }else{

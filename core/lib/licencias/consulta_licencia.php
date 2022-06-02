@@ -1,11 +1,11 @@
-<?php  include "../connection/connection.php";
-       include "../lib/lib_licencias.php";
+<?php  include "../../connection/connection.php";
+       include "lib_licencias.php";
        
        if($conn){
        
         $tipo_licencia = mysqli_real_escape_string($conn, $_POST['tipo_licencia']);
         $sql = "SELECT descripcion, art_licencia FROM tipo_licencia WHERE clase_licencia = '$tipo_licencia' order by descripcion ASC";
-        mysqli_select_db($conn,'licor');
+        mysqli_select_db($conn,$dbase);
         $query = mysqli_query($conn, $sql);
 
         if($query){

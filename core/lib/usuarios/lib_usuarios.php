@@ -7,12 +7,12 @@
 */
 
 
-function listarUsuarios($conn){
+function listarUsuarios($conn,$dbase){
 
 if($conn)
 {
 	$sql = "SELECT * FROM usuarios";
-    	mysqli_select_db($conn,'licor');
+    	mysqli_select_db($conn,$dbase);
     	$resultado = mysqli_query($conn,$sql);
 	//mostramos fila x fila
 	$count = 0;
@@ -70,12 +70,12 @@ if($conn)
 ** funcon que carga el usuario logueado
 */
 
-function loadUser($conn,$nombre){
+function loadUser($conn,$nombre,$dbase){
 
 if($conn){
 	
 	$sql = "SELECT * FROM usuarios where nombre = '$nombre'";
-    	mysqli_select_db($conn,'licor');
+    	mysqli_select_db($conn,$dbase);
     	$resultado = mysqli_query($conn,$sql);
 	//mostramos fila x fila
 	$count = 0;
@@ -202,7 +202,7 @@ function formAltaUsuarios(){
 * Funcion para agregar usuarios al sistema
 */
 
-function agregarUser($nombre,$dni,$email,$antiguedad,$revista,$conn){
+function agregarUser($nombre,$dni,$email,$antiguedad,$revista,$conn,$dbase){
     
     $string_1 = nameValidator($nombre);
     $string_2 = intValidator($dni);
@@ -213,7 +213,7 @@ function agregarUser($nombre,$dni,$email,$antiguedad,$revista,$conn){
     if(($string_1 == 1) && ($string_2 == 1) && ($string_3 == 1) && ($string_4 == 1) && ($string_5 == 1)){
     
 
-	mysqli_select_db($conn,'licor');
+	mysqli_select_db($conn,dbase);
 	$sql = "insert into agentes ".
         "(nombre,dni,email,antiguedad,situacion_revista)".
         "VALUES ".
@@ -293,7 +293,7 @@ function generationPass(){
 /*
 ** Funcion que actualiza el password de un usuario
 */
-function updatePassword($id,$pass,$conn){
+function updatePassword($id,$pass,$conn,$dbase){
 
     if((strlen($pass) < 15) || (strlen($pass) > 15)){
     
@@ -322,7 +322,7 @@ function updatePassword($id,$pass,$conn){
     }elseif((strlen($pass)) == 15){
     
         $passHash = password_hash($pass, PASSWORD_BCRYPT);
-        
+        mysqli_select_db($conn,$dbase);
         $sql = "update usuario set password = '$passHash' where id = '$id'";
         $query = mysqli_query($conn,$sql);
         
@@ -352,17 +352,17 @@ function genFile($usuario,$password){
   
   //echo "Archivo Existente...";
   //echo "Se actualizaran los datos...";
-  $file = fopen($fileName, 'w+') or die("Se produjo un error al crear el archivo");
+  $file = fopen($fileName, 'w+');
   
-  fwrite($file, $password) or die("No se pudo escribir en el archivo");
+  fwrite($file, $password);
   
   fclose($file);
 	 
   }else{
   
       //echo "Se Generará archivo de respaldo..."
-      $file = fopen($fileName, 'w') or die("Se produjo un error al crear el archivo");
-      fwrite($file, $password) or die("No se pudo escribir en el archivo");
+      $file = fopen($fileName, 'w');
+      fwrite($file, $password);
       fclose($file);
 	      
   }
@@ -465,10 +465,10 @@ if(preg_match($pattern_string,$var)){
 * Funcion para cambiar los permisos de los usuarios al sistema
 */
 
-function cambiarPermisos($id,$role,$conn){
+function cambiarPermisos($id,$role,$conn,$dbase){
 
   $sql = "UPDATE usuarios set role = '$role' where id = '$id'";
-  mysqli_select_db('licor');
+  mysqli_select_db($conn,$dbase);
   $retval = mysqli_query($conn,$sql);
   if($retval){    
     echo 1;
@@ -482,7 +482,7 @@ function cambiarPermisos($id,$role,$conn){
 /*
 ** persistencia en la actualizacion de pasword
 */
-function changePass($id,$password_1,$password_2,$conn){
+function changePass($id,$password_1,$password_2,$conn,$dbase){
 
    $string_1 = passwordValidator($password_1);
    $string_2 = passwordValidator($password_2);
@@ -496,7 +496,7 @@ function changePass($id,$password_1,$password_2,$conn){
             $passHash = password_hash($password_1, PASSWORD_BCRYPT); // se procede a encriptar el password
         
         $sql = "update usuarios set password = '$passHash' where id = '$id'";
-        mysqli_select_db($conn,'licor');
+        mysqli_select_db($conn,$dbase);
         $query = mysqli_query($conn,$sql);
         
         if($query){

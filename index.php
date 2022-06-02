@@ -64,7 +64,7 @@ $(document).ready(function(){
          
 	$user = mysqli_real_escape_string($conn,$_POST["user"]);
 	$pass = mysqli_real_escape_string($conn,$_POST["pass"]);
-	logIn($user,$pass,$conn);
+	logIn($user,$pass,$conn,$dbase);
 	
 	}
 	}else{

@@ -7,12 +7,12 @@
 */
 
 
-function listarAgentes($conn){
+function listarAgentes($conn,$dbase){
 
 if($conn){
 
 	$sql = "SELECT * FROM agentes";
-    mysqli_select_db($conn,'licor');
+    mysqli_select_db($conn,$dbase);
     $resultado = mysqli_query($conn,$sql);
 	//mostramos fila x fila
 	$count = 0;
@@ -77,12 +77,12 @@ if($conn){
 /*
 ** funcion que muestra el formulario de edición de Agentes
 */
-function formEditAgente($id,$name,$conn){
+function formEditAgente($id,$name,$conn,$dbase){
     
        
    if($id != ''){ 
     
-    mysqli_select_db($conn,'licor');
+    mysqli_select_db($conn,$dbase);
     $sql = "select * from agentes where id = '$id'";
     $query = mysqli_query($conn,$sql);
     while($row = mysqli_fetch_array($query)){
@@ -96,7 +96,7 @@ function formEditAgente($id,$name,$conn){
     }
     if($name != ''){
     
-        mysqli_select_db($conn,'licor');
+        mysqli_select_db($conn,$dbase);
         $sql = "select * from agentes where nombre = '$name'";
         $query = mysqli_query($conn,$sql);
         while($row = mysqli_fetch_array($query)){
@@ -177,7 +177,7 @@ function formEditAgente($id,$name,$conn){
 /*
 ** funcion que actualiza datos de agente en la base de datos
 */
-function updateAgente($id,$nombre,$dni,$email,$antiguedad,$revista,$conn){
+function updateAgente($id,$nombre,$dni,$email,$antiguedad,$revista,$conn,$dbase){
 
     $string_1 = nameValidator($nombre);
     $string_2 = intValidator($dni);
@@ -187,8 +187,15 @@ function updateAgente($id,$nombre,$dni,$email,$antiguedad,$revista,$conn){
     
     if(($string_1 == 1) && ($string_2 == 1) && ($string_3 == 1) && ($string_4 == 1) && ($string_5 == 1)){
     
-    $sql = "update agentes set nombre = '$nombre', dni = '$dni', email = '$email', antiguedad = '$antiguedad', situacion_revista = '$revista' where id = '$id'";
-    mysqli_select_db($conn,'licor');
+    $sql = "update agentes set 
+            nombre = '$nombre', 
+            dni = '$dni', 
+            email = '$email', 
+            antiguedad = '$antiguedad', 
+            situacion_revista = '$revista' 
+            where id = '$id'";
+            
+    mysqli_select_db($conn,$dbase);
     $query = mysqli_query($conn,$sql);
     
     if($query){
@@ -197,10 +204,8 @@ function updateAgente($id,$nombre,$dni,$email,$antiguedad,$revista,$conn){
         echo -1; // actualizacion erronea
     }
     }else{
-	    
-            echo 2; // alguna de las variables contiene caracteres inválidos
-	    
-	    }
+	   echo 2; // alguna de las variables contiene caracteres inválidos
+    }
 }
 
 ?>
